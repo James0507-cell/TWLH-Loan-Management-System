@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace TWLH_Loan_Management_System
 {
     /// <summary>
-    /// Interaction logic for admin.xaml
+    /// Interaction logic for loanPage.xaml
     /// </summary>
-    public partial class admin : Window
+    public partial class LoanPage : Page
     {
-        public admin()
+        public LoanPage()
         {
             InitializeComponent();
         }

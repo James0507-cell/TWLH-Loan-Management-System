@@ -16,7 +16,7 @@ namespace TWLH_Loan_Management_System
         private MySqlDataAdapter da;
         private DataTable dt;
 
-        private const string strConn = "server=localhost;user id=root;password=;database;db_twlh";
+        private const string strConn = "server=localhost;user id=root;password=;database=db_twlh";
 
 
         public DataTable displayRecords(string query)
