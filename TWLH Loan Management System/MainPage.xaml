@@ -178,7 +178,7 @@
         </Border>
 
         <!-- Main Content Area -->
-        <Grid Grid.Column="1" Background="{StaticResource MainContentBack}">
+        <Grid Grid.Column="1" Background="{StaticResource MainContentBack}" Height="634" VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
                 <RowDefinition Height="91"/>
                 <RowDefinition/>
@@ -192,12 +192,11 @@
                 <Grid Margin="30"/>
             </ScrollViewer>
             <StackPanel/>
-            <StackPan VerticalAlignment="Center" Margin="20,0,0,0">
+            <StackPanel VerticalAlignment="Center" Margin="20,0,0,0">
                 <TextBlock TextWrapping="Wrap" Text="Dashboard" FontSize="20" FontWeight="SemiBold"/>
                 <TextBlock
         Width="839" Text="Welcome back, Admin user" TextWrapping="Wrap" FontSize="11" Foreground="#FF8A8A8A"/>
-                </StackPanel> />
-                <TextBlock HorizontalAlignment="Left" Margin="32,60,0,0" TextWrapping="Wrap" Text="Welcome back, Admin user" VerticalAlignment="Top" Width="180" Grid.RowSpan="2" FontSize="11" Foreground="#FF8A8A8A"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
