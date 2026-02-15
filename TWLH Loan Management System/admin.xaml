@@ -1,0 +1,203 @@
+<Window x:Class="TWLH_Loan_Management_System.admin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TWLH_Loan_Management_System"
+        mc:Ignorable="d"
+        Title="TWLH Loan Management System - Admin" Height="650" Width="1100"
+        WindowStartupLocation="CenterScreen" Background="White">
+
+    <Window.Resources>
+        <!-- Modern Color Palette -->
+        <SolidColorBrush x:Key="SidebarBack" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="SidebarHover" Color="#F3F4F6"/>
+        <SolidColorBrush x:Key="AccentBlue" Color="#3044FF"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#1E293B"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#64748B"/>
+        <SolidColorBrush x:Key="LogoutRed" Color="#EF4444"/>
+        <SolidColorBrush x:Key="MainContentBack" Color="#F0F2F5"/>
+
+        <!-- Icon Geometries -->
+        <Geometry x:Key="IconCompany">M12,7V9H2V22H22V7H12M10,20H4V18H10V20M10,16H4V14H10V16M10,12H4V10H10V12M20,20H14V18H20V20M20,16H14V14H20V16M20,12H14V10H20V12M20,8H14V5H20V8Z</Geometry>
+        <Geometry x:Key="IconDashboard">M13,3V9H21V3H13M13,21H21V11H13V21M3,21H11V15H3V21M3,13H11V3H3V13Z</Geometry>
+        <Geometry x:Key="IconTransaction">M12.75,2.85L20.3,10.4L18.89,11.81L12.75,5.67L6.61,11.81L5.2,10.4L12.75,2.85M12.75,10L20.3,17.55L18.89,18.96L12.75,12.82L6.61,18.96L5.2,17.55L12.75,10Z</Geometry>
+        <Geometry x:Key="IconLoans">M5,6H19V18H5V6M5,4C3.9,4 3,4.9 3,6V18C3,19.1 3.9,20 5,20H19C20.1,20 21,19.1 21,18V6C21,4.9 20.1,4 19,4H5M11,8H13V16H11V8M7,10H9V16H7V10M15,12H17V16H15V12Z</Geometry>
+        <Geometry x:Key="IconCollection">M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M15,11.5V13H13V15H11V13H9V11.5H11V9.5H13V11.5H15Z</Geometry>
+        <Geometry x:Key="IconClient">M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z</Geometry>
+        <Geometry x:Key="IconEmployee">M12,12C14.21,12 16,10.21 16,8C16,5.79 14.21,4 12,4C9.79,4 8,5.79 8,8C8,10.21 9.79,12 12,12M12,14C9.33,14 4,15.34 4,18V20H20V18C20,15.34 14.67,14 12,14Z</Geometry>
+        <Geometry x:Key="IconLogout">M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.9 3.89,3 5,3H19Z</Geometry>
+
+        <!-- Sidebar Button Style -->
+        <Style x:Key="SidebarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value="10,2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource SidebarHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBlue}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Active">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBlue}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Logout Button Style -->
+        <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource SidebarButtonStyle}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Background="{StaticResource SidebarBack}" Grid.Column="0" BorderBrush="#E2E8F0" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo Section -->
+                <StackPanel Orientation="Horizontal" Margin="25,30,25,20">
+                    <Path Data="{StaticResource IconCompany}" Fill="{StaticResource AccentBlue}" Width="32" Height="32" Stretch="Uniform" Margin="0,0,12,0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="TWLH" Foreground="{StaticResource TextPrimary}" FontSize="24" FontWeight="ExtraBold"/>
+                        <TextBlock Text="LOAN SYSTEM" Foreground="{StaticResource TextMuted}" FontSize="9" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Rectangle Grid.Row="0" Height="1" Fill="#E2E8F0" VerticalAlignment="Bottom" Margin="20,0"/>
+
+                <!-- Profile Section -->
+                <Border Grid.Row="1" Margin="20,20,20,20" Padding="15" Background="{StaticResource SidebarHover}" CornerRadius="15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Width="45" Height="45" Fill="{StaticResource AccentBlue}">
+                            <!-- Placeholder for Profile Image -->
+                        </Ellipse>
+                        <Path Data="{StaticResource IconEmployee}" Fill="White" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+                            <TextBlock Text="Admin User" Foreground="{StaticResource TextPrimary}" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock Text="Administrator" Foreground="{StaticResource TextMuted}" FontSize="12"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Rectangle Grid.Row="1" Height="1" Fill="#E2E8F0" VerticalAlignment="Bottom" Margin="20,0"/>
+
+                <!-- Navigation Menu -->
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" Margin="0,10,0,10">
+                    <StackPanel>
+                        <Button Style="{StaticResource SidebarButtonStyle}" x:Name="btnDashboard" Tag="Active">
+                            <StackPanel Orientation="Horizontal" Margin="20,0">
+                                <Path Data="{StaticResource IconDashboard}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SidebarButtonStyle}" x:Name="btnTransaction">
+                            <StackPanel Orientation="Horizontal" Margin="20,0">
+                                <Path Data="{StaticResource IconTransaction}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="Transactions" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SidebarButtonStyle}" x:Name="btnLoans">
+                            <StackPanel Orientation="Horizontal" Margin="20,0">
+                                <Path Data="{StaticResource IconLoans}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="Loan Accounts" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SidebarButtonStyle}" x:Name="btnCollection">
+                            <StackPanel Orientation="Horizontal" Margin="20,0">
+                                <Path Data="{StaticResource IconCollection}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="Collections" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SidebarButtonStyle}" x:Name="btnClient">
+                            <StackPanel Orientation="Horizontal" Margin="20,0">
+                                <Path Data="{StaticResource IconClient}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="Clients" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SidebarButtonStyle}" x:Name="btnEmployee">
+                            <StackPanel Orientation="Horizontal" Margin="20,0">
+                                <Path Data="{StaticResource IconEmployee}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                                <TextBlock Text="Employees" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Rectangle Grid.Row="2" Height="1" Fill="#E2E8F0" VerticalAlignment="Bottom" Margin="20,0"/>
+
+                <!-- Logout -->
+                <Button Grid.Row="3" Style="{StaticResource LogoutButtonStyle}" x:Name="btnLogout" Margin="10,20,10,30">
+                    <StackPanel Orientation="Horizontal" Margin="20,0">
+                        <Path Data="{StaticResource IconLogout}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,15,0"/>
+                        <TextBlock Text="Logout" VerticalAlignment="Center" FontSize="15" FontWeight="Medium"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Column="1" Background="{StaticResource MainContentBack}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="91"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Header -->
+            <Grid Grid.Row="0"/>
+
+            <!-- Page Content Container -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <Grid Margin="30"/>
+            </ScrollViewer>
+            <StackPanel/>
+            <StackPan VerticalAlignment="Center" Margin="20,0,0,0">
+                <TextBlock TextWrapping="Wrap" Text="Dashboard" FontSize="20" FontWeight="SemiBold"/>
+                <TextBlock
+        Width="839" Text="Welcome back, Admin user" TextWrapping="Wrap" FontSize="11" Foreground="#FF8A8A8A"/>
+                </StackPanel> />
+                <TextBlock HorizontalAlignment="Left" Margin="32,60,0,0" TextWrapping="Wrap" Text="Welcome back, Admin user" VerticalAlignment="Top" Width="180" Grid.RowSpan="2" FontSize="11" Foreground="#FF8A8A8A"/>
+        </Grid>
+    </Grid>
+</Window>
