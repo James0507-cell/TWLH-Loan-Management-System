@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using System.Data;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +16,15 @@ namespace TWLH_Loan_Management_System
     
     public partial class LoginWindow : Window
     {
-        MainWindow main = new MainWindow();
+
+
+        login login = new login();
+
+        string userRole = "";
+        public string getRole()
+        {
+            return userRole;
+        }
 
         public LoginWindow()
         {
@@ -27,30 +36,38 @@ namespace TWLH_Loan_Management_System
             string username = txtUsername.Text;
             string password = txtPassword.Password;
 
-            if (username == "admin" && password == "admin123")
-            {
-                main.Show();
-                this.Close();
-            }
-            else if (username == "staff" && password == "staff123")
-            {
-                main.Show();
-                main.btnClient.Visibility = Visibility.Collapsed;
-                main.btnEmployee.Visibility = Visibility.Collapsed;
-                this.Close();
-            }
-            else if (username == "collector" && password == "collector123")
-            {
-                main.Show();
-                main.btnTransaction.Visibility = Visibility.Collapsed;
-                main.btnLoans.Visibility = Visibility.Collapsed;
-                main.btnClient.Visibility = Visibility.Collapsed;
-                main.btnEmployee.Visibility = Visibility.Collapsed;
-                this.Close();
-            } else
+            string role = login.UserValidation(username, password);
+            userRole = role;
+            if (role == null)
             {
                 MessageBox.Show("Invalid Credentials");
+            } else
+            {
+                MainWindow main = new MainWindow(role);
+               if (role == "Admin")
+                {
+                    main.Show();
+                    this.Close();
+                }
+               else if (role == "Staff")
+                {
+                    main.Show();
+                    main.btnClient.Visibility = Visibility.Collapsed;
+                    main.btnEmployee.Visibility = Visibility.Collapsed;
+                    this.Close();
+                }
+               else if (role == "Collector")
+                {
+                    main.Show();
+                    main.btnTransaction.Visibility = Visibility.Collapsed;
+                    main.btnLoans.Visibility = Visibility.Collapsed;
+                    main.btnClient.Visibility = Visibility.Collapsed;
+                    main.btnEmployee.Visibility = Visibility.Collapsed;
+                    this.Close();
+                }
             }
+
+           
         }
     }
 }

@@ -19,9 +19,36 @@ namespace TWLH_Loan_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private string role;
+
+        public MainWindow(string role)
         {
             InitializeComponent();
+            this.role = role;
+            
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            NavigateToDashboard();
+        }
+
+        private void NavigateToDashboard()
+        {
+            SetActiveButton(btnDashboard);
+            if (role == "Admin")
+            {
+                MainFrame.Navigate(new AdminDashboard());
+            }
+            else if(role == "Staff")
+            {
+                MainFrame.Navigate(new StaffDashboard());
+            } else if (role == "Collector")
+            {
+                MainFrame.Navigate(new CollectorDashboard());
+            }
+            
         }
 
         private void SetActiveButton(Button selectedButton)
@@ -30,6 +57,8 @@ namespace TWLH_Loan_Management_System
             btnTransaction.Tag = "";
             btnLoans.Tag = "";
             btnCollection.Tag = "";
+            btnFollowUp.Tag = "";
+            btnPromiseToPay.Tag = "";
             btnClient.Tag = "";
             btnEmployee.Tag = "";
 
@@ -42,11 +71,13 @@ namespace TWLH_Loan_Management_System
         private void btnDashboard_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
+            NavigateToDashboard();
         }
 
         private void btnTransaction_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
+
         }
 
         private void btnLoans_Click(object sender, RoutedEventArgs e)
@@ -69,8 +100,15 @@ namespace TWLH_Loan_Management_System
         {
             SetActiveButton(sender as Button);
         }
+        private void btnFollowUp_Click(object sender, RoutedEventArgs e)
+        {
 
-        
+        }
+
+        private void btnPromiseToPay_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
@@ -79,5 +117,7 @@ namespace TWLH_Loan_Management_System
             login.Show();
             this.Close();
         }
+
+        
     }
 }

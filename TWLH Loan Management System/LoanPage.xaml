@@ -12,7 +12,7 @@
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <StackPanel VerticalAlignment="Center" Margin="20,0,0,0" Height="38">
-            <TextBlock TextWrapping="Wrap" Text="Loans &amp; Schedules" FontSize="20" FontWeight="SemiBold"/>
+            <TextBlock TextWrapping="Wrap" Text="Loans &amp; Schedules" FontSize="19" FontWeight="Bold"/>
             <TextBlock TextWrapping="Wrap" Text="View and Manage Loans" FontSize="8" Foreground="#FF818181"/>
         </StackPanel>
 
