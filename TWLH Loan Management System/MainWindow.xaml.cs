@@ -70,10 +70,7 @@ namespace TWLH_Loan_Management_System
             SetActiveButton(sender as Button);
         }
 
-        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
-
-        }
+        
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {

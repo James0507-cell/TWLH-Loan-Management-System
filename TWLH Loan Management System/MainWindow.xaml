@@ -176,7 +176,7 @@
                 </Button>
             </Grid>
         </Border>
-        <Frame x:Name="MainFrame" Grid.Column="1" Navigated="MainFrame_Navigated" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
 
         <!-- Main Content Area -->
     </Grid>
