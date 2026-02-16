@@ -153,7 +153,7 @@
             <UniformGrid Grid.Row="1" Columns="4">
                 <Border Style="{StaticResource MetricCard}" x:Name="brdTotalActiveLoans">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="ListAlt" Foreground="#3044FF" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="ThLarge" Foreground="#3044FF" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Active Loans" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalActiveLoans" Text="0" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -161,7 +161,7 @@
 
                 <Border Style="{StaticResource MetricCard}" x:Name="brdTotalLoanAmount">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="Money" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="CreditCard" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Loan Amount" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalLoanAmount" Text="₱ 0.00" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -177,7 +177,7 @@
 
                 <Border Style="{StaticResource MetricCard}" x:Name="TotalEmployee">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="UserCircle" Foreground="#6366F1" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="User" Foreground="#6366F1" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Employees" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalEmployees" Text="0" Style="{StaticResource MetricValue}"/>
 
@@ -191,7 +191,7 @@
             <UniformGrid Grid.Row="3" Columns="3">
                 <Border Style="{StaticResource MetricCard}" x:Name="brdPaidInstallments">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="CheckCircle" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="CheckSquare" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Paid Installments" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtPaidInstallments" Text="0" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -207,7 +207,7 @@
 
                 <Border Style="{StaticResource MetricCard}" x:Name="brdTotalPasdueAmount">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="Dollar" Foreground="#EF4444" Width="21" HorizontalAlignment="Left" Margin="0,0,0,6" Height="26"/>
+                        <fa:ImageAwesome Icon="Money" Foreground="#EF4444" Width="21" HorizontalAlignment="Left" Margin="0,0,0,6" Height="26"/>
                         <TextBlock Text="Past Due Amount" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtPastDueAmount" Text="₱ 0.00" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -252,7 +252,10 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Over Due Account" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,15" Foreground="#1E293B"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <fa:ImageAwesome Icon="Warning" Foreground="#EF4444" Width="18" Margin="0,0,10,0"/>
+                            <TextBlock Text="Overdue Accounts" FontWeight="SemiBold" FontSize="16" Foreground="#1E293B"/>
+                        </StackPanel>
                         <DataGrid x:Name="dtgOverdueList" 
                                   Grid.Row="1"
                                   Style="{StaticResource ModernDataGrid}">
