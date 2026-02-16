@@ -12,10 +12,13 @@
         <!-- Card Style -->
         <Style x:Key="MetricCard" TargetType="Border">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="20"/>
-
+            <Setter Property="BorderBrush" Value="Silver"/>
+            <Setter Property="BorderThickness" Value=".5"/>
+            
+            
         </Style>
 
         <!-- Modern DataGrid Style -->
@@ -100,6 +103,23 @@
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
 
+        <Style x:Key="ModernProgressBar" TargetType="ProgressBar">
+            <Setter Property="Height" Value="10"/>
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#6366F1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid x:Name="TemplateRoot">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="5"/>
+                            <Border x:Name="PART_Indicator" Background="{TemplateBinding Foreground}" CornerRadius="5" HorizontalAlignment="Left" MinWidth="1"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="SectionHeader" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -131,7 +151,7 @@
 
             <!-- Top Row Stats -->
             <UniformGrid Grid.Row="1" Columns="4">
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalActiveLoans" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalActiveLoans">
                     <StackPanel>
                         <fa:ImageAwesome Icon="ListAlt" Foreground="#3044FF" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Active Loans" Style="{StaticResource MetricTitle}"/>
@@ -139,7 +159,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalLoanAmount" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalLoanAmount">
                     <StackPanel>
                         <fa:ImageAwesome Icon="Money" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Loan Amount" Style="{StaticResource MetricTitle}"/>
@@ -147,7 +167,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalClient" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalClient">
                     <StackPanel>
                         <fa:ImageAwesome Icon="Users" Foreground="#F59E0B" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Clients" Style="{StaticResource MetricTitle}"/>
@@ -155,7 +175,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="TotalEmployee" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
+                <Border Style="{StaticResource MetricCard}" x:Name="TotalEmployee">
                     <StackPanel>
                         <fa:ImageAwesome Icon="UserCircle" Foreground="#6366F1" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Employees" Style="{StaticResource MetricTitle}"/>
@@ -169,7 +189,7 @@
             <TextBlock Grid.Row="2" Text="Installment &amp; Collections" Style="{StaticResource SectionHeader}"/>
 
             <UniformGrid Grid.Row="3" Columns="3">
-                <Border Style="{StaticResource MetricCard}" x:Name="brdPaidInstallments" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdPaidInstallments">
                     <StackPanel>
                         <fa:ImageAwesome Icon="CheckCircle" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Paid Installments" Style="{StaticResource MetricTitle}"/>
@@ -177,7 +197,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalCountPastDue" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalCountPastDue">
                     <StackPanel>
                         <fa:ImageAwesome Icon="ExclamationTriangle" Foreground="#EF4444" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Past Due Count" Style="{StaticResource MetricTitle}"/>
@@ -185,7 +205,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalPasdueAmount" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalPasdueAmount">
                     <StackPanel>
                         <fa:ImageAwesome Icon="Dollar" Foreground="#EF4444" Width="21" HorizontalAlignment="Left" Margin="0,0,0,6" Height="26"/>
                         <TextBlock Text="Past Due Amount" Style="{StaticResource MetricTitle}"/>
@@ -201,26 +221,32 @@
                     <ColumnDefinition Width="473*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource MetricCard}" Margin="10,10,10,88" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
+                <Border x:Name="CollectionPerformanceCard" Grid.Column="0" Style="{StaticResource MetricCard}" Margin="10">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Collection Performance" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,15"/>
-                        <ProgressBar HorizontalAlignment="Left" Height="20" Margin="46,64,0,0" Grid.Row="1" VerticalAlignment="Top" Width="288"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="46,38,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Total Collected" VerticalAlignment="Top" Foreground="#FFA1A1A1"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="256,41,0,0" Grid.Row="1" TextWrapping="Wrap" Text="10,000" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="46,89,0,0" Grid.Row="1" TextWrapping="Wrap" Text="6.2% collection rate" VerticalAlignment="Top"/>
-                        <ProgressBar HorizontalAlignment="Left" Height="20" Margin="46,142,0,0" Grid.Row="1" VerticalAlignment="Top" Width="288"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="46,116,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Total Collected" VerticalAlignment="Top" Foreground="#FFA1A1A1"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="256,119,0,0" Grid.Row="1" TextWrapping="Wrap" Text="10,000" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
-                        <TextBlock HorizontalAlignment="Left" Margin="46,166,0,0" Grid.Row="1" TextWrapping="Wrap" Text="6.2% collection rate" VerticalAlignment="Top"/>
-                        <!-- Placeholder for Chart or Table -->
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <fa:ImageAwesome Icon="BarChart" Foreground="#6366F1" Width="18" Margin="0,0,10,0"/>
+                            <TextBlock Text="Collection Performance" FontWeight="SemiBold" FontSize="16" Foreground="#1E293B"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1" Margin="0,0,0,12">
+                            <TextBlock Text="Total Collected" Foreground="#64748B" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="txtblCollectedAmount" Text="₱ 10,000.00" HorizontalAlignment="Right" Foreground="#1E293B" FontSize="16" FontWeight="Bold"/>
+                        </Grid>
+
+                        <ProgressBar x:Name="prgCollectionRate" Grid.Row="2" Value="0" Minimum="0" Maximum="100" Height="10" Margin="0,0,0,10" Foreground="#FF6366F1"/>
+
+                        <TextBlock x:Name="txtblCollectionRate" Grid.Row="3" Text="6.2% collection rate" Foreground="#64748B" FontSize="12" HorizontalAlignment="Right"/>
                     </Grid>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource MetricCard}" Margin="10,10,10,10" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5" Height="377.28">
+                <Border Grid.Column="1" Style="{StaticResource MetricCard}" Margin="10" Height="377.28">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

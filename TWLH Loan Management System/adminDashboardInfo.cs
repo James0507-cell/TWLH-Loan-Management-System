@@ -70,6 +70,39 @@ namespace TWLH_Loan_Management_System
             return db.displayRecords(strquery);
         }
 
+        public double getCollectionRate()
+        {
+            strquery =  "select " +
+                        "ifnull((select count(li.installment_id) " +
+                        " from tbl_loan_installment li " +
+                        " inner join tbl_loan lo on li.loan_id = lo.loan_id " +
+                        " where lo.loan_status <> 'Paid' " +
+                        " and li.installment_status = 'Paid') " +
+                        "/ " +
+                        "(select count(li.installment_id) " +
+                        " from tbl_loan_installment li " +
+                        " inner join tbl_loan lo on li.loan_id = lo.loan_id " +
+                        " where lo.loan_status <> 'Paid'), 0)";
+
+
+            DataTable dt = db.displayRecords(strquery);
+            if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+            {
+                return Convert.ToDouble(dt.Rows[0][0]);
+            }
+            return 0;
+        }
+
+        public string getCollectedAmount()
+        {
+            strquery =  $"select sum(li.installment_amount) " +
+                        $"from tbl_loan_installment li inner join tbl_loan lo " +
+                        $"on li.loan_id = lo.loan_id " +
+                        $"where lo.loan_status <> 'Paid' " +
+                        $"and " +
+                        $"li.installment_status = 'Paid'";
+                        return db.displayRecords(strquery).Rows[0][0].ToString();
+        }
         
     }
 }

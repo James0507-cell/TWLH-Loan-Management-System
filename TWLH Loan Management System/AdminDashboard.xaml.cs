@@ -38,6 +38,10 @@ namespace TWLH_Loan_Management_System
             txtPastDueAmount.Text = dashboardInfo.getTotalPastDueAmount();
 
             dtgOverdueList.ItemsSource = dashboardInfo.getOverDueList().DefaultView;
+            double collectionRate = dashboardInfo.getCollectionRate();
+            txtblCollectionRate.Text = collectionRate.ToString("P2") + " Collection Rate";
+            prgCollectionRate.Value = collectionRate * 100;
+            txtblCollectedAmount.Text = dashboardInfo.getCollectedAmount().ToString();
         }
     }
 }
