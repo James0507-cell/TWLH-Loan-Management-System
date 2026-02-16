@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace TWLH_Loan_Management_System
             txtPaidInstallments.Text = dashboardInfo.getTotalPaidInstallment();
             txtPastDueCount.Text = dashboardInfo.getTotalPastDueAccount();
             txtPastDueAmount.Text = dashboardInfo.getTotalPastDueAmount();
+
+            dtgOverdueList.ItemsSource = dashboardInfo.getOverDueList().DefaultView;
         }
     }
 }

@@ -15,7 +15,76 @@
             <Setter Property="CornerRadius" Value="15"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="20"/>
-            
+
+        </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowHeight" Value="45"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#F1F5F9"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridColumnHeader">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#F1F5F9"/>
+                    <Setter Property="Foreground" Value="#1E293B"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#F8FAFC"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8FAFC"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="MetricTitle" TargetType="TextBlock">
@@ -62,7 +131,7 @@
 
             <!-- Top Row Stats -->
             <UniformGrid Grid.Row="1" Columns="4">
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalActiveLoans">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalActiveLoans" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
                     <StackPanel>
                         <fa:ImageAwesome Icon="ListAlt" Foreground="#3044FF" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Active Loans" Style="{StaticResource MetricTitle}"/>
@@ -70,7 +139,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalLoanAmount">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalLoanAmount" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
                     <StackPanel>
                         <fa:ImageAwesome Icon="Money" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Loan Amount" Style="{StaticResource MetricTitle}"/>
@@ -78,7 +147,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalClient">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalClient" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
                     <StackPanel>
                         <fa:ImageAwesome Icon="Users" Foreground="#F59E0B" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Clients" Style="{StaticResource MetricTitle}"/>
@@ -86,12 +155,12 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="TotalEmployee">
+                <Border Style="{StaticResource MetricCard}" x:Name="TotalEmployee" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
                     <StackPanel>
                         <fa:ImageAwesome Icon="UserCircle" Foreground="#6366F1" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Employees" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalEmployees" Text="0" Style="{StaticResource MetricValue}"/>
-                        
+
                     </StackPanel>
                 </Border>
             </UniformGrid>
@@ -100,7 +169,7 @@
             <TextBlock Grid.Row="2" Text="Installment &amp; Collections" Style="{StaticResource SectionHeader}"/>
 
             <UniformGrid Grid.Row="3" Columns="3">
-                <Border Style="{StaticResource MetricCard}" x:Name="brdPaidInstallments">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdPaidInstallments" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
                     <StackPanel>
                         <fa:ImageAwesome Icon="CheckCircle" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Paid Installments" Style="{StaticResource MetricTitle}"/>
@@ -108,7 +177,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalCountPastDue">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalCountPastDue" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
                     <StackPanel>
                         <fa:ImageAwesome Icon="ExclamationTriangle" Foreground="#EF4444" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Past Due Count" Style="{StaticResource MetricTitle}"/>
@@ -116,7 +185,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalPasdueAmount">
+                <Border Style="{StaticResource MetricCard}" x:Name="brdTotalPasdueAmount" BorderThickness="0.5,0.5,0.5,0.5" BorderBrush="Silver">
                     <StackPanel>
                         <fa:ImageAwesome Icon="Dollar" Foreground="#EF4444" Width="21" HorizontalAlignment="Left" Margin="0,0,0,6" Height="26"/>
                         <TextBlock Text="Past Due Amount" Style="{StaticResource MetricTitle}"/>
@@ -128,55 +197,119 @@
             <!-- Bottom Content -->
             <Grid Grid.Row="4" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="470*"/>
+                    <ColumnDefinition Width="473*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource MetricCard}">
+                <Border Grid.Column="0" Style="{StaticResource MetricCard}" Margin="10,10,10,88" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Recent Activity" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
+                        <TextBlock Text="Collection Performance" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,15"/>
+                        <ProgressBar HorizontalAlignment="Left" Height="20" Margin="46,64,0,0" Grid.Row="1" VerticalAlignment="Top" Width="288"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="46,38,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Total Collected" VerticalAlignment="Top" Foreground="#FFA1A1A1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="256,41,0,0" Grid.Row="1" TextWrapping="Wrap" Text="10,000" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="46,89,0,0" Grid.Row="1" TextWrapping="Wrap" Text="6.2% collection rate" VerticalAlignment="Top"/>
+                        <ProgressBar HorizontalAlignment="Left" Height="20" Margin="46,142,0,0" Grid.Row="1" VerticalAlignment="Top" Width="288"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="46,116,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Total Collected" VerticalAlignment="Top" Foreground="#FFA1A1A1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="256,119,0,0" Grid.Row="1" TextWrapping="Wrap" Text="10,000" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="46,166,0,0" Grid.Row="1" TextWrapping="Wrap" Text="6.2% collection rate" VerticalAlignment="Top"/>
                         <!-- Placeholder for Chart or Table -->
-                        <Border Grid.Row="1" MinHeight="300" Background="#F8FAFC" CornerRadius="10" BorderBrush="#E2E8F0" BorderThickness="1">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <fa:ImageAwesome Icon="BarChart" Foreground="#CBD5E1" Width="48" Margin="0,0,0,10"/>
-                                <TextBlock Text="No recent activity to display" Foreground="#94A3B8" FontSize="14"/>
-                            </StackPanel>
-                        </Border>
                     </Grid>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource MetricCard}">
+                <Border Grid.Column="1" Style="{StaticResource MetricCard}" Margin="10,10,10,10" BorderBrush="Silver" BorderThickness="0.5,0.5,0.5,0.5" Height="377.28">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Over Due Account" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                            <StackPanel x:Name="NotificationList">
-                                <Border Background="#EFF6FF" Padding="15" CornerRadius="10" Margin="0,0,0,10">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <fa:ImageAwesome Icon="InfoCircle" Foreground="#3B82F6" Width="16" VerticalAlignment="Top" Margin="0,2,10,0"/>
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="System Update" FontWeight="SemiBold" FontSize="13"/>
-                                            <TextBlock Text="The loan management system has been updated to the latest version." 
-                                                        Foreground="#64748B" FontSize="12" TextWrapping="Wrap"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </StackPanel>
-                        </ScrollViewer>
+                        <TextBlock Text="Over Due Account" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,15" Foreground="#1E293B"/>
+                        <DataGrid x:Name="dtgOverdueList" 
+                                  Grid.Row="1"
+                                  Style="{StaticResource ModernDataGrid}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding installment_id}" Width="40">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#94A3B8"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Client Name" Binding="{Binding full_name}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontWeight" Value="Medium"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding installment_amount, StringFormat=₱\{0:N2\}}" Width="100"/>
+                                <DataGridTextColumn Header="Days" Binding="{Binding total_overdue_day}" Width="60">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#EF4444"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Action" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Cursor="Hand" HorizontalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <fa:ImageAwesome Icon="Eye" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14"/>
+                                                    <TextBlock Text="View" Margin="5,0,0,0" VerticalAlignment="Center" FontSize="11" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" FontWeight="SemiBold"/>
+                                                </StackPanel>
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="BorderBrush" Value="#E0E7FF"/>
+                                                        <Setter Property="Foreground" Value="#6366F1"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border Background="{TemplateBinding Background}" 
+                                                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                            BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                            Padding="8,4" 
+                                                                            CornerRadius="8">
+                                                                        <ContentPresenter/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#6366F1"/>
+                                                                <Setter Property="BorderBrush" Value="#6366F1"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Background" Value="#4F46E5"/>
+                                                                <Setter Property="BorderBrush" Value="#4F46E5"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                                <Setter Property="RenderTransform">
+                                                                    <Setter.Value>
+                                                                        <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
                 </Border>
             </Grid>
+            <!-- Removed the floating DataGrid at the bottom as it seemed like a misplaced element -->
         </Grid>
     </ScrollViewer>
 </Page>

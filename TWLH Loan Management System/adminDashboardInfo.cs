@@ -1,8 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Media;
+using FontAwesome.WPF;
 
 namespace TWLH_Loan_Management_System
 {
@@ -51,5 +57,19 @@ namespace TWLH_Loan_Management_System
             strquery = $"select sum(installment_amount) from tbl_loan_installment where installment_status = 'Past Due'";
             return db.displayRecords(strquery).Rows[0][0].ToString();
         }
+
+        public DataTable getOverDueList()
+        {
+            strquery =  $"select vw.installment_id, " +
+                        $"(select concat(first_name, ' ', last_name) as full_name from tbl_client where client_id = vw.client_id) as full_name, " +
+                        $"installment_amount, " +
+                        $"timestampdiff(day, installment_due_date, curdate()) as total_overdue_day " +
+                        $"from vw_total_amount_installment vw " +
+                        $"where installment_status = 'Past Due';";
+
+            return db.displayRecords(strquery);
+        }
+
+        
     }
 }
