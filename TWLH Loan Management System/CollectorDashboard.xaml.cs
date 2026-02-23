@@ -20,7 +20,7 @@ namespace TWLH_Loan_Management_System
     /// </summary>
     public partial class CollectorDashboard : Page
     {
-        adminDashboardInfo dashBoardinfo = new adminDashboardInfo();
+        DashboardInfo dashBoardinfo = new DashboardInfo();
         public CollectorDashboard()
         {
             InitializeComponent();

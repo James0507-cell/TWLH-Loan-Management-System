@@ -12,7 +12,7 @@ using FontAwesome.WPF;
 
 namespace TWLH_Loan_Management_System
 {
-    class adminDashboardInfo
+    class DashboardInfo
     {
         dbManager db = new dbManager();
         string strquery = "";
