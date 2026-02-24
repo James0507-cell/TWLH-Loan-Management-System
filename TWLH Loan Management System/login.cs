@@ -15,19 +15,23 @@ namespace TWLH_Loan_Management_System
         dbManager db = new dbManager();
         string sql = "";
         public string role = "";
-        public string UserValidation(string username, string password_hash)
+        int employeeID = 0;
+        public (int EmployeeID, string Role)? UserValidation(string username, string password_hash)
         {
             sql =   $"Select * from tbl_employee_credential " +
                     $"where username = '{username}'     " +
                     $"and password_hash = '{password_hash}'";
             DataTable dt = db.displayRecords(sql);
+            
             if (dt != null && dt.Rows.Count > 0)
             {
+                employeeID = Convert.ToInt32(dt.Rows[0][1]);
                 sql =   $"Select * from tbl_employee " +
                         $"where employee_id = '{dt.Rows[0][1]}'";
                 dt = db.displayRecords(sql);
                 role = dt.Rows[0][6].ToString();
-                return role;
+                
+                return (employeeID, role);
             } else
             {
                 return null;

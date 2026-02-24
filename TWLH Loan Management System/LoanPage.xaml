@@ -4,17 +4,213 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TWLH_Loan_Management_System"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="loanPage" Height="650" Width="840" Background="White">
+        Title="loanPage" d:DesignHeight="650" d:DesignWidth="840" Background="#FFF2F4F7" Loaded="Page_Loaded">
+    <Page.Resources>
+        <!-- Modern Search Box Style -->
+        <Style x:Key="ModernSearchBox" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <fa:ImageAwesome Icon="Search" Width="14" Height="14" Foreground="#A0AEC0" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,15,0"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Elegant ComboBox Style -->
+        <Style x:Key="ElegantComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10"/>
+                            <ToggleButton x:Name="toggleButton" BorderThickness="0" Background="Transparent" ClickMode="Press" Focusable="false" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="Transparent">
+                                            <Path x:Name="Arrow" Data="M0,0 L4,4 L8,0 Z" Fill="#64748B" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" Stretch="Uniform" Width="8"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" IsHitTestVisible="false"/>
+                            <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="Slide">
+                                <Border x:Name="dropDownBorder" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=border}">
+                                    <ScrollViewer x:Name="DropDownScrollViewer">
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#CBD5E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Elegant Primary Button Style -->
+        <Style x:Key="ElegantPrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#3044FF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2537E6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Custom Card Button Style -->
+        <Style x:Key="CardButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" MinHeight="93"/>
             <RowDefinition/>
-            <RowDefinition Height="9*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel VerticalAlignment="Center" Margin="20,0,0,0" Height="38">
-            <TextBlock TextWrapping="Wrap" Text="Loans &amp; Schedules" FontSize="19" FontWeight="Bold"/>
-            <TextBlock TextWrapping="Wrap" Text="View and Manage Loans" FontSize="8" Foreground="#FF818181"/>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="30,30,30,20">
+            <TextBlock Text="Loans &amp; Schedules" FontSize="26" FontWeight="Bold" Foreground="#1E293B"/>
+            <TextBlock Text="Manage client accounts, monitor repayments, and schedule new loans." FontSize="14" Foreground="#64748B" Margin="0,4,0,0"/>
         </StackPanel>
 
+        <!-- Unified Actions Bar -->
+        <Grid Margin="30,107,30,15" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" MinWidth="164"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Filters & Search -->
+            <StackPanel Orientation="Horizontal">
+                <!-- Search -->
+                <Grid Width="250">
+                    <TextBox Style="{StaticResource ModernSearchBox}" x:Name="txtSearch"/>
+                    <TextBlock IsHitTestVisible="False" Text="Search client or loan ID..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0" Foreground="#A0AEC0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=txtSearch}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+
+                <!-- Status Filter -->
+                <ComboBox Style="{StaticResource ElegantComboBox}" x:Name="cmbStatus" Width="140" Margin="15,0,0,0">
+                    <ComboBoxItem Content="All Statuses" IsSelected="True"/>
+                    <ComboBoxItem Content="Active"/>
+                    <ComboBoxItem Content="Paid"/>
+                    <ComboBoxItem Content="Past Due"/>
+                </ComboBox>
+
+                <!-- Plan Filter -->
+                <ComboBox Style="{StaticResource ElegantComboBox}" x:Name="cmbPlan" Width="160" Margin="15,0,0,0">
+                    <ComboBoxItem Content="All Plans" IsSelected="True"/>
+                    <ComboBoxItem Content="Daily"/>
+                    <ComboBoxItem Content="Semimonthly"/>
+                    <ComboBoxItem Content="Monthly"/>
+                    <ComboBoxItem Content="Quarterly"/>
+                    <ComboBoxItem Content="Anually"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Add Button -->
+            <Button Grid.Column="1" Style="{StaticResource ElegantPrimaryButtonStyle}" x:Name="btnAddLoan" HorizontalAlignment="Center" Width="164" Click="btnAddLoan_Click_1">
+                <StackPanel Orientation="Horizontal">
+                    <fa:ImageAwesome Icon="PlusCircle" Width="14" Height="14" Foreground="White" Margin="0,0,10,0"/>
+                    <TextBlock Text="New Loan Record" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" Margin="0,68,0,0" Grid.RowSpan="2">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <WrapPanel x:Name="loanContainer" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,10"/>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Footer -->
+        <StackPanel Grid.Row="3" Margin="30,10,30,25">
+            <Separator Background="#E2E8F0" Height="1" Margin="0,0,0,15"/>
+            <TextBlock Text="© 2026 TWLH Loan Management System | System v1.0" 
+                       HorizontalAlignment="Center" Foreground="#64748B" FontSize="11"/>
+        </StackPanel>
     </Grid>
 </Page>

@@ -12,11 +12,11 @@
         <!-- Card Style -->
         <Style x:Key="MetricCard" TargetType="Border">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="CornerRadius" Value="15"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="20"/>
-            <Setter Property="BorderBrush" Value="Silver"/>
-            <Setter Property="BorderThickness" Value=".5"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
         </Style>
 
         <!-- Modern DataGrid Style -->
@@ -139,12 +139,15 @@
                 <!-- Stats Row 2 -->
                 <RowDefinition Height="*"/>
                 <!-- Main Content -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
             </Grid.RowDefinitions>
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="10,0,10,25">
                 <TextBlock Text="Staff Dashboard Overview" FontSize="28" FontWeight="Bold" Foreground="#1E293B"/>
                 <TextBlock Text="Welcome back, Staff Member. Here's a summary of the system status." FontSize="14" Foreground="#64748B"/>
+                <Separator Background="#E2E8F0" Height="1" Margin="0,15,0,0"/>
             </StackPanel>
 
             <!-- Top Row Stats (3 Cards) -->
@@ -327,6 +330,13 @@
                     </Grid>
                 </Border>
             </Grid>
+            
+            <!-- Footer -->
+            <StackPanel Grid.Row="5" Margin="10,40,10,20">
+                <Separator Background="#E2E8F0" Height="1" Margin="0,0,0,15"/>
+                <TextBlock Text="© 2026 TWLH Loan Management System | System v1.0" 
+                           HorizontalAlignment="Center" Foreground="#64748B" FontSize="11"/>
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </Page>

@@ -19,9 +19,33 @@ namespace TWLH_Loan_Management_System
     /// </summary>
     public partial class LoanPage : Page
     {
+        Loan loan = new Loan();
+
         public LoanPage()
         {
             InitializeComponent();
+        }
+
+        private void btnAddLoan_Click_1(object sender, RoutedEventArgs e)
+        {
+            LoanForm form = new LoanForm();
+            if (form.ShowDialog() == true)
+            {
+                loan.displayLoanCards(loanContainer);
+            }
+           
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                loan.displayLoanCards(loanContainer);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading loans: " + ex.Message);
+            }
         }
     }
 }

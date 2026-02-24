@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using Org.BouncyCastle.Bcpg;
 using System.Data;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace TWLH_Loan_Management_System
         login login = new login();
 
         string userRole = "";
+        int userID = 0;
         public string getRole()
         {
             return userRole;
@@ -36,27 +38,30 @@ namespace TWLH_Loan_Management_System
             string username = txtUsername.Text;
             string password = txtPassword.Password;
 
-            string role = login.UserValidation(username, password);
-            userRole = role;
-            if (role == null)
+            
+            var data = login.UserValidation(username, password);
+            if (data == null)
             {
                 MessageBox.Show("Invalid Credentials");
             } else
             {
-                MainWindow main = new MainWindow(role);
-               if (role == "Admin")
+                userRole = data.Value.Role;
+                userID = data.Value.EmployeeID;
+
+                MainWindow main = new MainWindow(userID, userRole);
+               if (userRole == "Admin")
                 {
                     main.Show();
                     this.Close();
                 }
-               else if (role == "Staff")
+               else if (userRole == "Staff")
                 {
                     main.Show();
                     main.btnClient.Visibility = Visibility.Collapsed;
                     main.btnEmployee.Visibility = Visibility.Collapsed;
                     this.Close();
                 }
-               else if (role == "Collector")
+               else if (userRole == "Loan Collector")
                 {
                     main.Show();
                     main.btnTransaction.Visibility = Visibility.Collapsed;

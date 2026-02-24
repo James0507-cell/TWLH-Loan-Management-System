@@ -6,19 +6,17 @@
       xmlns:local="clr-namespace:TWLH_Loan_Management_System"
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
-      Title="AdminDashboard" Background="#F0F2F5" Loaded="Page_Loaded">
+      Title="AdminDashboard" Background="#FFF2F4F7" Loaded="Page_Loaded">
 
     <Page.Resources>
         <!-- Card Style -->
         <Style x:Key="MetricCard" TargetType="Border">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="CornerRadius" Value="15"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="20"/>
-            <Setter Property="BorderBrush" Value="Silver"/>
-            <Setter Property="BorderThickness" Value=".5"/>
-            
-            
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
         </Style>
 
         <!-- Modern DataGrid Style -->
@@ -141,12 +139,15 @@
                 <!-- Stats Row 2 -->
                 <RowDefinition Height="*"/>
                 <!-- Main Content -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
             </Grid.RowDefinitions>
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="10,0,10,25">
                 <TextBlock Text="Dashboard Overview" FontSize="28" FontWeight="Bold" Foreground="#1E293B"/>
                 <TextBlock Text="Welcome back, Administrator. Here's a summary of the system status." FontSize="14" Foreground="#64748B"/>
+                <Separator Background="#E2E8F0" Height="1" Margin="0,15,0,0"/>
             </StackPanel>
 
             <!-- Top Row Stats -->
@@ -339,6 +340,13 @@
                 </Border>
             </Grid>
             <!-- Removed the floating DataGrid at the bottom as it seemed like a misplaced element -->
+
+            <!-- Footer -->
+            <StackPanel Grid.Row="5" Margin="10,40,10,20">
+                <Separator Background="#E2E8F0" Height="1" Margin="0,0,0,15"/>
+                <TextBlock Text="© 2026 TWLH Loan Management System | System v1.0" 
+                           HorizontalAlignment="Center" Foreground="#64748B" FontSize="11"/>
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </Page>

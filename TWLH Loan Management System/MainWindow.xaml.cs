@@ -20,12 +20,13 @@ namespace TWLH_Loan_Management_System
     public partial class MainWindow : Window
     {
         private string role;
+        private int userId;
 
-        public MainWindow(string role)
+        public MainWindow(int id, string role)
         {
             InitializeComponent();
             this.role = role;
-            
+            this.userId = id;
             Loaded += MainWindow_Loaded;
         }
 
@@ -44,9 +45,10 @@ namespace TWLH_Loan_Management_System
             else if(role == "Staff")
             {
                 MainFrame.Navigate(new StaffDashboard());
-            } else if (role == "Collector")
+            } 
+            else if (role == "Loan Collector")
             {
-                MainFrame.Navigate(new CollectorDashboard());
+                MainFrame.Navigate(new CollectorDashboard(userId));
             }
             
         }
