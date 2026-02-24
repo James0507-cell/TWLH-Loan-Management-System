@@ -71,7 +71,7 @@ namespace TWLH_Loan_Management_System
 
                 // Column 1: Installment Info
                 StackPanel col1 = new StackPanel();
-                col1.Children.Add(new TextBlock { Text = $"Installment #{installmentID}", FontWeight = FontWeights.Bold, FontSize = 16, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
+                col1.Children.Add(new TextBlock { Text = $"Installment #{installmentID}", FontWeight = FontWeights.SemiBold, FontSize = 16, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
                 col1.Children.Add(new TextBlock { Text = $"Due Date: {dueDate:MMM dd, yyyy}", FontSize = 13, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), Margin = new Thickness(0, 5, 0, 0) });
                 
                 Border statusChip = new Border
@@ -86,7 +86,7 @@ namespace TWLH_Loan_Management_System
                 {
                     Text = status,
                     FontSize = 11,
-                    FontWeight = FontWeights.Bold,
+                    FontWeight = FontWeights.SemiBold,
                     Foreground = (Brush)new BrushConverter().ConvertFrom(status == "Paid" ? "#10B981" : status == "Past Due" ? "#EF4444" : "#3044FF")
                 };
                 col1.Children.Add(statusChip);
@@ -95,8 +95,8 @@ namespace TWLH_Loan_Management_System
 
                 // Column 2: Payment Details
                 StackPanel col2 = new StackPanel();
-                col2.Children.Add(new TextBlock { Text = "INSTALLMENT AMOUNT", FontSize = 10, FontWeight = FontWeights.SemiBold, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B") });
-                col2.Children.Add(new TextBlock { Text = $"₱{amount:N2}", FontSize = 16, FontWeight = FontWeights.Bold, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
+                col2.Children.Add(new TextBlock { Text = "INSTALLMENT AMOUNT", FontSize = 10, FontWeight = FontWeights.Normal, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B") });
+                col2.Children.Add(new TextBlock { Text = $"₱{amount:N2}", FontSize = 16, FontWeight = FontWeights.SemiBold, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
                 
                 if (isPartiallyPaid)
                 {
@@ -112,8 +112,8 @@ namespace TWLH_Loan_Management_System
 
                 // Column 3: Total to Pay
                 StackPanel col3 = new StackPanel { HorizontalAlignment = HorizontalAlignment.Right };
-                col3.Children.Add(new TextBlock { Text = "REMAINING BALANCE", FontSize = 10, FontWeight = FontWeights.SemiBold, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), HorizontalAlignment = HorizontalAlignment.Right });
-                col3.Children.Add(new TextBlock { Text = $"₱{totalToPay:N2}", FontSize = 20, FontWeight = FontWeights.Bold, Foreground = (Brush)new BrushConverter().ConvertFrom("#3044FF"), HorizontalAlignment = HorizontalAlignment.Right });
+                col3.Children.Add(new TextBlock { Text = "REMAINING BALANCE", FontSize = 10, FontWeight = FontWeights.Normal, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), HorizontalAlignment = HorizontalAlignment.Right });
+                col3.Children.Add(new TextBlock { Text = $"₱{totalToPay:N2}", FontSize = 20, FontWeight = FontWeights.SemiBold, Foreground = (Brush)new BrushConverter().ConvertFrom("#3044FF"), HorizontalAlignment = HorizontalAlignment.Right });
                 Grid.SetColumn(col3, 2);
                 grid.Children.Add(col3);
 

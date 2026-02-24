@@ -143,6 +143,7 @@
         <StackPanel Grid.Row="0" Margin="30,30,30,20">
             <TextBlock Text="Loans &amp; Schedules" FontSize="26" FontWeight="Bold" Foreground="#1E293B"/>
             <TextBlock Text="Manage client accounts, monitor repayments, and schedule new loans." FontSize="14" Foreground="#64748B" Margin="0,4,0,0"/>
+            <Separator Background="#E2E8F0" Height="1" Margin="0,15,0,0"/>
         </StackPanel>
 
         <!-- Unified Actions Bar -->
