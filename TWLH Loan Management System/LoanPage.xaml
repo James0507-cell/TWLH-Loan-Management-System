@@ -1,4 +1,4 @@
-﻿<Page x:Class="TWLH_Loan_Management_System.LoanPage"
+<Page x:Class="TWLH_Loan_Management_System.LoanPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -133,8 +133,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" MinHeight="93"/>
+            <RowDefinition Height="Auto" MinHeight="140"/>
+            <RowDefinition Height="Auto" MinHeight="55"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -147,7 +147,7 @@
         </StackPanel>
 
         <!-- Unified Actions Bar -->
-        <Grid Margin="30,107,30,15" Grid.RowSpan="2">
+        <Grid Margin="30,0,30,0" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto" MinWidth="164"/>
@@ -201,10 +201,28 @@
         </Grid>
 
         <!-- Main Content Area -->
-        <Grid Grid.Row="1" Margin="0,68,0,0" Grid.RowSpan="2">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Grid.Row="2" Margin="0,1,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="22*"/>
+                <RowDefinition Height="177*"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,-5" Grid.Row="1">
                 <WrapPanel x:Name="loanContainer" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,10"/>
             </ScrollViewer>
+            <Border BorderBrush="#FFE2E8F0" BorderThickness="1" Margin="30,0,560,10" CornerRadius="7,7,7,7">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="#FFE2E8F0" CornerRadius="7,0,0,7">
+                        <Button Content="Card Layout" Click="Button_Click" Background="{x:Null}" BorderThickness="0,0,0,0"/>
+                    </Border>
+                    <Border BorderBrush="#FFE2E8F0" Grid.Column="1" CornerRadius="0,7,7,0">
+                        <Button Content="Table Layout" Background="{x:Null}" BorderThickness="0,0,0,0" Click="Button_Click_1"/>
+                    </Border>
+                </Grid>
+            </Border>
         </Grid>
 
         <!-- Footer -->

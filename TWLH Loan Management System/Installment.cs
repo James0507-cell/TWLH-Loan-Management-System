@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
-using System;
-using System.Data;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Input;
+using FontAwesome.WPF;
 
 namespace TWLH_Loan_Management_System
 {
@@ -110,10 +108,42 @@ namespace TWLH_Loan_Management_System
                 Grid.SetColumn(col2, 1);
                 grid.Children.Add(col2);
 
-                // Column 3: Total to Pay
+                // Column 3: Total to Pay & Actions
                 StackPanel col3 = new StackPanel { HorizontalAlignment = HorizontalAlignment.Right };
                 col3.Children.Add(new TextBlock { Text = "REMAINING BALANCE", FontSize = 10, FontWeight = FontWeights.Normal, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), HorizontalAlignment = HorizontalAlignment.Right });
                 col3.Children.Add(new TextBlock { Text = $"₱{totalToPay:N2}", FontSize = 20, FontWeight = FontWeights.SemiBold, Foreground = (Brush)new BrushConverter().ConvertFrom("#3044FF"), HorizontalAlignment = HorizontalAlignment.Right });
+
+                // Action Buttons container
+                StackPanel btnPanel = new StackPanel 
+                { 
+                    Orientation = Orientation.Horizontal, 
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Margin = new Thickness(0, 12, 0, 0)
+                };
+
+                // Logic to show multiple buttons if necessary
+                if (status == "Paid" || isPartiallyPaid)
+                {
+                    Button btnView = CreateIconButton(FontAwesomeIcon.History, "#3044FF", "View Transaction Log");
+                    btnView.Tag = installmentID; // Store installmentID in the Tag for access in the event handler
+                    btnView.Click += BtnViewTransactionLog_Click;
+                    btnPanel.Children.Add(btnView);                }
+
+                if (status == "Active" || status == "Past Due")
+                {
+                    Button btnFollow = CreateIconButton(FontAwesomeIcon.Calendar, "#64748B", "Schedule Follow Up");
+                    if (btnPanel.Children.Count > 0)
+                    {
+                        btnFollow.Margin = new Thickness(10, 0, 0, 0);
+                    }
+                    btnPanel.Children.Add(btnFollow);
+                }
+
+                if (btnPanel.Children.Count > 0)
+                {
+                    col3.Children.Add(btnPanel);
+                }
+
                 Grid.SetColumn(col3, 2);
                 grid.Children.Add(col3);
 
@@ -122,6 +152,51 @@ namespace TWLH_Loan_Management_System
             }
 
             return grandTotal;
+        }
+
+        private Button CreateIconButton(FontAwesomeIcon icon, string color, string tooltip)
+        {
+            ImageAwesome iconImage = new ImageAwesome
+            {
+                Icon = icon,
+                Foreground = Brushes.White,
+                Width = 16,
+                Height = 16
+            };
+
+            Button btn = new Button
+            {
+                Content = iconImage,
+                Background = (Brush)new BrushConverter().ConvertFrom(color),
+                BorderThickness = new Thickness(0),
+                Cursor = Cursors.Hand,
+                Height = 36,
+                Width = 36,
+                ToolTip = tooltip
+            };
+
+            // Programmatic rounded corners template
+            ControlTemplate template = new ControlTemplate(typeof(Button));
+            FrameworkElementFactory border = new FrameworkElementFactory(typeof(Border));
+            border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Button.BackgroundProperty));
+            border.SetValue(Border.CornerRadiusProperty, new CornerRadius(18)); // Half of height/width for perfect circle
+            FrameworkElementFactory content = new FrameworkElementFactory(typeof(ContentPresenter));
+            content.SetValue(ContentPresenter.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+            content.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);
+            border.AppendChild(content);
+            template.VisualTree = border;
+            btn.Template = template;
+
+            return btn;
+        }
+
+        private void BtnViewTransactionLog_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            int installmentID = (int)btn.Tag;
+
+            installmentTransactionDetail transactionDetailWindow = new installmentTransactionDetail(installmentID);
+            transactionDetailWindow.ShowDialog();
         }
     }
 }
