@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySqlX.XDevAPI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -89,11 +90,13 @@ namespace TWLH_Loan_Management_System
         private void btnCollection_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
+            
         }
 
         private void btnClient_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
+            MainFrame.Navigate(new Page1());
         }
 
         private void btnEmployee_Click(object sender, RoutedEventArgs e)
@@ -118,6 +121,9 @@ namespace TWLH_Loan_Management_System
             this.Close();
         }
 
-        
+        private void btnPastDueAccounts_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
