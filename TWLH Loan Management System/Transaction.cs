@@ -68,7 +68,7 @@ namespace TWLH_Loan_Management_System
 
             // Column 1: Transaction Info
             StackPanel col1 = new StackPanel();
-            col1.Children.Add(new TextBlock { Text = $"Transaction ID: {paymentId}", FontWeight = FontWeights.SemiBold, FontSize = 14, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
+            col1.Children.Add(new TextBlock { Text = $"Payment ID: {paymentId}", FontWeight = FontWeights.SemiBold, FontSize = 14, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
             col1.Children.Add(new TextBlock { Text = $"Recorded By: {recordedByName}", FontSize = 12, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), Margin = new Thickness(0, 5, 0, 0) });
             Grid.SetColumn(col1, 0);
             grid.Children.Add(col1);
