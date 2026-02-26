@@ -60,9 +60,11 @@ namespace TWLH_Loan_Management_System
                 // Extract data from row, handling potential nulls or data type differences
                 int loanID = Convert.ToInt32(row["loan_id"]);
                 decimal loanAmount = Convert.ToDecimal(row["loan_amount"]);
+                double interestRate = Convert.ToDouble(row["interest_rate"]);
                 int clientID = Convert.ToInt32(row["client_id"]);
                 string clientName = $"{row["first_name"]} {row["last_name"]}";
                 DateTime dueDate = Convert.ToDateTime(row["due_date"]);
+                DateTime createdAt = Convert.ToDateTime(row["created_at"]);
                 string installmentPlan = row["installment_plan"].ToString();
                 string loanStatus = row["loan_status"].ToString();
                 int totalInstallments = Convert.ToInt32(row["total_installments"]);
@@ -72,7 +74,7 @@ namespace TWLH_Loan_Management_System
                 Border card = new Border
                 {
                     Width = 340,
-                    Height = 350,
+                    Height = 380, // Increased height
                     Margin = new System.Windows.Thickness(12),
                     Background = Brushes.White,
                     CornerRadius = new System.Windows.CornerRadius(15),
@@ -100,13 +102,32 @@ namespace TWLH_Loan_Management_System
                     Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"),
                     Margin = new System.Windows.Thickness(0, 4, 0, 0)
                 });
-                stack.Children.Add(new TextBlock
+                
+                Grid clientSubInfo = new Grid();
+                clientSubInfo.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                clientSubInfo.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+                TextBlock txtClientID = new TextBlock
                 {
                     Text = $"Client ID: {clientID}",
-                    FontSize = 12,
+                    FontSize = 11,
+                    Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B")
+                };
+                Grid.SetColumn(txtClientID, 0);
+                clientSubInfo.Children.Add(txtClientID);
+
+                TextBlock txtCreated = new TextBlock
+                {
+                    Text = $"Added: {createdAt:MMM dd, yyyy}",
+                    FontSize = 11,
                     Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"),
-                    Margin = new System.Windows.Thickness(0, 0, 0, 15)
-                });
+                    HorizontalAlignment = HorizontalAlignment.Right
+                };
+                Grid.SetColumn(txtCreated, 1);
+                clientSubInfo.Children.Add(txtCreated);
+
+                stack.Children.Add(clientSubInfo);
+                stack.Children.Add(new Border { Height = 15 }); // Spacer
 
                 // Top Info Grid (Amount and Status)
                 Grid infoGrid = new Grid();
@@ -158,22 +179,29 @@ namespace TWLH_Loan_Management_System
                 // Divider
                 stack.Children.Add(new Separator { Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9"), Margin = new System.Windows.Thickness(0, 15, 0, 15) });
 
-                // Details: Due Date & Plan
+                // Details: Due Date, Plan & Interest
                 Grid detailsGrid = new Grid();
+                detailsGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 detailsGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 detailsGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
                 StackPanel dateStack = new StackPanel();
                 dateStack.Children.Add(new TextBlock { Text = "DUE DATE", FontSize = 9, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), FontWeight = FontWeights.SemiBold });
-                dateStack.Children.Add(new TextBlock { Text = dueDate.ToString("MMM dd, yyyy"), FontSize = 12, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
+                dateStack.Children.Add(new TextBlock { Text = dueDate.ToString("MMM dd, yyyy"), FontSize = 11, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
                 Grid.SetColumn(dateStack, 0);
                 detailsGrid.Children.Add(dateStack);
 
                 StackPanel planStack = new StackPanel();
                 planStack.Children.Add(new TextBlock { Text = "PLAN", FontSize = 9, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), FontWeight = FontWeights.SemiBold });
-                planStack.Children.Add(new TextBlock { Text = installmentPlan, FontSize = 12, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
+                planStack.Children.Add(new TextBlock { Text = installmentPlan, FontSize = 11, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
                 Grid.SetColumn(planStack, 1);
                 detailsGrid.Children.Add(planStack);
+
+                StackPanel interestStack = new StackPanel();
+                interestStack.Children.Add(new TextBlock { Text = "INTEREST", FontSize = 9, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), FontWeight = FontWeights.SemiBold });
+                interestStack.Children.Add(new TextBlock { Text = $"{interestRate}%", FontSize = 11, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
+                Grid.SetColumn(interestStack, 2);
+                detailsGrid.Children.Add(interestStack);
 
                 stack.Children.Add(detailsGrid);
 

@@ -50,12 +50,33 @@ namespace TWLH_Loan_Management_System
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Card Layout
+            scrollCards.Visibility = Visibility.Visible;
+            loanFrame.Visibility = Visibility.Collapsed;
 
+            // Update styles
+            btnCardView.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+            btnCardView.Foreground = (Brush)new BrushConverter().ConvertFrom("#3044FF");
+            btnTableView.Background = Brushes.Transparent;
+            btnTableView.Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B");
+
+            loan.displayLoanCards(loanContainer);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            // Table Layout
+            scrollCards.Visibility = Visibility.Collapsed;
+            loanFrame.Visibility = Visibility.Visible;
 
+            // Update styles
+            btnTableView.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+            btnTableView.Foreground = (Brush)new BrushConverter().ConvertFrom("#3044FF");
+            btnCardView.Background = Brushes.Transparent;
+            btnCardView.Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B");
+
+            // Navigate to Tabular View
+            loanFrame.Navigate(new LoanTabular());
         }
     }
 }

@@ -203,26 +203,44 @@
         <!-- Main Content Area -->
         <Grid Grid.Row="2" Margin="0,1,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="22*"/>
-                <RowDefinition Height="177*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,-5" Grid.Row="1">
-                <WrapPanel x:Name="loanContainer" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,10"/>
-            </ScrollViewer>
-            <Border BorderBrush="#FFE2E8F0" BorderThickness="1" Margin="30,0,560,10" CornerRadius="7,7,7,7">
-                <Grid>
+
+            <!-- Layout Switcher Tab -->
+            <Border BorderBrush="#E2E8F0" BorderThickness="1" Margin="30,0,30,15" CornerRadius="10" HorizontalAlignment="Left" Background="White">
+                <Grid Width="240" Height="38">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="#FFE2E8F0" CornerRadius="7,0,0,7">
-                        <Button Content="Card Layout" Click="Button_Click" Background="{x:Null}" BorderThickness="0,0,0,0"/>
-                    </Border>
-                    <Border BorderBrush="#FFE2E8F0" Grid.Column="1" CornerRadius="0,7,7,0">
-                        <Button Content="Table Layout" Background="{x:Null}" BorderThickness="0,0,0,0" Click="Button_Click_1"/>
-                    </Border>
+                    
+                    <Button x:Name="btnCardView" Content="Card View" Click="Button_Click" Cursor="Hand" Background="#F1F5F9">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource CardButtonStyle}">
+                                <Setter Property="Foreground" Value="#3044FF"/>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    
+                    <Button x:Name="btnTableView" Grid.Column="1" Content="Table View" Click="Button_Click_1" Cursor="Hand" Background="Transparent">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource CardButtonStyle}">
+                                <Setter Property="Foreground" Value="#64748B"/>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Border>
+
+            <!-- Content -->
+            <Grid Grid.Row="1">
+                <ScrollViewer x:Name="scrollCards" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="Visible">
+                    <WrapPanel x:Name="loanContainer" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,0,20,20"/>
+                </ScrollViewer>
+                
+                <Frame x:Name="loanFrame" NavigationUIVisibility="Hidden" Visibility="Collapsed" Margin="30,0,30,20"/>
+            </Grid>
         </Grid>
 
         <!-- Footer -->
