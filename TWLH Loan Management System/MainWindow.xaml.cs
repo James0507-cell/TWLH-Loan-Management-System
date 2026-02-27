@@ -59,6 +59,7 @@ namespace TWLH_Loan_Management_System
             btnDashboard.Tag = "";
             btnTransaction.Tag = "";
             btnLoans.Tag = "";
+            btnPastDueAccounts.Tag = "";
             btnCollection.Tag = "";
             btnFollowUp.Tag = "";
             btnPromiseToPay.Tag = "";
@@ -87,6 +88,12 @@ namespace TWLH_Loan_Management_System
         {
             SetActiveButton(sender as Button);
             MainFrame.Navigate(new LoanPage());
+        }
+
+        private void btnPastDueAccounts_Click(object sender, RoutedEventArgs e)
+        {
+            SetActiveButton(sender as Button);
+            MainFrame.Navigate(new PastDueAccountPage());
         }
 
         private void btnCollection_Click(object sender, RoutedEventArgs e)
@@ -124,9 +131,6 @@ namespace TWLH_Loan_Management_System
             this.Close();
         }
 
-        private void btnPastDueAccounts_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }
