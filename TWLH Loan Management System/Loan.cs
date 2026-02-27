@@ -37,17 +37,29 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getFilteredLoans(string searchText = "", string status = "All Statuses")
         {
-            strQuery = "SELECT l.*, c.first_name, c.last_name, " +
-                       "CONCAT(c.first_name, ' ', c.last_name) as FullName, " +
-                       "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) as total_installments, " +
-                       "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') as paid_installments, " +
-                       "CONCAT(CAST((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') AS CHAR), '/', " +
-                       "CAST((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) AS CHAR)) as ProgressText, " +
-                       "IFNULL(((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') / " +
-                       "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) * 100), 0) as ProgressValue " +
-                       "FROM tbl_loan l " +
-                       "JOIN tbl_client c ON l.client_id = c.client_id " +
-                       "WHERE 1=1 ";
+            strQuery = @"SELECT l.*, c.first_name, c.last_name, 
+                       CONCAT(c.first_name, ' ', c.last_name) as FullName, 
+                       (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) as total_installments, 
+                       (SELECT COUNT(DISTINCT li.installment_id) 
+                        FROM tbl_loan_installment li
+                        JOIN tbl_installment_payment ip ON li.installment_id = ip.installment_id
+                        JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                        WHERE li.loan_id = l.loan_id AND t.status = 'Confirmed' AND li.installment_status = 'Paid') as paid_installments, 
+                       CONCAT(CAST((SELECT COUNT(DISTINCT li.installment_id) 
+                                    FROM tbl_loan_installment li
+                                    JOIN tbl_installment_payment ip ON li.installment_id = ip.installment_id
+                                    JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                                    WHERE li.loan_id = l.loan_id AND t.status = 'Confirmed' AND li.installment_status = 'Paid') AS CHAR), '/', 
+                              CAST((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) AS CHAR)) as ProgressText, 
+                       IFNULL(((SELECT COUNT(DISTINCT li.installment_id) 
+                                FROM tbl_loan_installment li
+                                JOIN tbl_installment_payment ip ON li.installment_id = ip.installment_id
+                                JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                                WHERE li.loan_id = l.loan_id AND t.status = 'Confirmed' AND li.installment_status = 'Paid') / 
+                               (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) * 100), 0) as ProgressValue 
+                       FROM tbl_loan l 
+                       JOIN tbl_client c ON l.client_id = c.client_id 
+                       WHERE 1=1 ";
 
             if (!string.IsNullOrEmpty(searchText))
             {

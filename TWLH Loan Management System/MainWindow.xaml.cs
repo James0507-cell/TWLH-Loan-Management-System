@@ -79,7 +79,7 @@ namespace TWLH_Loan_Management_System
         private void btnTransaction_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
-
+            MainFrame.Navigate(new TransactionPage());
         }
 
         private void btnLoans_Click(object sender, RoutedEventArgs e)
