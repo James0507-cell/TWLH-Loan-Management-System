@@ -39,6 +39,19 @@ namespace TWLH_Loan_Management_System
             this.Loaded += (s, e) => PopulateTable();
         }
 
+        private void btnManage_Click(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).DataContext is DataRowView row)
+            {
+                int pastDueID = Convert.ToInt32(row["past_due_id"]);
+                PastDueAccountForm form = new PastDueAccountForm(pastDueID);
+                if (form.ShowDialog() == true)
+                {
+                    PopulateTable();
+                }
+            }
+        }
+
         private void PopulateTable()
         {
             try

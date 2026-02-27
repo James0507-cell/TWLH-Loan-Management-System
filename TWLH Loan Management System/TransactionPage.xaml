@@ -180,6 +180,10 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#F8FAFC"/>
                             </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#E0E7FF"/>
+                                <Setter Property="Foreground" Value="#1E293B"/>
+                            </Trigger>
                         </Style.Triggers>
                     </Style>
                     <Style TargetType="DataGridCell">

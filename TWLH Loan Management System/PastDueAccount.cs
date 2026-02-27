@@ -177,7 +177,14 @@ namespace TWLH_Loan_Management_System
                 Foreground = Brushes.White,
                 FontWeight = FontWeights.SemiBold,
                 Cursor = Cursors.Hand,
-                BorderThickness = new Thickness(0)
+                BorderThickness = new Thickness(0),
+                Tag = row["past_due_id"]
+            };
+            btnView.Click += (s, e) => {
+                int pastDueID = Convert.ToInt32(((Button)s).Tag);
+                PastDueAccountForm form = new PastDueAccountForm(pastDueID);
+                form.ShowDialog();
+                // To refresh parent page, we'd need a callback, but for now showing the form is enough
             };
             
             // Rounded button template

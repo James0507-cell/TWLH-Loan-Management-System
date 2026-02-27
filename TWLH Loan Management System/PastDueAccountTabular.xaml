@@ -68,7 +68,16 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="LOAN #" Binding="{Binding loan_id}" Width="80"/>
+                    <DataGridTemplateColumn Header="LOAN / INST" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding loan_id, StringFormat='Loan #\{0\}'}" FontSize="13" Foreground="#1E293B"/>
+                                    <TextBlock Text="{Binding installment_id, StringFormat='Inst. #\{0\}'}" FontSize="11" Foreground="#64748B"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="STATUS" Width="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -109,19 +118,30 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="PAST DUE AMOUNT" Binding="{Binding TotalPastDue, StringFormat='₱\{0:N2\}'}" Width="*" MinWidth="150">
+                    <DataGridTextColumn Header="PENALTY" Binding="{Binding penalty_added, StringFormat='₱\{0:N2\}'}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="#EF4444"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="15,0"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="TOTAL DUE" Binding="{Binding TotalPastDue, StringFormat='₱\{0:N2\}'}" Width="*" MinWidth="120">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontWeight" Value="Bold"/>
                                 <Setter Property="Foreground" Value="#1E293B"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="15,0"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="ORIGINAL DUE DATE" Binding="{Binding installment_due_date, StringFormat='\{0:MMM dd, yyyy\}'}" Width="*" MinWidth="150"/>
+                    <DataGridTextColumn Header="ORIGINAL DUE" Binding="{Binding installment_due_date, StringFormat='\{0:MMM dd, yyyy\}'}" Width="*" MinWidth="130"/>
                     <DataGridTemplateColumn Header="ACTIONS" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Manage" Cursor="Hand" Background="#3044FF" Foreground="White" BorderThickness="0" Padding="12,6">
+                                <Button Content="Manage" Click="btnManage_Click" Cursor="Hand" Background="#3044FF" Foreground="White" BorderThickness="0" Padding="12,6">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="6"/>
