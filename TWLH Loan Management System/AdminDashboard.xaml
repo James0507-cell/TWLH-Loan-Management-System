@@ -6,19 +6,17 @@
       xmlns:local="clr-namespace:TWLH_Loan_Management_System"
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
-      Title="AdminDashboard" Background="#F0F2F5" Loaded="Page_Loaded">
+      Title="AdminDashboard" Background="#FFF2F4F7" Loaded="Page_Loaded">
 
     <Page.Resources>
         <!-- Card Style -->
         <Style x:Key="MetricCard" TargetType="Border">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="CornerRadius" Value="15"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="20"/>
-            <Setter Property="BorderBrush" Value="Silver"/>
-            <Setter Property="BorderThickness" Value=".5"/>
-            
-            
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
         </Style>
 
         <!-- Modern DataGrid Style -->
@@ -141,19 +139,22 @@
                 <!-- Stats Row 2 -->
                 <RowDefinition Height="*"/>
                 <!-- Main Content -->
+                <RowDefinition Height="Auto"/>
+                <!-- Footer -->
             </Grid.RowDefinitions>
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="10,0,10,25">
                 <TextBlock Text="Dashboard Overview" FontSize="28" FontWeight="Bold" Foreground="#1E293B"/>
                 <TextBlock Text="Welcome back, Administrator. Here's a summary of the system status." FontSize="14" Foreground="#64748B"/>
+                <Separator Background="#E2E8F0" Height="1" Margin="0,15,0,0"/>
             </StackPanel>
 
             <!-- Top Row Stats -->
             <UniformGrid Grid.Row="1" Columns="4">
                 <Border Style="{StaticResource MetricCard}" x:Name="brdTotalActiveLoans">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="ListAlt" Foreground="#3044FF" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="ThLarge" Foreground="#3044FF" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Active Loans" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalActiveLoans" Text="0" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -161,7 +162,7 @@
 
                 <Border Style="{StaticResource MetricCard}" x:Name="brdTotalLoanAmount">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="Money" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="CreditCard" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Loan Amount" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalLoanAmount" Text="₱ 0.00" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -177,7 +178,7 @@
 
                 <Border Style="{StaticResource MetricCard}" x:Name="TotalEmployee">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="UserCircle" Foreground="#6366F1" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="User" Foreground="#6366F1" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Total Employees" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtTotalEmployees" Text="0" Style="{StaticResource MetricValue}"/>
 
@@ -191,7 +192,7 @@
             <UniformGrid Grid.Row="3" Columns="3">
                 <Border Style="{StaticResource MetricCard}" x:Name="brdPaidInstallments">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="CheckCircle" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
+                        <fa:ImageAwesome Icon="CheckSquare" Foreground="#10B981" Width="24" HorizontalAlignment="Left" Margin="0,0,0,15"/>
                         <TextBlock Text="Paid Installments" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtPaidInstallments" Text="0" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -207,7 +208,7 @@
 
                 <Border Style="{StaticResource MetricCard}" x:Name="brdTotalPasdueAmount">
                     <StackPanel>
-                        <fa:ImageAwesome Icon="Dollar" Foreground="#EF4444" Width="21" HorizontalAlignment="Left" Margin="0,0,0,6" Height="26"/>
+                        <fa:ImageAwesome Icon="Money" Foreground="#EF4444" Width="21" HorizontalAlignment="Left" Margin="0,0,0,6" Height="26"/>
                         <TextBlock Text="Past Due Amount" Style="{StaticResource MetricTitle}"/>
                         <TextBlock x:Name="txtPastDueAmount" Text="₱ 0.00" Style="{StaticResource MetricValue}"/>
                     </StackPanel>
@@ -252,7 +253,10 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Over Due Account" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,15" Foreground="#1E293B"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <fa:ImageAwesome Icon="Warning" Foreground="#EF4444" Width="18" Margin="0,0,10,0"/>
+                            <TextBlock Text="Overdue Accounts" FontWeight="SemiBold" FontSize="16" Foreground="#1E293B"/>
+                        </StackPanel>
                         <DataGrid x:Name="dtgOverdueList" 
                                   Grid.Row="1"
                                   Style="{StaticResource ModernDataGrid}">
@@ -336,6 +340,13 @@
                 </Border>
             </Grid>
             <!-- Removed the floating DataGrid at the bottom as it seemed like a misplaced element -->
+
+            <!-- Footer -->
+            <StackPanel Grid.Row="5" Margin="10,40,10,20">
+                <Separator Background="#E2E8F0" Height="1" Margin="0,0,0,15"/>
+                <TextBlock Text="© 2026 TWLH Loan Management System | System v1.0" 
+                           HorizontalAlignment="Center" Foreground="#64748B" FontSize="11"/>
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </Page>

@@ -21,12 +21,13 @@ namespace TWLH_Loan_Management_System
     public partial class MainWindow : Window
     {
         private string role;
+        private int userId;
 
-        public MainWindow(string role)
+        public MainWindow(int id, string role)
         {
             InitializeComponent();
             this.role = role;
-            
+            this.userId = id;
             Loaded += MainWindow_Loaded;
         }
 
@@ -45,9 +46,10 @@ namespace TWLH_Loan_Management_System
             else if(role == "Staff")
             {
                 MainFrame.Navigate(new StaffDashboard());
-            } else if (role == "Collector")
+            } 
+            else if (role == "Loan Collector")
             {
-                MainFrame.Navigate(new CollectorDashboard());
+                MainFrame.Navigate(new CollectorDashboard(userId));
             }
             
         }
@@ -78,7 +80,7 @@ namespace TWLH_Loan_Management_System
         private void btnTransaction_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
-
+            MainFrame.Navigate(new TransactionPage());
         }
 
         private void btnLoans_Click(object sender, RoutedEventArgs e)

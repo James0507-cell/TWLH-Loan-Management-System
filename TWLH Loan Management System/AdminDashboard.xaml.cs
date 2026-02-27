@@ -21,7 +21,8 @@ namespace TWLH_Loan_Management_System
     /// </summary>
     public partial class AdminDashboard : Page
     {
-        adminDashboardInfo dashboardInfo =new adminDashboardInfo();
+        DashboardInfo dashboardInfo =new DashboardInfo();
+        
         public AdminDashboard()
         {
             InitializeComponent();

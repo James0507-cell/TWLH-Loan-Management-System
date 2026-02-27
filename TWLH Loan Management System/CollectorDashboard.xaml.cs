@@ -20,15 +20,41 @@ namespace TWLH_Loan_Management_System
     /// </summary>
     public partial class CollectorDashboard : Page
     {
-        adminDashboardInfo dashBoardinfo = new adminDashboardInfo();
-        public CollectorDashboard()
+        DashboardInfo dashBoardinfo = new DashboardInfo();
+        int userID = 0;
+
+        public CollectorDashboard(int userID)
         {
             InitializeComponent();
+            this.userID = userID;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            loadDashboard();
+        }
+
+        private void loadDashboard()
+        {
+            try
+            {
+                txtMyAssignmentCount.Text = dashBoardinfo.getMyAssignmentCount(userID);
+                txtOverdueCount.Text = dashBoardinfo.getOverdueAssignmentCount(userID);
+                
+                StackPanel cardsPanel = dashBoardinfo.collectionAssignmentCard(userID);
+                stkAssignmentDetails.Children.Clear();
+                
+                while (cardsPanel.Children.Count > 0)
+                {
+                    UIElement element = cardsPanel.Children[0] as UIElement;
+                    cardsPanel.Children.RemoveAt(0);
+                    stkAssignmentDetails.Children.Add(element);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while loading the dashboard: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
