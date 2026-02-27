@@ -27,5 +27,12 @@ namespace TWLH_Loan_Management_System
                         WHERE ca.past_due_id = '{pastDueID}'";
             return db.displayRecords(sqlQuery);
         }
+
+        public void addCollectionAssignment(int pastDueID, int assignedTo, string status, int createdBy)
+        {
+            sqlQuery = $"INSERT INTO tbl_collection_assignment (past_due_id, assigned_to, assignment_status, created_by) " +
+                       $"VALUES ('{pastDueID}', '{assignedTo}', '{status}', '{createdBy}')";
+            db.sqlManager(sqlQuery);
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace TWLH_Loan_Management_System
         private PastDueAccount _pda = new PastDueAccount();
         private FollowUp _followUp = new FollowUp();
         private Collection _collection = new Collection();
+        private PromiseToPay _promise = new PromiseToPay();
 
         public PastDueAccountForm(int pastDueID)
         {
@@ -67,10 +68,12 @@ namespace TWLH_Loan_Management_System
                             btnScheduleFollowUp.IsEnabled = false;
                             btnAddFollowUp.IsEnabled = false;
                             btnAddCollection.IsEnabled = false;
+                            btnAddPromise.IsEnabled = false;
 
                             btnScheduleFollowUp.Opacity = 0.5;
                             btnAddFollowUp.Opacity = 0.5;
                             btnAddCollection.Opacity = 0.5;
+                            btnAddPromise.Opacity = 0.5;
                         }
                     }
                 }
@@ -80,6 +83,9 @@ namespace TWLH_Loan_Management_System
 
                 // 3. Load Collections
                 dgCollections.ItemsSource = _collection.getCollectionRecord(_pastDueID).DefaultView;
+
+                // 4. Load Promise Records
+                dgPromises.ItemsSource = _promise.getPromiseRecords(_pastDueID).DefaultView;
             }
             catch (Exception ex)
             {
@@ -120,6 +126,33 @@ namespace TWLH_Loan_Management_System
         {
             base.OnMouseLeftButtonDown(e);
             try { this.DragMove(); } catch { }
+        }
+
+        private void btnAddFollowUp_Click(object sender, RoutedEventArgs e)
+        {
+            FollowUpForm form = new FollowUpForm(_pastDueID);
+            if (form.ShowDialog() == true)
+            {
+                LoadData();
+            }
+        }
+
+        private void btnAddPromise_Click(object sender, RoutedEventArgs e)
+        {
+            PromiseForm form = new PromiseForm(_pastDueID);
+            if (form.ShowDialog() == true)
+            {
+                LoadData();
+            }
+        }
+
+        private void btnAddCollection_Click(object sender, RoutedEventArgs e)
+        {
+            CollectionAssignmentForm form = new CollectionAssignmentForm(_pastDueID);
+            if (form.ShowDialog() == true)
+            {
+                LoadData();
+            }
         }
     }
 }

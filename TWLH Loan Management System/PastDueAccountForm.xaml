@@ -117,7 +117,7 @@
                         <TextBlock Text="Follow Up History" FontWeight="Bold" FontSize="16" Foreground="#1E293B" VerticalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button x:Name="btnScheduleFollowUp" Content="Schedule" Style="{StaticResource ActionButtonStyle}" Background="#F1F5F9" Foreground="#3044FF" Margin="0,0,10,0"/>
-                            <Button x:Name="btnAddFollowUp" Content="+ New Record" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White"/>
+                            <Button x:Name="btnAddFollowUp" Content="+ New Record" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White" Click="btnAddFollowUp_Click"/>
                         </StackPanel>
                     </Grid>
                     <Border Background="White" CornerRadius="12" BorderBrush="#E2E8F0" BorderThickness="1" MinHeight="150" Margin="0,0,0,25" Padding="5">
@@ -143,6 +143,10 @@
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="#F8FAFC"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#EEF2FF"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -184,10 +188,75 @@
                         </DataGrid>
                     </Border>
 
+                    <!-- Promise to Pay Section -->
+                    <Grid Margin="0,0,0,10">
+                        <TextBlock Text="Promise to Pay Records" FontWeight="Bold" FontSize="16" Foreground="#1E293B" VerticalAlignment="Center"/>
+                        <Button x:Name="btnAddPromise" Content="+ New Promise" HorizontalAlignment="Right" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White" Click="btnAddPromise_Click"/>
+                    </Grid>
+                    <Border Background="White" CornerRadius="12" BorderBrush="#E2E8F0" BorderThickness="1" MinHeight="150" Margin="0,0,0,25" Padding="5">
+                        <DataGrid x:Name="dgPromises" 
+                                  AutoGenerateColumns="False" 
+                                  IsReadOnly="True" 
+                                  Background="Transparent" 
+                                  BorderThickness="0" 
+                                  GridLinesVisibility="None"
+                                  HeadersVisibility="Column" 
+                                  RowHeight="50">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#F8FAFC"/>
+                                    <Setter Property="Foreground" Value="#64748B"/>
+                                    <Setter Property="Padding" Value="12,10"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                                </Style>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#F8FAFC"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#EEF2FF"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="12,0"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="DataGridCell">
+                                                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                                    <ContentPresenter VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="PROMISE DATE" Binding="{Binding promise_payment_date, StringFormat=\{0:MMM dd yyyy\}}" Width="130"/>
+                                <DataGridTextColumn Header="PROMISE AMOUNT" Binding="{Binding promise_amount, StringFormat=₱\{0:N2\}}" Width="130"/>
+                                <DataGridTextColumn Header="REMARKS" Binding="{Binding remarks}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                            <Setter Property="FontSize" Value="12"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+
                     <!-- Collection Assignment Section -->
                     <Grid Margin="0,0,0,10">
                         <TextBlock Text="Collection Assignments" FontWeight="Bold" FontSize="16" Foreground="#1E293B" VerticalAlignment="Center"/>
-                        <Button x:Name="btnAddCollection" Content="+ Create Assignment" HorizontalAlignment="Right" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White"/>
+                        <Button x:Name="btnAddCollection" Content="+ Create Assignment" HorizontalAlignment="Right" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White" Click="btnAddCollection_Click"/>
                     </Grid>
                     <Border Background="White" CornerRadius="12" BorderBrush="#E2E8F0" BorderThickness="1" MinHeight="150" Margin="0,0,0,10" Padding="5">
                         <DataGrid x:Name="dgCollections" 
@@ -213,6 +282,10 @@
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="#F8FAFC"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#EEF2FF"/>
+                                            <Setter Property="Foreground" Value="#1E293B"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>

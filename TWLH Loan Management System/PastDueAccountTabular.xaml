@@ -38,6 +38,10 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#F8FAFC"/>
                             </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#EEF2FF"/>
+                                <Setter Property="Foreground" Value="#1E293B"/>
+                            </Trigger>
                         </Style.Triggers>
                     </Style>
                     <Style TargetType="DataGridCell">
@@ -137,7 +141,6 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="ORIGINAL DUE" Binding="{Binding installment_due_date, StringFormat='\{0:MMM dd, yyyy\}'}" Width="*" MinWidth="130"/>
                     <DataGridTemplateColumn Header="ACTIONS" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

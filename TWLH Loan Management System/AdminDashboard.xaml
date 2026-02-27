@@ -71,7 +71,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#F1F5F9"/>
+                    <Setter Property="Background" Value="#EEF2FF"/>
                     <Setter Property="Foreground" Value="#1E293B"/>
                 </Trigger>
             </Style.Triggers>
