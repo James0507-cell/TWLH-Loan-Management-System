@@ -35,14 +35,36 @@ namespace TWLH_Loan_Management_System
             db.sqlManager(strQuery);
         }
 
-        public DataTable getLoans()
+        public DataTable getFilteredLoans(string searchText = "", string status = "All Statuses")
         {
             strQuery = "SELECT l.*, c.first_name, c.last_name, " +
+                       "CONCAT(c.first_name, ' ', c.last_name) as FullName, " +
                        "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) as total_installments, " +
-                       "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') as paid_installments " +
+                       "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') as paid_installments, " +
+                       "CONCAT(CAST((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') AS CHAR), '/', " +
+                       "CAST((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) AS CHAR)) as ProgressText, " +
+                       "IFNULL(((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id AND installment_status = 'Paid') / " +
+                       "(SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) * 100), 0) as ProgressValue " +
                        "FROM tbl_loan l " +
-                       "JOIN tbl_client c ON l.client_id = c.client_id";
+                       "JOIN tbl_client c ON l.client_id = c.client_id " +
+                       "WHERE 1=1 ";
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                strQuery += $"AND (c.first_name LIKE '%{searchText}%' OR c.last_name LIKE '%{searchText}%' OR l.loan_id LIKE '%{searchText}%') ";
+            }
+
+            if (status != "All Statuses")
+            {
+                strQuery += $"AND l.loan_status = '{status}' ";
+            }
+
             return db.displayRecords(strQuery);
+        }
+
+        public DataTable getLoans()
+        {
+            return getFilteredLoans();
         }
 
         public DataTable getLoanByID(int loanID)
@@ -50,10 +72,13 @@ namespace TWLH_Loan_Management_System
             strQuery = $"select * from tbl_loan where loan_id = {loanID}";
             return db.displayRecords(strQuery);
         }
-        public void displayLoanCards(WrapPanel container)
+
+        public void displayLoanCards(WrapPanel container, string searchText = "", string status = "All Statuses")
         {
-            DataTable dt = getLoans();
+            DataTable dt = getFilteredLoans(searchText, status);
             container.Children.Clear();
+            
+            // ... (rest of the displayLoanCards logic remains the same)
 
             foreach (DataRow row in dt.Rows)
             {

@@ -24,6 +24,33 @@ namespace TWLH_Loan_Management_System
         public LoanPage()
         {
             InitializeComponent();
+            txtSearch.TextChanged += TxtSearch_TextChanged;
+            cmbStatus.SelectionChanged += CmbStatus_SelectionChanged;
+        }
+
+        private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void CmbStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            string searchText = txtSearch.Text;
+            string status = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Statuses";
+
+            if (scrollCards.Visibility == Visibility.Visible)
+            {
+                loan.displayLoanCards(loanContainer, searchText, status);
+            }
+            else
+            {
+                loanFrame.Navigate(new LoanTabular(searchText, status));
+            }
         }
 
         private void btnAddLoan_Click_1(object sender, RoutedEventArgs e)
@@ -31,7 +58,7 @@ namespace TWLH_Loan_Management_System
             LoanForm form = new LoanForm();
             if (form.ShowDialog() == true)
             {
-                loan.displayLoanCards(loanContainer);
+                ApplyFilters();
             }
            
         }
@@ -40,7 +67,7 @@ namespace TWLH_Loan_Management_System
         {
             try
             {
-                loan.displayLoanCards(loanContainer);
+                ApplyFilters();
             }
             catch (Exception ex)
             {
@@ -60,7 +87,7 @@ namespace TWLH_Loan_Management_System
             btnTableView.Background = Brushes.Transparent;
             btnTableView.Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B");
 
-            loan.displayLoanCards(loanContainer);
+            ApplyFilters();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -75,8 +102,8 @@ namespace TWLH_Loan_Management_System
             btnCardView.Background = Brushes.Transparent;
             btnCardView.Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B");
 
-            // Navigate to Tabular View
-            loanFrame.Navigate(new LoanTabular());
+            // Navigate to Tabular View with current filters
+            ApplyFilters();
         }
     }
 }
