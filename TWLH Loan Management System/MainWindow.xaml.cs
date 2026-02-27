@@ -104,6 +104,7 @@ namespace TWLH_Loan_Management_System
         private void btnEmployee_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
+            MainFrame.Navigate(new Employees());
         }
         private void btnFollowUp_Click(object sender, RoutedEventArgs e)
         {
