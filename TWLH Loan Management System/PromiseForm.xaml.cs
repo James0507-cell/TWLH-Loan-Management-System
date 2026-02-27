@@ -48,7 +48,7 @@ namespace TWLH_Loan_Management_System
                 decimal amount = decimal.Parse(txtAmount.Text);
                 string date = dpDate.SelectedDate.Value.ToString("yyyy-MM-dd");
                 string remarks = txtRemarks.Text;
-                int recordedBy = 2; // Placeholder for staff ID
+                int recordedBy = UserSession.EmployeeID;
 
                 _promise.addPromise(_pastDueID, amount, date, remarks, recordedBy);
 

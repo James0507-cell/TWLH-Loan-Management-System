@@ -49,7 +49,7 @@ namespace TWLH_Loan_Management_System
                 string date = dpDate.SelectedDate.Value.ToString("yyyy-MM-dd");
                 string type = ((ComboBoxItem)cmbType.SelectedItem).Content.ToString();
                 string notes = txtNotes.Text;
-                int recordedBy = 2; // Placeholder for staff ID
+                int recordedBy = UserSession.EmployeeID;
 
                 _followUp.addFollowUp(_pastDueID, date, type, notes, recordedBy);
 

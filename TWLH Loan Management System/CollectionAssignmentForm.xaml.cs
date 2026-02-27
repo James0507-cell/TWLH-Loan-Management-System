@@ -68,7 +68,7 @@ namespace TWLH_Loan_Management_System
 
                 int assignedTo = Convert.ToInt32(cmbCollector.SelectedValue);
                 string status = ((ComboBoxItem)cmbStatus.SelectedItem).Content.ToString();
-                int createdBy = 2; // Placeholder for staff ID
+                int createdBy = UserSession.EmployeeID;
 
                 _collection.addCollectionAssignment(_pastDueID, assignedTo, status, createdBy);
 
@@ -87,10 +87,6 @@ namespace TWLH_Loan_Management_System
             this.Close();
         }
 
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            try { this.DragMove(); } catch { }
-        }
+        
     }
 }

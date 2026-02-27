@@ -48,6 +48,9 @@ namespace TWLH_Loan_Management_System
                 userRole = data.Value.Role;
                 userID = data.Value.EmployeeID;
 
+                // Update static session
+                UserSession.Login(userID, userRole);
+
                 MainWindow main = new MainWindow(userID, userRole);
                if (userRole == "Admin")
                 {

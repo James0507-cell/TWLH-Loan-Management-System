@@ -117,7 +117,7 @@ namespace TWLH_Loan_Management_System
                 string plan = ((ComboBoxItem)cmbInstallmentPlan.SelectedItem).Content.ToString();
                 double interestRate = double.Parse(txtInterestRate.Text);
                 string status = _loanID == -1 ? "Active" : ((ComboBoxItem)cmbStatus.SelectedItem).Content.ToString();
-                int approvedBy = 1; 
+                int approvedBy = UserSession.EmployeeID; 
 
                 if (_loanID == -1)
                 {

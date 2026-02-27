@@ -126,6 +126,7 @@ namespace TWLH_Loan_Management_System
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
+            UserSession.Logout();
             LoginWindow login = new LoginWindow();
             login.Show();
             this.Close();

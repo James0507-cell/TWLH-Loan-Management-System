@@ -131,7 +131,7 @@ namespace TWLH_Loan_Management_System
                 }
 
                 string status = ((ComboBoxItem)cmbStatus.SelectedItem).Content.ToString();
-                int recordedBy = 1; // Default for now
+                int recordedBy = UserSession.EmployeeID;
 
                 if (_transactionID == -1)
                 {
