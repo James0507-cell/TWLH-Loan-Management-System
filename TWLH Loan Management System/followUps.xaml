@@ -10,113 +10,53 @@
       Background="#F8F9FA">
 
     <Grid Margin="30">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,25">
             <StackPanel>
-
-                <DockPanel LastChildFill="False" Margin="0,0,0,25">
-                    <StackPanel>
-                        <TextBlock Text="Follow-up Log" FontSize="28" FontWeight="Bold" Foreground="#111827"/>
-                        <TextBlock Text="Track all collection activities and communications" Foreground="#6B7280" FontSize="14"/>
-                    </StackPanel>
-                    <Button DockPanel.Dock="Right" Content="+ Log Follow-up" Padding="15,8" 
-                            Background="#4F46E5" Foreground="White" BorderThickness="0" Height="38" FontWeight="SemiBold">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="8"/>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                </DockPanel>
-
-                <UniformGrid Columns="3" Margin="0,0,0,30">
-                    <Border Background="White" CornerRadius="12" Margin="0,0,10,0" Padding="20" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <Border Width="45" Height="45" Background="#4F46E5" CornerRadius="10" Margin="0,0,15,0">
-                                <fa:ImageAwesome Icon="Comment" Foreground="White" Width="20" Height="20" VerticalAlignment="Center"/>
-                            </Border>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Total Follow-ups" Foreground="#6B7280" FontSize="12"/>
-                                <TextBlock Text="2" FontSize="22" FontWeight="Bold" Foreground="#111827"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Background="White" CornerRadius="12" Margin="5,0" Padding="20" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <Border Width="45" Height="45" Background="#10B981" CornerRadius="10" Margin="0,0,15,0">
-                                <fa:ImageAwesome Icon="ClockOutline" Foreground="White" Width="20" Height="20" VerticalAlignment="Center"/>
-                            </Border>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="This Week" Foreground="#6B7280" FontSize="12"/>
-                                <TextBlock Text="0" FontSize="22" FontWeight="Bold" Foreground="#111827"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Background="White" CornerRadius="12" Margin="10,0,0,0" Padding="20" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <Border Width="45" Height="45" Background="#F59E0B" CornerRadius="10" Margin="0,0,15,0">
-                                <fa:ImageAwesome Icon="Phone" Foreground="White" Width="20" Height="20" VerticalAlignment="Center"/>
-                            </Border>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Phone Contacts" Foreground="#6B7280" FontSize="12"/>
-                                <TextBlock Text="1" FontSize="22" FontWeight="Bold" Foreground="#111827"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-                </UniformGrid>
-
-                <Border Background="White" CornerRadius="15" Padding="25" BorderBrush="#E5E7EB" BorderThickness="1">
-                    <StackPanel>
-                        <TextBlock Text="Activity Timeline" FontSize="18" FontWeight="SemiBold" Foreground="#111827" Margin="0,0,0,25"/>
-
-                        <ItemsControl x:Name="FollowUpTimeline">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,0,0,20">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="60"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Rectangle Grid.Column="0" Width="2" Fill="#E5E7EB" HorizontalAlignment="Center" Margin="0,10,0,-20"/>
-
-                                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="#4F46E5" VerticalAlignment="Top">
-                                            <fa:ImageAwesome Icon="User" Foreground="White" Width="15" Height="15"/>
-                                        </Border>
-
-                                        <Border Grid.Column="1" Background="#FFFFFF" BorderBrush="#F3F4F6" BorderThickness="1" CornerRadius="12" Padding="20" Margin="10,0,0,0">
-                                            <StackPanel>
-                                                <DockPanel LastChildFill="False">
-                                                    <TextBlock Text="{Binding client_name}" FontWeight="Bold" FontSize="16" Foreground="#111827"/>
-                                                    <Border DockPanel.Dock="Right" Background="#DCFCE7" CornerRadius="6" Padding="8,3">
-                                                        <TextBlock Text="{Binding type}" Foreground="#15803D" FontSize="11" FontWeight="Medium"/>
-                                                    </Border>
-                                                </DockPanel>
-
-                                                <StackPanel Orientation="Horizontal" Margin="0,5,0,15">
-                                                    <fa:ImageAwesome Icon="Calendar" Foreground="#9CA3AF" Width="12" Margin="0,0,8,0"/>
-                                                    <TextBlock Text="{Binding date_logged}" Foreground="#6B7280" FontSize="13"/>
-                                                </StackPanel>
-
-                                                <Border Background="#F9FAFB" CornerRadius="8" Padding="15">
-                                                    <TextBlock Text="{Binding notes}" Foreground="#374151" TextWrapping="Wrap" LineHeight="20"/>
-                                                </Border>
-
-                                                <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                                                    <fa:ImageAwesome Icon="User" Foreground="#9CA3AF" Width="12" Margin="0,0,8,0"/>
-                                                    <TextBlock Text="Recorded by You" Foreground="#9CA3AF" FontSize="12"/>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Border>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
-
+                <TextBlock Text="Follow-up Log" FontSize="28" FontWeight="Bold" Foreground="#111827"/>
+                <TextBlock Text="Track all collection activities and communications" Foreground="#6B7280" FontSize="14"/>
             </StackPanel>
+        </DockPanel>
+
+        <!-- Search & Add Bar -->
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="15,10" Margin="0,0,15,0" BorderBrush="#E5E7EB" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <fa:ImageAwesome Icon="Search" Width="16" Height="16" Foreground="#9CA3AF" Margin="5,0,15,0"/>
+                    <TextBox x:Name="txtSearch" Grid.Column="1" Background="Transparent" BorderThickness="0" 
+                             VerticalContentAlignment="Center" FontSize="14" Tag="Search follow-ups by client name or notes..." 
+                             TextChanged="txtSearch_TextChanged"/>
+                </Grid>
+            </Border>
+
+            <Button x:Name="btnAddFollowUp" Grid.Column="1" Content="+ Log Follow-up" Padding="20,0" 
+                    Background="#4F46E5" Foreground="White" BorderThickness="0" Height="45" FontWeight="SemiBold" Click="btnAddFollowUp_Click">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+
+        <!-- Cards Container -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <WrapPanel x:Name="FollowUpCardsContainer" HorizontalAlignment="Center"/>
         </ScrollViewer>
     </Grid>
 </Page>

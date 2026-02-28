@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,9 @@ namespace TWLH_Loan_Management_System
     public partial class FollowUpForm : Window
     {
         private int _pastDueID;
+        private int _followUpID = 0;
         private FollowUp _followUp = new FollowUp();
+        private bool _isEdit = false;
 
         public FollowUpForm(int pastDueID)
         {
@@ -28,6 +31,32 @@ namespace TWLH_Loan_Management_System
             this._pastDueID = pastDueID;
             dpDate.SelectedDate = DateTime.Now;
             cmbType.SelectedIndex = 0;
+        }
+
+        public FollowUpForm(DataRow row)
+        {
+            InitializeComponent();
+            this._isEdit = true;
+            this._followUpID = Convert.ToInt32(row["follow_up_id"]);
+            this._pastDueID = Convert.ToInt32(row["past_due_id"]);
+            
+            dpDate.SelectedDate = Convert.ToDateTime(row["follow_up_date"]);
+            txtNotes.Text = row["notes"].ToString();
+            
+            string type = row["follow_up_type"].ToString();
+            foreach (ComboBoxItem item in cmbType.Items)
+            {
+                if (item.Content.ToString() == type)
+                {
+                    cmbType.SelectedItem = item;
+                    break;
+                }
+            }
+
+            // Update UI for Edit
+            TextBlock headerTitle = (TextBlock)this.FindName("headerTitle");
+            if (headerTitle != null) headerTitle.Text = "Edit Follow Up";
+            btnSave.Content = "Update Record";
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -51,9 +80,17 @@ namespace TWLH_Loan_Management_System
                 string notes = txtNotes.Text;
                 int recordedBy = UserSession.EmployeeID;
 
-                _followUp.addFollowUp(_pastDueID, date, type, notes, recordedBy);
+                if (_isEdit)
+                {
+                    _followUp.updateFollowUp(_followUpID, _pastDueID, date, type, notes, recordedBy);
+                    MessageBox.Show("Follow up record updated successfully.");
+                }
+                else
+                {
+                    _followUp.addFollowUp(_pastDueID, date, type, notes, recordedBy);
+                    MessageBox.Show("Follow up record saved successfully.");
+                }
 
-                MessageBox.Show("Follow up record saved successfully.");
                 this.DialogResult = true;
                 this.Close();
             }
