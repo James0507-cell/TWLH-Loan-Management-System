@@ -28,9 +28,15 @@ namespace TWLH_Loan_Management_System
             return db.displayRecords(strQuery);
         }
 
-        public void setInstallmentToPastDue(int installmentID)
+        public void setInstallmentToPastDueWithPenalty(int installmentID, decimal penalty)
         {
-            strQuery = $"UPDATE tbl_loan_installment SET installment_status = 'Past Due' WHERE installment_id = {installmentID}";
+            // 1. Mark installment as Past Due (This triggers tbl_past_due_account insert via DB trigger)
+            strQuery = $"UPDATE tbl_loan_installment SET installment_status = 'Past Due', updated_by = '{UserSession.EmployeeID}' WHERE installment_id = {installmentID}";
+            db.sqlManager(strQuery);
+
+            // 2. Update the newly created past due account record with the penalty
+            // Since the trigger just ran, we look for the most recent 'Open' record for this installment
+            strQuery = $"UPDATE tbl_past_due_account SET penalty_added = {penalty}, updated_by = '{UserSession.EmployeeID}' WHERE installment_id = {installmentID} AND past_due_status = 'Open'";
             db.sqlManager(strQuery);
         }
 
@@ -142,9 +148,10 @@ namespace TWLH_Loan_Management_System
                     if (btnPanel.Children.Count > 0) btnPastDue.Margin = new Thickness(10, 0, 0, 0);
                     btnPastDue.Click += (s, e) =>
                     {
-                        if (MessageBox.Show("Mark this installment as Past Due?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        PenaltyInputDialog dialog = new PenaltyInputDialog();
+                        if (dialog.ShowDialog() == true)
                         {
-                            setInstallmentToPastDue((int)((Button)s).Tag);
+                            setInstallmentToPastDueWithPenalty((int)((Button)s).Tag, dialog.PenaltyAmount);
                             displayInstallmentCards(container, loanID); // Refresh
                         }
                     };

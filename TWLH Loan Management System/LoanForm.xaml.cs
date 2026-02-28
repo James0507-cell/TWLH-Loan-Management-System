@@ -3,6 +3,7 @@ using System.Windows;
 using System.Data;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Collections.Generic;
 
 namespace TWLH_Loan_Management_System
@@ -27,8 +28,8 @@ namespace TWLH_Loan_Management_System
             InitializeComponent();
             LoadClients();
             _loanID = Convert.ToInt32(row["loan_id"]);
-            txtTitle.Text = "Update Loan Details";
-            txtSubtitle.Text = $"Updating details for Loan #{_loanID}.";
+            txtTitle.Text = "Update Loan Status";
+            txtSubtitle.Text = $"Updating status for Loan #{_loanID}. Only the status can be modified.";
             statusPanel.Visibility = Visibility.Visible;
 
             // Pre-fill data
@@ -40,6 +41,22 @@ namespace TWLH_Loan_Management_System
             // Select Status and Plan
             SelectComboBoxItem(cmbInstallmentPlan, row["installment_plan"].ToString());
             SelectComboBoxItem(cmbStatus, row["loan_status"].ToString());
+
+            // Disable all fields except status for updates
+            DisableFieldsForUpdate();
+        }
+
+        private void DisableFieldsForUpdate()
+        {
+            cmbClient.IsEnabled = false;
+            txtAmount.IsReadOnly = true;
+            txtInterestRate.IsReadOnly = true;
+            dtpDueDate.IsEnabled = false;
+            cmbInstallmentPlan.IsEnabled = false;
+            
+            // Optionally adjust background to visually indicate read-only status
+            txtAmount.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+            txtInterestRate.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
         }
 
         private void LoadClients()
