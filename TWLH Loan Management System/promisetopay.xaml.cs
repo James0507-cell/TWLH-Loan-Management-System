@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TWLH_Loan_Management_System
@@ -47,6 +48,10 @@ namespace TWLH_Loan_Management_System
             {
                 LoadPromises();
             }
+        }
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

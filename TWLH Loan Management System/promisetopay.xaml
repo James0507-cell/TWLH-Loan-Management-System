@@ -101,26 +101,21 @@
                                         <TextBlock Text="{Binding remarks}" Foreground="#67748E" FontSize="12" TextWrapping="Wrap" FontStyle="Italic"/>
                                     </Border>
 
-                                    <Grid Margin="0,20,0,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Button Content="Details" Margin="0,0,5,0" Background="Transparent" Foreground="#8392AB" BorderBrush="#E9ECEF" BorderThickness="1" Height="36" Cursor="Hand">
-                                            <Button.Resources>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="CornerRadius" Value="8"/>
-                                                </Style>
-                                            </Button.Resources>
-                                        </Button>
-                                        <Button Grid.Column="1" Content="Process" Background="#5E72E4" Foreground="White" BorderThickness="0" Height="36" FontWeight="SemiBold" Cursor="Hand">
-                                            <Button.Resources>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="CornerRadius" Value="8"/>
-                                                </Style>
-                                            </Button.Resources>
-                                        </Button>
-                                    </Grid>
+                                    <Button Margin="0,20,0,0" 
+                                            Content="Update Record" 
+                                            Background="#5E72E4" 
+                                            Foreground="White" 
+                                            BorderThickness="0" 
+                                            Height="40" 
+                                            FontWeight="Bold" 
+                                            Cursor="Hand"
+                                            Click="BtnUpdate_Click">
+                                        <Button.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="10"/>
+                                            </Style>
+                                        </Button.Resources>
+                                    </Button>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
