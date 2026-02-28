@@ -35,10 +35,10 @@ namespace TWLH_Loan_Management_System
 
         private void BtnAddPromise_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // Now this works because we fixed the constructor above!
+            
             PromiseForm addForm = new PromiseForm();
 
-            // Use System.Windows.Window to be specific and avoid red errors
+            
             addForm.Owner = System.Windows.Window.GetWindow(this);
 
             bool? result = addForm.ShowDialog();
