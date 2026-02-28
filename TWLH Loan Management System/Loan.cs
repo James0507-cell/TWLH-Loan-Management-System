@@ -472,5 +472,15 @@ namespace TWLH_Loan_Management_System
                 container.Children.Add(card);
             }
         }
+        public bool hasExistingActiveLoan(int clientID)
+        {
+            strQuery = $"SELECT COUNT(*) FROM tbl_loan WHERE client_id = {clientID} AND (loan_status = 'Active' OR loan_status = 'Past Due')";
+            DataTable dt = db.displayRecords(strQuery);
+            if (dt.Rows.Count > 0)
+            {
+                return Convert.ToInt32(dt.Rows[0][0]) > 0;
+            }
+            return false;
+        }
     }
 }
