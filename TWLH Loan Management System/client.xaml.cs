@@ -20,14 +20,44 @@ namespace TWLH_Loan_Management_System
     /// </summary>
     public partial class Page1 : Page
     {
+        Client client = new Client();
+
         public Page1()
         {
             InitializeComponent();
+            this.Loaded += Page1_Loaded;
+        }
+
+        private void Page1_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadClients();
+        }
+
+        private void LoadClients()
+        {
+            try
+            {
+                client.displayClientCards(clientContainer, txtSearch.Text == (string)txtSearch.Tag ? "" : txtSearch.Text);
+            }
+            catch (Exception ex)
+            {
+                // Silence error if it's just initialization noise, or show if it's critical
+                // MessageBox.Show("Error loading clients: " + ex.Message);
+            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            LoadClients();
+        }
 
+        private void btnAddClient_Click(object sender, RoutedEventArgs e)
+        {
+            ClientForm form = new ClientForm();
+            if (form.ShowDialog() == true)
+            {
+                LoadClients(); // Refresh list after adding
+            }
         }
     }
 }

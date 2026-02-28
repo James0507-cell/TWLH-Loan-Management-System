@@ -17,7 +17,11 @@ namespace TWLH_Loan_Management_System
         dbManager db  =new dbManager();
         string strQuery = "";
 
-
+        public void getCLientLoan(int clientID)
+        {
+            strQuery = $"select * from tbl_loan where client_id = '{clientID}'";
+            db.displayRecords(strQuery);
+        }
         public void addLoan(int clientID, double amount, string dueDate, string installmentPlan, 
                             double interestRate, string status, int approvedBy)
         {
@@ -345,6 +349,124 @@ namespace TWLH_Loan_Management_System
                 buttonsGrid.Children.Add(viewBtn);
                 buttonsGrid.Children.Add(updateBtn);
                 stack.Children.Add(buttonsGrid);
+
+                card.Child = stack;
+                container.Children.Add(card);
+            }
+        }
+        public DataTable getLoansByClientID(int clientID)
+        {
+            strQuery = @"SELECT l.*, c.first_name, c.last_name, 
+                       CONCAT(c.first_name, ' ', c.last_name) as FullName, 
+                       (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) as total_installments, 
+                       (SELECT COUNT(DISTINCT li.installment_id) 
+                        FROM tbl_loan_installment li
+                        JOIN tbl_installment_payment ip ON li.installment_id = ip.installment_id
+                        JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                        WHERE li.loan_id = l.loan_id AND t.status = 'Confirmed' AND li.installment_status = 'Paid') as paid_installments, 
+                       CONCAT(CAST((SELECT COUNT(DISTINCT li.installment_id) 
+                                    FROM tbl_loan_installment li
+                                    JOIN tbl_installment_payment ip ON li.installment_id = ip.installment_id
+                                    JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                                    WHERE li.loan_id = l.loan_id AND t.status = 'Confirmed' AND li.installment_status = 'Paid') AS CHAR), '/', 
+                              CAST((SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) AS CHAR)) as ProgressText, 
+                       IFNULL(((SELECT COUNT(DISTINCT li.installment_id) 
+                                FROM tbl_loan_installment li
+                                JOIN tbl_installment_payment ip ON li.installment_id = ip.installment_id
+                                JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                                WHERE li.loan_id = l.loan_id AND t.status = 'Confirmed' AND li.installment_status = 'Paid') / 
+                               (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) * 100), 0) as ProgressValue 
+                       FROM tbl_loan l 
+                       JOIN tbl_client c ON l.client_id = c.client_id 
+                       WHERE l.client_id = " + clientID;
+            return db.displayRecords(strQuery);
+        }
+
+        public void displayLoanCardsByClient(WrapPanel container, int clientID)
+        {
+            DataTable dt = getLoansByClientID(clientID);
+            container.Children.Clear();
+
+            if (dt.Rows.Count == 0)
+            {
+                container.Children.Add(new TextBlock 
+                { 
+                    Text = "No active loans for this client.", 
+                    Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"),
+                    FontSize = 14,
+                    Margin = new Thickness(10)
+                });
+                return;
+            }
+
+            foreach (DataRow row in dt.Rows)
+            {
+                // (Existing logic for creating loan cards, simplified for the detail view)
+                int loanID = Convert.ToInt32(row["loan_id"]);
+                decimal loanAmount = Convert.ToDecimal(row["loan_amount"]);
+                string loanStatus = row["loan_status"].ToString();
+                string plan = row["installment_plan"].ToString();
+                int totalInst = Convert.ToInt32(row["total_installments"]);
+                int paidInst = Convert.ToInt32(row["paid_installments"]);
+
+                Border card = new Border
+                {
+                    Width = 300,
+                    Height = 220,
+                    Margin = new Thickness(10),
+                    Background = Brushes.White,
+                    CornerRadius = new CornerRadius(12),
+                    BorderBrush = (Brush)new BrushConverter().ConvertFrom("#E2E8F0"),
+                    BorderThickness = new Thickness(1.5)
+                };
+
+                StackPanel stack = new StackPanel { Margin = new Thickness(20) };
+                
+                Grid head = new Grid();
+                head.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                head.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+                TextBlock txtId = new TextBlock { Text = $"Loan #{loanID}", FontWeight = FontWeights.Bold, FontSize = 16, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") };
+                Grid.SetColumn(txtId, 0);
+                head.Children.Add(txtId);
+
+                Border statusBrd = new Border
+                {
+                    Padding = new Thickness(8, 4, 8, 4),
+                    CornerRadius = new CornerRadius(6),
+                    Background = (Brush)new BrushConverter().ConvertFrom(loanStatus == "Active" ? "#E0E7FF" : loanStatus == "Paid" ? "#D1FAE5" : "#FEE2E2")
+                };
+                statusBrd.Child = new TextBlock { Text = loanStatus, FontSize = 10, FontWeight = FontWeights.Bold, Foreground = (Brush)new BrushConverter().ConvertFrom(loanStatus == "Active" ? "#3044FF" : loanStatus == "Paid" ? "#10B981" : "#EF4444") };
+                Grid.SetColumn(statusBrd, 1);
+                head.Children.Add(statusBrd);
+                stack.Children.Add(head);
+
+                stack.Children.Add(new TextBlock { Text = $"₱{loanAmount:N2}", FontSize = 20, FontWeight = FontWeights.Bold, Margin = new Thickness(0, 10, 0, 0), Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B") });
+                stack.Children.Add(new TextBlock { Text = $"Plan: {plan}", FontSize = 12, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), Margin = new Thickness(0, 2, 0, 15) });
+
+                // Progress Bar
+                Grid progLabels = new Grid();
+                progLabels.Children.Add(new TextBlock { Text = "Progress", FontSize = 10, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B") });
+                progLabels.Children.Add(new TextBlock { Text = $"{paidInst}/{totalInst} paid", FontSize = 10, HorizontalAlignment = HorizontalAlignment.Right, FontWeight = FontWeights.Bold });
+                stack.Children.Add(progLabels);
+
+                Border pb = new Border { Height = 8, Background = (Brush)new BrushConverter().ConvertFrom("#E2E8F0"), CornerRadius = new CornerRadius(4), Margin = new Thickness(0, 5, 0, 15) };
+                double pct = totalInst > 0 ? (double)paidInst / totalInst : 0;
+                pb.Child = new Border { HorizontalAlignment = HorizontalAlignment.Left, Width = 260 * pct, Background = (Brush)new BrushConverter().ConvertFrom("#3044FF"), CornerRadius = new CornerRadius(4) };
+                stack.Children.Add(pb);
+
+                Button btnView = new Button
+                {
+                    Content = "View Breakdown",
+                    Padding = new Thickness(0, 8, 0, 8),
+                    Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9"),
+                    Foreground = (Brush)new BrushConverter().ConvertFrom("#475569"),
+                    BorderThickness = new Thickness(0),
+                    Cursor = System.Windows.Input.Cursors.Hand
+                };
+                btnView.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(6)) } });
+                btnView.Click += (s, e) => { new LoanDetails(loanID).ShowDialog(); };
+                stack.Children.Add(btnView);
 
                 card.Child = stack;
                 container.Children.Add(card);
