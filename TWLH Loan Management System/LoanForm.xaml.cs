@@ -121,6 +121,13 @@ namespace TWLH_Loan_Management_System
 
                 if (_loanID == -1)
                 {
+                    // Check for existing active/past due loans
+                    if (_loan.hasExistingActiveLoan(clientID))
+                    {
+                        MessageBox.Show("This client already has an Active or Past Due loan. They must fully pay their existing loan before applying for a new one.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
                     _loan.addLoan(clientID, amount, dueDate, plan, interestRate, status, approvedBy);
                     MessageBox.Show("Loan added successfully!");
                 }

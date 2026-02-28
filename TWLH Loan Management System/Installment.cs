@@ -28,6 +28,12 @@ namespace TWLH_Loan_Management_System
             return db.displayRecords(strQuery);
         }
 
+        public void setInstallmentToPastDue(int installmentID)
+        {
+            strQuery = $"UPDATE tbl_loan_installment SET installment_status = 'Past Due' WHERE installment_id = {installmentID}";
+            db.sqlManager(strQuery);
+        }
+
         public decimal displayInstallmentCards(StackPanel container, int loanID)
         {
             DataTable dt = getTotalAmountNeededToPay(loanID);
@@ -129,7 +135,23 @@ namespace TWLH_Loan_Management_System
                     btnView.Click += BtnViewTransactionLog_Click;
                     btnPanel.Children.Add(btnView);                }
 
-                if (status == "Active" || status == "Past Due")
+                if (status == "Active" && DateTime.Now.Date > dueDate.Date)
+                {
+                    Button btnPastDue = CreateIconButton(FontAwesomeIcon.ExclamationTriangle, "#EF4444", "Mark as Past Due");
+                    btnPastDue.Tag = installmentID;
+                    if (btnPanel.Children.Count > 0) btnPastDue.Margin = new Thickness(10, 0, 0, 0);
+                    btnPastDue.Click += (s, e) =>
+                    {
+                        if (MessageBox.Show("Mark this installment as Past Due?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            setInstallmentToPastDue((int)((Button)s).Tag);
+                            displayInstallmentCards(container, loanID); // Refresh
+                        }
+                    };
+                    btnPanel.Children.Add(btnPastDue);
+                }
+
+                if (status == "Past Due")
                 {
                     Button btnFollow = CreateIconButton(FontAwesomeIcon.Calendar, "#64748B", "Schedule Follow Up");
                     if (btnPanel.Children.Count > 0)
@@ -179,7 +201,7 @@ namespace TWLH_Loan_Management_System
             ControlTemplate template = new ControlTemplate(typeof(Button));
             FrameworkElementFactory border = new FrameworkElementFactory(typeof(Border));
             border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Button.BackgroundProperty));
-            border.SetValue(Border.CornerRadiusProperty, new CornerRadius(18)); // Half of height/width for perfect circle
+            border.SetValue(Border.CornerRadiusProperty, new CornerRadius(4)); // Square with slight rounding
             FrameworkElementFactory content = new FrameworkElementFactory(typeof(ContentPresenter));
             content.SetValue(ContentPresenter.HorizontalAlignmentProperty, HorizontalAlignment.Center);
             content.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);
