@@ -1,0 +1,132 @@
+﻿<Page x:Class="TWLH_Loan_Management_System.promisetopay"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1000"
+      Title="Promise to Pay Records"
+      Background="#F0F2F5">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30">
+
+                <StackPanel Margin="0,0,0,30">
+                    <TextBlock Text="Promise to Pay Management" FontSize="28" FontWeight="Bold" Foreground="#344767"/>
+                    <TextBlock Text="Monitor and create payment commitments for overdue accounts" FontSize="14" Foreground="#67748E" Margin="0,5,0,20"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="BtnAddPromise" 
+                                Content="+ New Promise" 
+                                Width="160" Height="42" 
+                                Margin="0,0,15,0" 
+                                Background="#5E72E4" 
+                                Foreground="White" 
+                                FontWeight="Bold" 
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="BtnAddPromise_Click">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Border Background="White" CornerRadius="10" BorderBrush="#E9ECEF" BorderThickness="1" Width="280" Height="42">
+                            <Grid>
+                                <TextBlock Text="Search records..." Foreground="#ADB5BD" VerticalAlignment="Center" Margin="15,0" IsHitTestVisible="False">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBox x:Name="SearchBox" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Margin="15,0" FontSize="14"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+
+                <ItemsControl x:Name="PromiseCardsControl" HorizontalContentAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="3" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border HorizontalAlignment="Stretch" Margin="0,0,20,20" Background="White" CornerRadius="15" BorderBrush="#E9ECEF" BorderThickness="1">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="3" Opacity="0.07"/>
+                                </Border.Effect>
+
+                                <StackPanel Margin="20">
+                                    <DockPanel LastChildFill="False" Margin="0,0,0,15">
+                                        <Border Background="#F6F9FC" CornerRadius="6" Padding="10,5">
+                                            <TextBlock Text="{Binding promise_id, StringFormat='PROMISE #\{0\}'}" FontWeight="Bold" Foreground="#5E72E4" FontSize="11"/>
+                                        </Border>
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding promise_payment_date, StringFormat='\{0:MMM dd, yyyy\}'}" Foreground="#8392AB" FontSize="12" VerticalAlignment="Center"/>
+                                    </DockPanel>
+
+                                    <TextBlock Text="Commitment Amount" FontSize="12" Foreground="#8392AB"/>
+                                    <TextBlock Text="{Binding promise_amount, StringFormat='₱ \{0:N2\}'}" FontSize="24" FontWeight="Bold" Foreground="#344767" Margin="0,2,0,18"/>
+
+                                    <Separator Background="#F8F9FA" Margin="0,0,0,18"/>
+
+                                    <Grid Margin="0,0,0,15">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Past Due ID" FontSize="11" Foreground="#8392AB"/>
+                                            <TextBlock Text="{Binding past_due_id}" FontWeight="SemiBold" Foreground="#344767"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Recorded By" FontSize="11" Foreground="#8392AB"/>
+                                            <TextBlock Text="{Binding recorded_by}" FontWeight="SemiBold" Foreground="#344767"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <TextBlock Text="Admin Remarks" FontSize="11" Foreground="#8392AB" Margin="0,0,0,5"/>
+                                    <Border Background="#F8F9FA" CornerRadius="8" Padding="12" MinHeight="70">
+                                        <TextBlock Text="{Binding remarks}" Foreground="#67748E" FontSize="12" TextWrapping="Wrap" FontStyle="Italic"/>
+                                    </Border>
+
+                                    <Grid Margin="0,20,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Content="Details" Margin="0,0,5,0" Background="Transparent" Foreground="#8392AB" BorderBrush="#E9ECEF" BorderThickness="1" Height="36" Cursor="Hand">
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="8"/>
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
+                                        <Button Grid.Column="1" Content="Process" Background="#5E72E4" Foreground="White" BorderThickness="0" Height="36" FontWeight="SemiBold" Cursor="Hand">
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="8"/>
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

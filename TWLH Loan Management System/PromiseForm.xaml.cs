@@ -22,11 +22,18 @@ namespace TWLH_Loan_Management_System
         private int _pastDueID;
         private PromiseToPay _promise = new PromiseToPay();
 
+        public PromiseForm()
+        {
+            InitializeComponent();
+            this._pastDueID = 0;
+            dpDate.SelectedDate = DateTime.Now.AddDays(7); // Suggest next week
+        }
+
         public PromiseForm(int pastDueID)
         {
             InitializeComponent();
             this._pastDueID = pastDueID;
-            dpDate.SelectedDate = DateTime.Now.AddDays(7); // Suggest next week
+            dpDate.SelectedDate = DateTime.Now.AddDays(7);
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

@@ -120,7 +120,8 @@ namespace TWLH_Loan_Management_System
 
         private void btnPromiseToPay_Click(object sender, RoutedEventArgs e)
         {
-
+            SetActiveButton(sender as Button);
+            MainFrame.Navigate(new promisetopay());
         }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
