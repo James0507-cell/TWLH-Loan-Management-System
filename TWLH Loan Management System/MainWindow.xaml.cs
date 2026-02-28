@@ -115,7 +115,8 @@ namespace TWLH_Loan_Management_System
         }
         private void btnFollowUp_Click(object sender, RoutedEventArgs e)
         {
-
+            SetActiveButton(sender as Button);
+            MainFrame.Navigate(new followUps());
         }
 
         private void btnPromiseToPay_Click(object sender, RoutedEventArgs e)
