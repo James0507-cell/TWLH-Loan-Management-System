@@ -26,6 +26,7 @@ namespace TWLH_Loan_Management_System
             InitializeComponent();
             txtSearch.TextChanged += TxtSearch_TextChanged;
             cmbStatus.SelectionChanged += CmbStatus_SelectionChanged;
+            cmbPlan.SelectionChanged += CmbPlan_SelectionChanged;
         }
 
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -38,18 +39,26 @@ namespace TWLH_Loan_Management_System
             ApplyFilters();
         }
 
+        private void CmbPlan_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
         private void ApplyFilters()
         {
+            if (txtSearch == null || cmbStatus == null || cmbPlan == null) return;
+
             string searchText = txtSearch.Text;
             string status = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Statuses";
+            string plan = (cmbPlan.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Plans";
 
             if (scrollCards.Visibility == Visibility.Visible)
             {
-                loan.displayLoanCards(loanContainer, searchText, status);
+                loan.displayLoanCards(loanContainer, searchText, status, plan);
             }
             else
             {
-                loanFrame.Navigate(new LoanTabular(searchText, status));
+                loanFrame.Navigate(new LoanTabular(searchText, status, plan));
             }
         }
 

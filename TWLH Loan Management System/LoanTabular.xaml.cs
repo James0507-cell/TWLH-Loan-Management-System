@@ -24,6 +24,7 @@ namespace TWLH_Loan_Management_System
         Loan loan = new Loan();
         string searchText = "";
         string status = "All Statuses";
+        string plan = "All Plans";
 
         public LoanTabular()
         {
@@ -32,11 +33,12 @@ namespace TWLH_Loan_Management_System
             dgLoans.MouseDoubleClick += DgLoans_MouseDoubleClick;
         }
 
-        public LoanTabular(string searchText, string status)
+        public LoanTabular(string searchText, string status, string plan = "All Plans")
         {
             InitializeComponent();
             this.searchText = searchText;
             this.status = status;
+            this.plan = plan;
             this.Loaded += LoanTabular_Loaded;
             dgLoans.MouseDoubleClick += DgLoans_MouseDoubleClick;
         }
@@ -85,7 +87,7 @@ namespace TWLH_Loan_Management_System
         {
             try
             {
-                dgLoans.ItemsSource = loan.getFilteredLoans(searchText, status).DefaultView;
+                dgLoans.ItemsSource = loan.getFilteredLoans(searchText, status, plan).DefaultView;
             }
             catch (Exception ex)
             {
