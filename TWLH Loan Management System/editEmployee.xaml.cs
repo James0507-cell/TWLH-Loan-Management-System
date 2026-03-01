@@ -29,6 +29,7 @@ namespace TWLH_Loan_Management_System
             TxtFirstName.Text = row["first_name"].ToString();
             TxtMiddleName.Text = row["middle_name"].ToString();
             TxtLastName.Text = row["last_name"].ToString();
+            CboRole.Text = row["Role"].ToString();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -37,17 +38,16 @@ namespace TWLH_Loan_Management_System
             {
                 dbManager db = new dbManager();
 
-                // SQL Update query matching your table schema
-                string query = $"UPDATE tbl_employee SET " +
-                               $"first_name = '{TxtFirstName.Text}', " +
-                               $"middle_name = '{TxtMiddleName.Text}', " +
-                               $"last_name = '{TxtLastName.Text}', " +
-                               $"role = '{CbRole.Text}' " +
-                               $"WHERE employee_id = '{employeeId}'";
+                // Ensure there are no trailing commas and all fields are included
+                string updateQuery = $"UPDATE tbl_employee SET " +
+                     $"first_name = '{TxtFirstName.Text}', " +
+                     $"middle_name = '{TxtMiddleName.Text}', " +
+                     $"last_name = '{TxtLastName.Text}', " +
+                     $"role = '{CboRole.Text}' " + // Ensure this isn't empty!
+                     $"WHERE employee_id = '{employeeId}'";
 
-                db.executeQuery(query);
-
-                MessageBox.Show("Employee updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                db.executeQuery(updateQuery);
+                MessageBox.Show("Employee updated successfully!");
 
                 this.DialogResult = true;
                 this.Close();
@@ -59,5 +59,10 @@ namespace TWLH_Loan_Management_System
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e) => this.Close();
+
+        private void CbRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

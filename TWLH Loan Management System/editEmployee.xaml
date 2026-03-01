@@ -44,7 +44,7 @@
 
                     <TextBlock Text="Designated Role" FontSize="12" Foreground="#8392AB" Margin="0,0,0,5"/>
                     <Border BorderBrush="#E9ECEF" BorderThickness="1" CornerRadius="8" Padding="10,5" Margin="0,0,0,15">
-                        <ComboBox x:Name="CbRole" BorderThickness="0" VerticalContentAlignment="Center" Background="Transparent">
+                        <ComboBox x:Name="CboRole" BorderThickness="0" VerticalContentAlignment="Center" Background="Transparent" SelectionChanged="CbRole_SelectionChanged">
                             <ComboBoxItem Content="Admin"/>
                             <ComboBoxItem Content="Staff"/>
                             <ComboBoxItem Content="Collector"/>

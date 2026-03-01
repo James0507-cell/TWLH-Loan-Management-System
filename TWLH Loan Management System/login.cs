@@ -20,7 +20,8 @@ namespace TWLH_Loan_Management_System
         {
             sql =   $"Select * from tbl_employee_credential " +
                     $"where username = '{username}'     " +
-                    $"and password_hash = '{password_hash}'";
+                    $"and password_hash = '{password_hash}'" +
+                    $"AND is_active = 1";
             DataTable dt = db.displayRecords(sql);
             
             if (dt != null && dt.Rows.Count > 0)

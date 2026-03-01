@@ -73,8 +73,14 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="180"/>
-
+                                <GridViewColumn Header="Email" Width="180">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Email}" Foreground="#4B5563"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                
                                 <GridViewColumn Header="Status" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
