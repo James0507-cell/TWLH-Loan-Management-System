@@ -32,6 +32,41 @@ namespace TWLH_Loan_Management_System
             InitializeComponent();
             this._pastDueID = pastDueID;
             LoadData();
+            btnScheduleFollowUp.Click += btnScheduleFollowUp_Click;
+        }
+
+        private async void btnScheduleFollowUp_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ScheduleFollowUpDialog dialog = new ScheduleFollowUpDialog();
+                if (dialog.ShowDialog() == true)
+                {
+                    DateTime followUpDate = dialog.SelectedDateTime;
+                    string clientName = txtClientName.Text;
+                    string totalDue = txtTotalDue.Text;
+
+                    string summary = $"Follow-up: {clientName} (PDA #{_pastDueID})";
+                    string description = $"Automated follow-up for {clientName}.\n" +
+                                       $"Past Due Account ID: {_pastDueID}\n" +
+                                       $"Total Amount Due: {totalDue}\n" +
+                                       $"Please contact the client regarding their outstanding balance.";
+
+                    btnScheduleFollowUp.IsEnabled = false;
+                    bool success = await GoogleCalendarHelper.ScheduleFollowUpAsync(summary, description, followUpDate);
+                    btnScheduleFollowUp.IsEnabled = true;
+
+                    if (success)
+                    {
+                        MessageBox.Show($"Successfully scheduled follow-up for {clientName} on {followUpDate:MMM dd, yyyy} at {followUpDate:hh:mm tt}.", "Google Calendar", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error scheduling follow-up: " + ex.Message);
+                btnScheduleFollowUp.IsEnabled = true;
+            }
         }
 
         private void LoadData()

@@ -43,5 +43,31 @@ namespace TWLH_Loan_Management_System
             prgCollectionRate.Value = collectionRate * 100;
             txtblCollectedAmount.Text = dashboardInfo.getCollectedAmount().ToString();
         }
+
+        private void btnViewOverdue_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Button btn = sender as Button;
+                if (btn != null)
+                {
+                    DataRowView row = (DataRowView)btn.DataContext;
+                    if (row != null)
+                    {
+                        int pastDueID = Convert.ToInt32(row["past_due_id"]);
+                        PastDueAccountForm form = new PastDueAccountForm(pastDueID);
+                        if (form.ShowDialog() == true)
+                        {
+                            // Refresh dashboard data if needed
+                            Page_Loaded(null, null);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening past due account: " + ex.Message);
+            }
+        }
     }
 }

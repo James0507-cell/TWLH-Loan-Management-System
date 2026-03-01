@@ -39,7 +39,7 @@ namespace TWLH_Loan_Management_System
             db.sqlManager(strQuery);
         }
 
-        public DataTable getFilteredLoans(string searchText = "", string status = "All Statuses")
+        public DataTable getFilteredLoans(string searchText = "", string status = "All Statuses", string installmentPlan = "All Plans")
         {
             strQuery = @"SELECT l.*, c.first_name, c.last_name, 
                        CONCAT(c.first_name, ' ', c.last_name) as FullName, 
@@ -75,6 +75,11 @@ namespace TWLH_Loan_Management_System
                 strQuery += $"AND l.loan_status = '{status}' ";
             }
 
+            if (installmentPlan != "All Plans")
+            {
+                strQuery += $"AND l.installment_plan = '{installmentPlan}' ";
+            }
+
             return db.displayRecords(strQuery);
         }
 
@@ -89,9 +94,9 @@ namespace TWLH_Loan_Management_System
             return db.displayRecords(strQuery);
         }
 
-        public void displayLoanCards(WrapPanel container, string searchText = "", string status = "All Statuses")
+        public void displayLoanCards(WrapPanel container, string searchText = "", string status = "All Statuses", string installmentPlan = "All Plans")
         {
-            DataTable dt = getFilteredLoans(searchText, status);
+            DataTable dt = getFilteredLoans(searchText, status, installmentPlan);
             container.Children.Clear();
             
             // ... (rest of the displayLoanCards logic remains the same)
@@ -106,7 +111,7 @@ namespace TWLH_Loan_Management_System
                 string clientName = $"{row["first_name"]} {row["last_name"]}";
                 DateTime dueDate = Convert.ToDateTime(row["due_date"]);
                 DateTime createdAt = Convert.ToDateTime(row["created_at"]);
-                string installmentPlan = row["installment_plan"].ToString();
+                string currentPlan = row["installment_plan"].ToString();
                 string loanStatus = row["loan_status"].ToString();
                 int totalInstallments = Convert.ToInt32(row["total_installments"]);
                 int paidInstallments = Convert.ToInt32(row["paid_installments"]);

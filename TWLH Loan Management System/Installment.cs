@@ -165,6 +165,59 @@ namespace TWLH_Loan_Management_System
                     {
                         btnFollow.Margin = new Thickness(10, 0, 0, 0);
                     }
+                    btnFollow.Tag = installmentID;
+                    btnFollow.Click += async (s, e) =>
+                    {
+                        try
+                        {
+                            Button btn = (Button)s;
+                            int instID = (int)btn.Tag;
+                            
+                            // Fetch client name and past_due_id
+                            string q = $"SELECT pda.past_due_id, CONCAT(c.first_name, ' ', c.last_name) as client_name, vw.total_amount_to_pay as amount " +
+                                       $"FROM tbl_past_due_account pda " +
+                                       $"JOIN vw_total_amount_installment vw ON pda.installment_id = vw.installment_id " +
+                                       $"JOIN tbl_client c ON vw.client_id = c.client_id " +
+                                       $"WHERE pda.installment_id = {instID} AND pda.past_due_status = 'Open'";
+                            DataTable dtDetails = db.displayRecords(q);
+                            
+                            if (dtDetails.Rows.Count > 0)
+                            {
+                                DataRow dr = dtDetails.Rows[0];
+                                int pdaID = Convert.ToInt32(dr["past_due_id"]);
+                                string clientName = dr["client_name"].ToString();
+                                string amount = dr["amount"].ToString();
+                                
+                                ScheduleFollowUpDialog dialog = new ScheduleFollowUpDialog();
+                                if (dialog.ShowDialog() == true)
+                                {
+                                    DateTime followUpDate = dialog.SelectedDateTime;
+                                    string summary = $"Follow-up: {clientName} (PDA #{pdaID})";
+                                    string description = $"Scheduled follow-up for {clientName}.\n" +
+                                                       $"Past Due Account ID: {pdaID}\n" +
+                                                       $"Current Past Due Amount: ₱{amount}\n" +
+                                                       $"Generated from Loan Management System.";
+
+                                    btn.IsEnabled = false;
+                                    bool success = await GoogleCalendarHelper.ScheduleFollowUpAsync(summary, description, followUpDate);
+                                    btn.IsEnabled = true;
+
+                                    if (success)
+                                    {
+                                        MessageBox.Show($"Successfully scheduled follow-up for {clientName} on {followUpDate:MMM dd, yyyy} at {followUpDate:hh:mm tt}.", "Google Calendar", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Could not find open past due record for this installment.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex.Message);
+                        }
+                    };
                     btnPanel.Children.Add(btnFollow);
                 }
 
