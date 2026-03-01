@@ -71,12 +71,13 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getOverDueList()
         {
-            strquery =  $"select vw.installment_id, " +
+            strquery =  $"select pda.past_due_id, vw.installment_id, " +
                         $"(select concat(first_name, ' ', last_name) as full_name from tbl_client where client_id = vw.client_id) as full_name, " +
-                        $"installment_amount, " +
-                        $"timestampdiff(day, installment_due_date, curdate()) as total_overdue_day " +
+                        $"vw.installment_amount, " +
+                        $"timestampdiff(day, vw.installment_due_date, curdate()) as total_overdue_day " +
                         $"from vw_total_amount_installment vw " +
-                        $"where installment_status = 'Past Due';";
+                        $"join tbl_past_due_account pda on vw.installment_id = pda.installment_id " +
+                        $"where vw.installment_status = 'Past Due';";
 
             return db.displayRecords(strquery);
         }

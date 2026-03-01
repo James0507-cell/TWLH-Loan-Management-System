@@ -61,18 +61,18 @@ namespace TWLH_Loan_Management_System
             return db.displayRecords(sqlQuery);
         }
 
-        public void displayPastDueCards(WrapPanel container, string searchText = "", string status = "All Statuses")
+        public void displayPastDueCards(WrapPanel container, string searchText = "", string status = "All Statuses", Action onRefresh = null)
         {
             DataTable dt = getFilteredPastDueAccounts(searchText, status);
             container.Children.Clear();
 
             foreach (DataRow row in dt.Rows)
             {
-                container.Children.Add(createPastDueCard(row));
+                container.Children.Add(createPastDueCard(row, onRefresh));
             }
         }
 
-        private UIElement createPastDueCard(DataRow row)
+        private UIElement createPastDueCard(DataRow row, Action onRefresh = null)
         {
             Border card = new Border
             {
@@ -183,8 +183,10 @@ namespace TWLH_Loan_Management_System
             btnView.Click += (s, e) => {
                 int pastDueID = Convert.ToInt32(((Button)s).Tag);
                 PastDueAccountForm form = new PastDueAccountForm(pastDueID);
-                form.ShowDialog();
-                // To refresh parent page, we'd need a callback, but for now showing the form is enough
+                if (form.ShowDialog() == true)
+                {
+                    onRefresh?.Invoke();
+                }
             };
             
             // Rounded button template

@@ -55,7 +55,7 @@ namespace TWLH_Loan_Management_System
 
                 if (scrollCards.Visibility == Visibility.Visible)
                 {
-                    pastDue.displayPastDueCards(pastDueContainer, searchText, status);
+                    pastDue.displayPastDueCards(pastDueContainer, searchText, status, ApplyFilters);
                 }
                 else
                 {
