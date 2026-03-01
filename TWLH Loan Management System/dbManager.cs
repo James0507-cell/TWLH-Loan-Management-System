@@ -53,6 +53,17 @@
                 dbConn.Close();
             }
 
-
+        public void executeQuery(string query)
+        {
+            using (MySqlConnection dbConn = new MySqlConnection(strConn))
+            {
+                dbConn.Open();
+                MySqlCommand cmd = new MySqlCommand(query, dbConn);
+                cmd.ExecuteNonQuery(); 
+                dbConn.Close();
+            }
         }
+
+
+    }
     }

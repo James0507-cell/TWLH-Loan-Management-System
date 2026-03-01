@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TWLH_Loan_Management_System
@@ -12,7 +13,8 @@ namespace TWLH_Loan_Management_System
         {
            
             InitializeComponent();
-            LoadEmployeeData();
+            LoadEmployees();
+
         }
 
         private void LoadEmployeeData()
@@ -30,23 +32,24 @@ namespace TWLH_Loan_Management_System
         {
             try
             {
-                dbManager db = new dbManager();
-
-                // Use 'AS' to match the column names expected by your XAML Bindings
-                string query = @"SELECT 
-                            first_name AS Employee, 
-                            role AS Role, 
-                            email AS Email, 
-                            IF(is_active = 1, 'Active', 'Inactive') AS Status, 
-                            created_at AS DateHired 
-                         FROM tbl_employee";
+                string query = @"SELECT *, 
+                 role AS Role, 
+                 email AS Email, 
+                 created_at AS DateHired,
+                 CONCAT(first_name, ' ', last_name) AS Name, 
+                 IF(is_active = 1, 'Active', 'Inactive') AS Status 
+                 FROM tbl_employee";
 
                 DataTable dt = db.displayRecords(query);
-                EmployeeListView.ItemsSource = dt.DefaultView;
+
+                if (dt != null)
+                {
+                    EmployeeListView.ItemsSource = dt.DefaultView;
+                }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Failed to load employees: " + ex.Message);
+                MessageBox.Show("Failed to load: " + ex.Message);
             }
         }
 
@@ -64,6 +67,24 @@ namespace TWLH_Loan_Management_System
             {
                 LoadEmployees();
             }
+        }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            DataRowView row = btn.DataContext as DataRowView;
+
+            if (row != null)
+            {
+                editEmployee editWin = new editEmployee(row); // This calls your window
+                editWin.Owner = Window.GetWindow(this);
+                editWin.ShowDialog(); // This displays the window
+            }
+        }
+
+        private void BtnDeactivate_Click(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

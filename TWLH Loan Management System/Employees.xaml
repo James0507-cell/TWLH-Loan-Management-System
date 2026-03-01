@@ -56,7 +56,7 @@
                                                 <Ellipse Width="35" Height="35" Fill="#6366F1"/>
                                                 <StackPanel Margin="10,0,0,0">
                                                     <TextBlock Text="{Binding Name}" FontWeight="Medium"/>
-                                                    <TextBlock Text="{Binding Username}" Foreground="#6B7280" FontSize="11"/>
+                                                    <TextBlock Text="{Binding username}" Foreground="#6B7280" FontSize="11"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </DataTemplate>
@@ -73,7 +73,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="200"/>
+                                <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="180"/>
 
                                 <GridViewColumn Header="Status" Width="100">
                                     <GridViewColumn.CellTemplate>
@@ -91,8 +91,8 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <Button Content="Edit" Background="Transparent" BorderThickness="0" Foreground="Black" Margin="0,0,10,0"/>
-                                                <Button Content="Deactivate" Background="Transparent" BorderThickness="0" Foreground="#EF4444"/>
+                                                <Button Content="Edit" Click="BtnEdit_Click" Background="Transparent" BorderThickness="0" Foreground="#4F46E5" Margin="0,0,10,0" FontWeight="SemiBold"/>
+                                                <Button Content="Deactivate" Click="BtnDeactivate_Click" Background="Transparent" BorderThickness="0" Foreground="#EF4444" FontWeight="SemiBold"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -105,33 +105,33 @@
         </Border>
 
         <UniformGrid Grid.Row="3" Columns="3" Margin="0,20,0,0">
-            <Border Background="White" Margin="0,0,10,0" Padding="20" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1">
-                <StackPanel Margin="0,0,0,10">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <fa:ImageAwesome Icon="UserCircle" Foreground="#6366F1" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBlock Text="Admin" FontWeight="Bold" Foreground="#111827" VerticalAlignment="Center" FontSize="16"/>
+            <Border Background="White" Margin="0,0,10,0" Padding="15" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <fa:ImageAwesome Icon="UserCircle" Foreground="#6366F1" Width="16" Height="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Admin" FontWeight="Bold" FontSize="14"/>
                     </StackPanel>
-                    <TextBlock Text="Full system access including employee management, client management, and all operations." TextWrapping="Wrap" Foreground="#4B5563" FontSize="12"/>
+                    <TextBlock Text="Full system access and management." TextWrapping="Wrap" Foreground="#4B5563" FontSize="11"/>
                 </StackPanel>
             </Border>
 
-            <Border Background="White" Margin="5,0,5,0" Padding="20" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1">
+            <Border Background="White" Margin="5,0,5,0" Padding="15" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <fa:ImageAwesome Icon="UserCircle" Foreground="#10B981" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBlock Text="Staff" FontWeight="Bold" Foreground="#111827" VerticalAlignment="Center" FontSize="16"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <fa:ImageAwesome Icon="UserCircle" Foreground="#10B981" Width="16" Height="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Staff" FontWeight="Bold" FontSize="14"/>
                     </StackPanel>
-                    <TextBlock Text="Access to transactions and loans. Cannot manage employees or edit client information." TextWrapping="Wrap" Foreground="#4B5563" FontSize="12"/>
+                    <TextBlock Text="Transaction and loan processing." TextWrapping="Wrap" Foreground="#4B5563" FontSize="11"/>
                 </StackPanel>
             </Border>
 
-            <Border Background="White" Margin="10,0,0,0" Padding="20" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1">
+            <Border Background="White" Margin="10,0,0,0" Padding="15" CornerRadius="12" BorderBrush="#E5E7EB" BorderThickness="1">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <fa:ImageAwesome Icon="UserCircle" Foreground="#8B5CF6" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBlock Text="Collector" FontWeight="Bold" Foreground="#111827" VerticalAlignment="Center" FontSize="16"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <fa:ImageAwesome Icon="UserCircle" Foreground="#8B5CF6" Width="16" Height="16" Margin="0,0,10,0"/>
+                        <TextBlock Text="Collector" FontWeight="Bold" FontSize="14"/>
                     </StackPanel>
-                    <TextBlock Text="Limited to assigned collections and follow-ups. Mobile-optimized interface." TextWrapping="Wrap" Foreground="#4B5563" FontSize="12"/>
+                    <TextBlock Text="Assigned collections and follow-ups." TextWrapping="Wrap" Foreground="#4B5563" FontSize="11"/>
                 </StackPanel>
             </Border>
         </UniformGrid>
