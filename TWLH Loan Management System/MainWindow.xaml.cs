@@ -99,7 +99,8 @@ namespace TWLH_Loan_Management_System
         private void btnCollection_Click(object sender, RoutedEventArgs e)
         {
             SetActiveButton(sender as Button);
-            
+            MainFrame.Navigate(new CollectionPage());
+
         }
 
         private void btnClient_Click(object sender, RoutedEventArgs e)

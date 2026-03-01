@@ -33,7 +33,10 @@ namespace TWLH_Loan_Management_System
                 if (dt.Rows.Count > 0)
                 {
                     DataRow row = dt.Rows[0];
-                    txtFullName.Text = $"{row["first_name"]} {row["last_name"]}";
+                    string firstName = row["first_name"].ToString();
+                    string middleName = row["middle_name"].ToString();
+                    string lastName = row["last_name"].ToString();
+                    txtFullName.Text = string.IsNullOrWhiteSpace(middleName) ? $"{firstName} {lastName}" : $"{firstName} {middleName} {lastName}";
                     txtClientID.Text = $"ID: #{clientID:D4}";
                     txtGender.Text = row["gender"].ToString();
                     txtPhone.Text = row["contact_number"].ToString();

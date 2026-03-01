@@ -21,6 +21,7 @@ namespace TWLH_Loan_Management_System
     public partial class CollectionAssignmentForm : Window
     {
         private int _pastDueID;
+        private int _assignmentID = 0; // 0 means new assignment
         private Collection _collection = new Collection();
         private dbManager _db = new dbManager();
 
@@ -30,6 +31,33 @@ namespace TWLH_Loan_Management_System
             this._pastDueID = pastDueID;
             LoadCollectors();
             cmbStatus.SelectedIndex = 0; // Default to In Progress
+        }
+
+        // New constructor for updating
+        public CollectionAssignmentForm(DataRow row)
+        {
+            InitializeComponent();
+            this._assignmentID = Convert.ToInt32(row["assignment_id"]);
+            this._pastDueID = Convert.ToInt32(row["past_due_id"]);
+            
+            LoadCollectors();
+            
+            // Set values from row
+            cmbCollector.SelectedValue = row["assigned_to"];
+            
+            // Set status in combo box
+            string currentStatus = row["assignment_status"].ToString();
+            foreach (ComboBoxItem item in cmbStatus.Items)
+            {
+                if (item.Content.ToString() == currentStatus)
+                {
+                    cmbStatus.SelectedItem = item;
+                    break;
+                }
+            }
+            
+            btnSave.Content = "Update Assignment";
+            this.Title = "Update Collection Assignment";
         }
 
         private void LoadCollectors()
@@ -68,11 +96,22 @@ namespace TWLH_Loan_Management_System
 
                 int assignedTo = Convert.ToInt32(cmbCollector.SelectedValue);
                 string status = ((ComboBoxItem)cmbStatus.SelectedItem).Content.ToString();
-                int createdBy = UserSession.EmployeeID;
+                
+                if (_assignmentID == 0)
+                {
+                    // New assignment
+                    int createdBy = UserSession.EmployeeID;
+                    _collection.addCollectionAssignment(_pastDueID, assignedTo, status, createdBy);
+                    MessageBox.Show("Collection assignment saved successfully.");
+                }
+                else
+                {
+                    // Update existing
+                    int updatedBy = UserSession.EmployeeID;
+                    _collection.updateCollectionAssignment(_assignmentID, assignedTo, status, updatedBy);
+                    MessageBox.Show("Collection assignment updated successfully.");
+                }
 
-                _collection.addCollectionAssignment(_pastDueID, assignedTo, status, createdBy);
-
-                MessageBox.Show("Collection assignment saved successfully.");
                 this.DialogResult = true;
                 this.Close();
             }

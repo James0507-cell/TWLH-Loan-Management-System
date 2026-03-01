@@ -1,0 +1,190 @@
+<Window x:Class="TWLH_Loan_Management_System.CollectionDetails"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TWLH_Loan_Management_System"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="Collection Assignment Details" Height="750" Width="1000" 
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <Style x:Key="SectionBorder" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="25"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="InfoLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style x:Key="InfoValue" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#FFF2F4F7" CornerRadius="20" BorderThickness="0" ClipToBounds="True">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border BorderThickness="0,0,0,1" BorderBrush="#E2E8F0" Background="#FFF2F6FF" CornerRadius="20,20,0,0" Padding="30,25">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock x:Name="txtAssignmentID" Text="Assignment #0000" FontSize="24" FontWeight="SemiBold" Foreground="#1E293B"/>
+                        <TextBlock x:Name="txtTitle" Text="Assignment Details" FontSize="14" Foreground="#64748B" Margin="0,5,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
+                        <StackPanel Margin="0,0,25,0">
+                            <TextBlock Text="STATUS" FontSize="10" FontWeight="Normal" Foreground="#64748B" HorizontalAlignment="Right"/>
+                            <Border x:Name="brdStatus" CornerRadius="4" Padding="8,2" Margin="0,2,0,0" HorizontalAlignment="Right">
+                                <TextBlock x:Name="txtStatus" Text="In Progress" FontSize="13" FontWeight="SemiBold"/>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="DUE DATE" FontSize="10" FontWeight="Normal" Foreground="#64748B" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="txtDueDateHeader" Text="Mar 11, 2026" FontSize="15" FontWeight="SemiBold" Foreground="#1E293B" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="btnClose_Click" Grid.Column="1" Margin="0,-5,0,0">
+                        <fa:ImageAwesome Icon="Close" Width="14" Height="14" Foreground="#64748B"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <!-- Main Content Grid -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Column: Client and Business -->
+                        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                            <!-- Client Details -->
+                            <Border Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Client Information" Style="{StaticResource SectionHeader}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Full Name" Style="{StaticResource InfoLabel}"/>
+                                            <TextBlock x:Name="txtClientFullName" Text="Juan Dela Cruz" Style="{StaticResource InfoValue}"/>
+
+                                            <TextBlock Text="Contact Number" Style="{StaticResource InfoLabel}"/>
+                                            <TextBlock x:Name="txtContact" Text="09171234567" Style="{StaticResource InfoValue}"/>
+
+                                            <TextBlock Text="Messenger Name" Style="{StaticResource InfoLabel}"/>
+                                            <TextBlock x:Name="txtMessenger" Text="juan.dc" Style="{StaticResource InfoValue}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Gender" Style="{StaticResource InfoLabel}"/>
+                                            <TextBlock x:Name="txtGender" Text="Male" Style="{StaticResource InfoValue}"/>
+
+                                            <TextBlock Text="Date of Birth" Style="{StaticResource InfoLabel}"/>
+                                            <TextBlock x:Name="txtBirthDate" Text="May 12, 1998" Style="{StaticResource InfoValue}"/>
+
+                                            <TextBlock Text="Residence" Style="{StaticResource InfoLabel}"/>
+                                            <TextBlock x:Name="txtResidence" Text="Davao City" Style="{StaticResource InfoValue}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Business Details -->
+                            <Border Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Business Owned" Style="{StaticResource SectionHeader}"/>
+                                    <WrapPanel x:Name="pnlBusinesses" Margin="-10"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Right Column: Installment and Status -->
+                        <StackPanel Grid.Column="1">
+                            <!-- Installment Info -->
+                            <Border Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Installment Details" Style="{StaticResource SectionHeader}"/>
+
+                                    <TextBlock Text="Loan ID" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtLoanID" Text="#0000" Style="{StaticResource InfoValue}"/>
+
+                                    <TextBlock Text="Installment ID" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtInstallmentID" Text="#0000" Style="{StaticResource InfoValue}"/>
+
+                                    <TextBlock Text="Due Date" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtDueDate" Text="Mar 11, 2026" Style="{StaticResource InfoValue}"/>
+
+                                    <Separator Margin="0,5,0,15" Background="#F1F5F9"/>
+
+                                    <TextBlock Text="Installment Amount" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtInstAmount" Text="₱ 0.00" Style="{StaticResource InfoValue}"/>
+
+                                    <TextBlock Text="Penalty Added" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtPenalty" Text="₱ 0.00" Style="{StaticResource InfoValue}" Foreground="#EF4444"/>
+
+                                    <Border Background="#F8FAFC" CornerRadius="10" Padding="15" Margin="0,5,0,0">
+                                        <StackPanel>
+                                            <TextBlock Text="Total Balance Due" FontSize="12" Foreground="#64748B"/>
+                                            <TextBlock x:Name="txtTotalDue" Text="₱ 0.00" FontSize="22" FontWeight="Bold" Foreground="#1E293B" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Assignment Status -->
+                            <Border Style="{StaticResource SectionBorder}">
+                                <StackPanel>
+                                    <TextBlock Text="Assignment Status" Style="{StaticResource SectionHeader}"/>
+
+                                    <TextBlock Text="Assigned Collector" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtCollector" Text="Mark Lopez" Style="{StaticResource InfoValue}"/>
+
+                                    <TextBlock Text="Assigned By" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock x:Name="txtCreator" Text="Liza Cruz" Style="{StaticResource InfoValue}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

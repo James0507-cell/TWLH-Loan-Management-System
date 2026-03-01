@@ -60,7 +60,7 @@
             <!-- Add Client Button moved here -->
             <Button x:Name="btnAddClient" Grid.Column="1" 
                     Content="+ Add New Client" 
-                    Background="#6366F1"
+                    Background="#FF3044FF"
                     Foreground="White"
                     Padding="20,0"
                     Height="44"

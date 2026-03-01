@@ -20,7 +20,7 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getFollowUpRecrods()
         {
-            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, e.first_name as recorder_name " +
+            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name " +
                        "FROM tbl_follow_up f " +
                        "JOIN tbl_past_due_account pda ON f.past_due_id = pda.past_due_id " +
                        "JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id " +
@@ -32,7 +32,7 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getFilteredFollowUps(string searchText = "")
         {
-            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, e.first_name as recorder_name " +
+            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name " +
                        "FROM tbl_follow_up f " +
                        "JOIN tbl_past_due_account pda ON f.past_due_id = pda.past_due_id " +
                        "JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id " +
@@ -188,7 +188,7 @@ namespace TWLH_Loan_Management_System
                 {
                     Content = "Edit",
                     Padding = new Thickness(12, 5, 12, 5),
-                    Background = (Brush)new BrushConverter().ConvertFrom("#4F46E5"),
+                    Background = (Brush)new BrushConverter().ConvertFrom("#FF3044FF"),
                     Foreground = Brushes.White,
                     BorderThickness = new Thickness(0),
                     Cursor = System.Windows.Input.Cursors.Hand,

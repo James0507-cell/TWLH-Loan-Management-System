@@ -39,7 +39,7 @@ namespace TWLH_Loan_Management_System
             db.sqlManager(sqlQuery);
         }
 
-        public void displayBusinessCards(WrapPanel container, int clientID)
+        public void displayBusinessCards(WrapPanel container, int clientID, bool isReadOnly = false)
         {
             DataTable dt = getClientBusiness(clientID);
             container.Children.Clear();
@@ -66,7 +66,7 @@ namespace TWLH_Loan_Management_System
                 Border card = new Border
                 {
                     Width = 300,
-                    Height = 200, // Increased height for buttons
+                    Height = isReadOnly ? 140 : 200, // Adjusted height based on read-only mode
                     Margin = new Thickness(10),
                     Background = Brushes.White,
                     CornerRadius = new CornerRadius(12),
@@ -104,55 +104,58 @@ namespace TWLH_Loan_Management_System
                 });
                 stack.Children.Add(addrStack);
 
-                // Action Buttons for Business
-                Grid actionGrid = new Grid();
-                actionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                actionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                if (!isReadOnly)
+                {
+                    // Action Buttons for Business
+                    Grid actionGrid = new Grid();
+                    actionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    actionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-                Button btnEdit = new Button
-                {
-                    Content = "Edit",
-                    Margin = new Thickness(0, 0, 5, 0),
-                    Padding = new Thickness(0, 6, 0, 6),
-                    Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9"),
-                    Foreground = (Brush)new BrushConverter().ConvertFrom("#475569"),
-                    BorderThickness = new Thickness(0),
-                    Cursor = System.Windows.Input.Cursors.Hand,
-                    Tag = row
-                };
-                btnEdit.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(6)) } });
-                btnEdit.Click += (s, e) => 
-                {
-                    BusinessForm form = new BusinessForm((DataRow)((Button)s).Tag);
-                    if (form.ShowDialog() == true) displayBusinessCards(container, clientID);
-                };
-
-                Button btnDelete = new Button
-                {
-                    Content = "Delete",
-                    Margin = new Thickness(5, 0, 0, 0),
-                    Padding = new Thickness(0, 6, 0, 6),
-                    Background = (Brush)new BrushConverter().ConvertFrom("#FEE2E2"),
-                    Foreground = (Brush)new BrushConverter().ConvertFrom("#EF4444"),
-                    BorderThickness = new Thickness(0),
-                    Cursor = System.Windows.Input.Cursors.Hand,
-                    Tag = businessID
-                };
-                btnDelete.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(6)) } });
-                btnDelete.Click += (s, e) =>
-                {
-                    if (MessageBox.Show("Are you sure you want to delete this business record?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    Button btnEdit = new Button
                     {
-                        deleteBusiness((int)((Button)s).Tag);
-                        displayBusinessCards(container, clientID);
-                    }
-                };
+                        Content = "Edit",
+                        Margin = new Thickness(0, 0, 5, 0),
+                        Padding = new Thickness(0, 6, 0, 6),
+                        Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9"),
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#475569"),
+                        BorderThickness = new Thickness(0),
+                        Cursor = System.Windows.Input.Cursors.Hand,
+                        Tag = row
+                    };
+                    btnEdit.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(6)) } });
+                    btnEdit.Click += (s, e) => 
+                    {
+                        BusinessForm form = new BusinessForm((DataRow)((Button)s).Tag);
+                        if (form.ShowDialog() == true) displayBusinessCards(container, clientID, isReadOnly);
+                    };
 
-                Grid.SetColumn(btnEdit, 0);
-                Grid.SetColumn(btnDelete, 1);
-                actionGrid.Children.Add(btnEdit);
-                actionGrid.Children.Add(btnDelete);
-                stack.Children.Add(actionGrid);
+                    Button btnDelete = new Button
+                    {
+                        Content = "Delete",
+                        Margin = new Thickness(5, 0, 0, 0),
+                        Padding = new Thickness(0, 6, 0, 6),
+                        Background = (Brush)new BrushConverter().ConvertFrom("#FEE2E2"),
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#EF4444"),
+                        BorderThickness = new Thickness(0),
+                        Cursor = System.Windows.Input.Cursors.Hand,
+                        Tag = businessID
+                    };
+                    btnDelete.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(6)) } });
+                    btnDelete.Click += (s, e) =>
+                    {
+                        if (MessageBox.Show("Are you sure you want to delete this business record?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            deleteBusiness((int)((Button)s).Tag);
+                            displayBusinessCards(container, clientID, isReadOnly);
+                        }
+                    };
+
+                    Grid.SetColumn(btnEdit, 0);
+                    Grid.SetColumn(btnDelete, 1);
+                    actionGrid.Children.Add(btnEdit);
+                    actionGrid.Children.Add(btnDelete);
+                    stack.Children.Add(actionGrid);
+                }
 
                 card.Child = stack;
                 container.Children.Add(card);

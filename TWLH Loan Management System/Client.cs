@@ -67,8 +67,9 @@ namespace TWLH_Loan_Management_System
             {
                 int clientID = Convert.ToInt32(row["client_id"]);
                 string firstName = row["first_name"].ToString();
+                string middleName = row["middle_name"].ToString();
                 string lastName = row["last_name"].ToString();
-                string fullName = $"{firstName} {lastName}";
+                string fullName = string.IsNullOrWhiteSpace(middleName) ? $"{firstName} {lastName}" : $"{firstName} {middleName} {lastName}";
                 string businessNames = row["business_names"] != DBNull.Value ? row["business_names"].ToString() : "No Business Registered";
                 string contactNumber = row["contact_number"].ToString();
                 string residence = row["current_residence"].ToString();
@@ -176,7 +177,7 @@ namespace TWLH_Loan_Management_System
                     Tag = row, // Store row for updating
                     Margin = new Thickness(5, 0, 0, 0),
                     Padding = new Thickness(0, 8, 0, 8),
-                    Background = (Brush)new BrushConverter().ConvertFrom("#6366F1"),
+                    Background = (Brush)new BrushConverter().ConvertFrom("#FF3044FF"),
                     Foreground = Brushes.White,
                     BorderThickness = new Thickness(0),
                     Cursor = System.Windows.Input.Cursors.Hand
