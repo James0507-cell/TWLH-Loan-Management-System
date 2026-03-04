@@ -21,8 +21,11 @@ namespace TWLH_Loan_Management_System
     public partial class CollectionDetails : Window
     {
         private int assignmentID;
+        private int pastDueID;
         dbManager db = new dbManager();
         Business business = new Business();
+        FollowUp followUp = new FollowUp();
+        PromiseToPay promise = new PromiseToPay();
 
         public CollectionDetails()
         {
@@ -42,7 +45,7 @@ namespace TWLH_Loan_Management_System
                                     c.*,
                                     l.loan_id,
                                     li.installment_id, li.installment_amount, li.installment_due_date,
-                                    pda.penalty_added,
+                                    pda.penalty_added, pda.past_due_id,
                                     CONCAT(e.first_name, ' ', e.last_name) as collector_name,
                                     CONCAT(creator.first_name, ' ', creator.last_name) as creator_name
                              FROM tbl_collection_assignment ca
@@ -60,6 +63,7 @@ namespace TWLH_Loan_Management_System
             {
                 DataRow row = dt.Rows[0];
                 int clientID = Convert.ToInt32(row["client_id"]);
+                this.pastDueID = Convert.ToInt32(row["past_due_id"]);
 
                 // Header
                 txtAssignmentID.Text = $"Assignment #{assignmentID:D4}";
@@ -113,6 +117,8 @@ namespace TWLH_Loan_Management_System
                     brdStatus.Background = (Brush)new BrushConverter().ConvertFrom("#EEF2FF");
                     txtStatus.Foreground = (Brush)new BrushConverter().ConvertFrom("#6366F1");
                 }
+
+                LoadHistory();
             }
             else
             {
@@ -121,9 +127,46 @@ namespace TWLH_Loan_Management_System
             }
         }
 
+        private void LoadHistory()
+        {
+            try
+            {
+                dgFollowUps.ItemsSource = followUp.getFollowUpRecrods(pastDueID).DefaultView;
+                dgPromises.ItemsSource = promise.getPromiseRecords(pastDueID).DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading history: " + ex.Message);
+            }
+        }
+
+        private void btnAddFollowUp_Click(object sender, RoutedEventArgs e)
+        {
+            FollowUpForm form = new FollowUpForm(pastDueID);
+            if (form.ShowDialog() == true)
+            {
+                LoadHistory();
+            }
+        }
+
+        private void btnAddPromise_Click(object sender, RoutedEventArgs e)
+        {
+            PromiseForm form = new PromiseForm(pastDueID);
+            if (form.ShowDialog() == true)
+            {
+                LoadHistory();
+            }
+        }
+
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            try { this.DragMove(); } catch { }
         }
     }
 }

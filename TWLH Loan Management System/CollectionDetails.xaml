@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TWLH_Loan_Management_System"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Collection Assignment Details" Height="750" Width="1000" 
+        Title="Collection Assignment Details" Height="850" Width="1000" 
         WindowStyle="None" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
@@ -38,6 +38,66 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#1E293B"/>
             <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeight" Value="45"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8FAFC"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -83,7 +143,7 @@
             <!-- Main Content -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="30">
-                    <!-- Main Content Grid -->
+                    <!-- Top Section: Info -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
@@ -182,6 +242,56 @@
                                 </StackPanel>
                             </Border>
                         </StackPanel>
+                    </Grid>
+
+                    <!-- Bottom Section: History and Actions -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Follow Up History -->
+                        <Border Grid.Column="0" Style="{StaticResource SectionBorder}" Margin="0,0,10,20">
+                            <StackPanel>
+                                <Grid Margin="0,0,0,15">
+                                    <TextBlock Text="Follow Up Records" FontSize="18" FontWeight="Bold" Foreground="#1E293B" VerticalAlignment="Center"/>
+                                    <Button x:Name="btnAddFollowUp" Content="+ New Record" HorizontalAlignment="Right" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White" Click="btnAddFollowUp_Click"/>
+                                </Grid>
+                                <DataGrid x:Name="dgFollowUps" MinHeight="150" MaxHeight="300">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="DATE" Binding="{Binding follow_up_date, StringFormat=\{0:MMM dd yyyy\}}" Width="110"/>
+                                        <DataGridTemplateColumn Header="TYPE" Width="100">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Border Padding="8,3" CornerRadius="4" Background="#E0E7FF" HorizontalAlignment="Left">
+                                                        <TextBlock Text="{Binding follow_up_type}" FontSize="10" FontWeight="Bold" Foreground="#3044FF"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="NOTES" Binding="{Binding notes}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Promise to Pay History -->
+                        <Border Grid.Column="1" Style="{StaticResource SectionBorder}" Margin="10,0,0,20">
+                            <StackPanel>
+                                <Grid Margin="0,0,0,15">
+                                    <TextBlock Text="Promise Records" FontSize="18" FontWeight="Bold" Foreground="#1E293B" VerticalAlignment="Center"/>
+                                    <Button x:Name="btnAddPromise" Content="+ New Promise" HorizontalAlignment="Right" Style="{StaticResource ActionButtonStyle}" Background="#3044FF" Foreground="White" Click="btnAddPromise_Click"/>
+                                </Grid>
+                                <DataGrid x:Name="dgPromises" MinHeight="150" MaxHeight="300">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="PROMISE DATE" Binding="{Binding promise_payment_date, StringFormat=\{0:MMM dd yyyy\}}" Width="120"/>
+                                        <DataGridTextColumn Header="AMOUNT" Binding="{Binding promise_amount, StringFormat=₱\{0:N2\}}" Width="100"/>
+                                        <DataGridTextColumn Header="REMARKS" Binding="{Binding remarks}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

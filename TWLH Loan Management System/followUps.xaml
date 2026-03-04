@@ -9,6 +9,80 @@
       Title="Follow-up Log"
       Background="#F8F9FA">
 
+    <Page.Resources>
+        <!-- Modern Search Box Style -->
+        <Style x:Key="ModernSearchBox" TargetType="TextBox">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <fa:ImageAwesome Icon="Search" Width="14" Height="14" Foreground="#A0AEC0" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,15,0"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Elegant ComboBox Style -->
+        <Style x:Key="ElegantComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10"/>
+                            <ToggleButton x:Name="toggleButton" BorderThickness="0" Background="Transparent" ClickMode="Press" Focusable="false" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="Transparent">
+                                            <Path x:Name="Arrow" Data="M0,0 L4,4 L8,0 Z" Fill="#64748B" HorizontalAlignment="Right" Margin="0,0,12,0" VerticalAlignment="Center" Stretch="Uniform" Width="8"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" IsHitTestVisible="false"/>
+                            <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="Slide">
+                                <Border x:Name="dropDownBorder" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=border}">
+                                    <ScrollViewer x:Name="DropDownScrollViewer">
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#CBD5E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,22 +103,38 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="15,10" Margin="0,0,15,0" BorderBrush="#E5E7EB" BorderThickness="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <fa:ImageAwesome Icon="Search" Width="16" Height="16" Foreground="#9CA3AF" Margin="5,0,15,0"/>
-                    <TextBox x:Name="txtSearch" Grid.Column="1" Background="Transparent" BorderThickness="0" 
-                             VerticalContentAlignment="Center" FontSize="14" Tag="Search follow-ups by client name or notes..." 
-                             TextChanged="txtSearch_TextChanged"/>
-                </Grid>
-            </Border>
+            <Grid Grid.Column="0" Margin="0,0,15,0">
+                <TextBox x:Name="txtSearch" Style="{StaticResource ModernSearchBox}" 
+                         TextChanged="txtSearch_TextChanged"/>
+                <TextBlock IsHitTestVisible="False" Text="Search follow-ups by client name or notes..." 
+                           VerticalAlignment="Center" HorizontalAlignment="Left" Margin="45,0,0,0" 
+                           Foreground="#A0AEC0" FontSize="13">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtSearch}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
-            <Button x:Name="btnAddFollowUp" Grid.Column="1" Content="+ Log Follow-up" Padding="20,0" 
+            <!-- Type Filter -->
+            <ComboBox x:Name="cmbTypeFilter" Grid.Column="1" Width="180" Margin="0,0,15,0" 
+                      Style="{StaticResource ElegantComboBox}" SelectionChanged="cmbTypeFilter_SelectionChanged">
+                <ComboBoxItem Content="All Types" IsSelected="True"/>
+                <ComboBoxItem Content="Call"/>
+                <ComboBoxItem Content="Message"/>
+                <ComboBoxItem Content="Email"/>
+            </ComboBox>
+
+            <Button x:Name="btnAddFollowUp" Grid.Column="2" Content="+ Log Follow-up" Padding="20,0" 
                     Background="#4F46E5" Foreground="White" BorderThickness="0" Height="45" FontWeight="SemiBold" Click="btnAddFollowUp_Click">
                 <Button.Resources>
                     <Style TargetType="Border">

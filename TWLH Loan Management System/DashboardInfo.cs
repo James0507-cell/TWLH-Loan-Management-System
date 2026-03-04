@@ -136,9 +136,10 @@ namespace TWLH_Loan_Management_System
         {
             strquery = $@"SELECT 
                             ca.assignment_id,
+                            ca.past_due_id,
                             CONCAT(c.first_name, ' ', c.last_name) AS client_name,
                             vw.total_amount_to_pay,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-                            ca.due_date,
+                            li.installment_due_date AS due_date,
                             ca.assignment_status
                         FROM tbl_collection_assignment ca
                         JOIN tbl_past_due_account pda ON ca.past_due_id = pda.past_due_id

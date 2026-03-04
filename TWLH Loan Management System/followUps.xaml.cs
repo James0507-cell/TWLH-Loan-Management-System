@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,14 +28,28 @@ namespace TWLH_Loan_Management_System
             LoadCards();
         }
 
-        private void LoadCards(string search = "")
+        private void LoadCards()
         {
-            _followUp.displayFollowUpCards(FollowUpCardsContainer, search);
+            if (FollowUpCardsContainer == null) return;
+
+            string search = txtSearch != null ? txtSearch.Text : "";
+            string type = "All Types";
+            if (cmbTypeFilter != null && cmbTypeFilter.SelectedItem != null)
+            {
+                type = (cmbTypeFilter.SelectedItem as ComboBoxItem).Content.ToString();
+            }
+
+            _followUp.displayFollowUpCards(FollowUpCardsContainer, search, type);
         }
 
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            LoadCards(txtSearch.Text);
+            LoadCards();
+        }
+
+        private void cmbTypeFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadCards();
         }
 
         private void btnAddFollowUp_Click(object sender, RoutedEventArgs e)

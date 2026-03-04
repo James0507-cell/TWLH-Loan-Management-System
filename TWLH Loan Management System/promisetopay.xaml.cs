@@ -50,7 +50,12 @@ namespace TWLH_Loan_Management_System
         }
         private void BtnAddPromise_Click(object sender, RoutedEventArgs e)
         {
-            
+            MessageBox.Show("Please select an account from the Past Due Accounts page to create a new promise to pay record.", "Add Promise to Pay", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            if (this.NavigationService != null)
+            {
+                this.NavigationService.Navigate(new PastDueAccountPage());
+            }
         }
 
         // You can now delete the extra 'LoadPromiseData()' method

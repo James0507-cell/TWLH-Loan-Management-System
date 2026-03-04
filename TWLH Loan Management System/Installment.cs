@@ -75,9 +75,9 @@ namespace TWLH_Loan_Management_System
                 };
 
                 Grid grid = new Grid();
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.2, GridUnitType.Star) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.3, GridUnitType.Star) });
 
                 // Column 1: Installment Info
                 StackPanel col1 = new StackPanel();
@@ -136,14 +136,14 @@ namespace TWLH_Loan_Management_System
                 // Logic to show multiple buttons if necessary
                 if (status == "Paid" || isPartiallyPaid)
                 {
-                    Button btnView = CreateIconButton(FontAwesomeIcon.History, "#3044FF", "View Transaction Log");
-                    btnView.Tag = installmentID; // Store installmentID in the Tag for access in the event handler
+                    Button btnView = CreateRectangleButton(FontAwesomeIcon.History, "#F1F5F9", "#1E293B", "View Log");
+                    btnView.Tag = installmentID; 
                     btnView.Click += BtnViewTransactionLog_Click;
                     btnPanel.Children.Add(btnView);                }
 
                 if (status == "Active" && DateTime.Now.Date > dueDate.Date)
                 {
-                    Button btnPastDue = CreateIconButton(FontAwesomeIcon.ExclamationTriangle, "#EF4444", "Mark as Past Due");
+                    Button btnPastDue = CreateRectangleButton(FontAwesomeIcon.ExclamationTriangle, "#EF4444", "#FFFFFF", "Mark Past Due");
                     btnPastDue.Tag = installmentID;
                     if (btnPanel.Children.Count > 0) btnPastDue.Margin = new Thickness(10, 0, 0, 0);
                     btnPastDue.Click += (s, e) =>
@@ -160,7 +160,7 @@ namespace TWLH_Loan_Management_System
 
                 if (status == "Past Due")
                 {
-                    Button btnFollow = CreateIconButton(FontAwesomeIcon.Calendar, "#64748B", "Schedule Follow Up");
+                    Button btnFollow = CreateRectangleButton(FontAwesomeIcon.Calendar, "#3044FF", "#FFFFFF", "Schedule");
                     if (btnPanel.Children.Count > 0)
                     {
                         btnFollow.Margin = new Thickness(10, 0, 0, 0);
@@ -236,32 +236,49 @@ namespace TWLH_Loan_Management_System
             return grandTotal;
         }
 
-        private Button CreateIconButton(FontAwesomeIcon icon, string color, string tooltip)
+        private Button CreateRectangleButton(FontAwesomeIcon icon, string bgColor, string fgColor, string text)
         {
+            Brush bgBrush = (Brush)new BrushConverter().ConvertFrom(bgColor);
+            Brush fgBrush = (Brush)new BrushConverter().ConvertFrom(fgColor);
+
+            StackPanel panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(12, 0, 12, 0) };
+            
             ImageAwesome iconImage = new ImageAwesome
             {
                 Icon = icon,
-                Foreground = Brushes.White,
-                Width = 16,
-                Height = 16
+                Foreground = fgBrush,
+                Width = 12,
+                Height = 12,
+                VerticalAlignment = VerticalAlignment.Center
             };
+            panel.Children.Add(iconImage);
+
+            TextBlock txt = new TextBlock
+            {
+                Text = text,
+                Foreground = fgBrush,
+                FontSize = 11,
+                FontWeight = FontWeights.SemiBold,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(6, 0, 0, 0)
+            };
+            panel.Children.Add(txt);
 
             Button btn = new Button
             {
-                Content = iconImage,
-                Background = (Brush)new BrushConverter().ConvertFrom(color),
+                Content = panel,
+                Background = bgBrush,
                 BorderThickness = new Thickness(0),
                 Cursor = Cursors.Hand,
-                Height = 36,
-                Width = 36,
-                ToolTip = tooltip
+                Height = 32,
+                Padding = new Thickness(0)
             };
 
             // Programmatic rounded corners template
             ControlTemplate template = new ControlTemplate(typeof(Button));
             FrameworkElementFactory border = new FrameworkElementFactory(typeof(Border));
             border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(Button.BackgroundProperty));
-            border.SetValue(Border.CornerRadiusProperty, new CornerRadius(4)); // Square with slight rounding
+            border.SetValue(Border.CornerRadiusProperty, new CornerRadius(8));
             FrameworkElementFactory content = new FrameworkElementFactory(typeof(ContentPresenter));
             content.SetValue(ContentPresenter.HorizontalAlignmentProperty, HorizontalAlignment.Center);
             content.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);

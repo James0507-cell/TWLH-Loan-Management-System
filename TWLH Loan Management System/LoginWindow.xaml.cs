@@ -71,6 +71,9 @@ namespace TWLH_Loan_Management_System
                     main.btnLoans.Visibility = Visibility.Collapsed;
                     main.btnClient.Visibility = Visibility.Collapsed;
                     main.btnEmployee.Visibility = Visibility.Collapsed;
+                    main.btnPromiseToPay.Visibility = Visibility.Collapsed;
+                    main.btnFollowUp.Visibility = Visibility.Collapsed;
+                    main.btnPastDueAccounts.Visibility = Visibility.Collapsed;
                     this.Close();
                 }
             }

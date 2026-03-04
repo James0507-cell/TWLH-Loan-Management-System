@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace TWLH_Loan_Management_System
             return db.displayRecords(sqlQuery);
         }
 
-        public DataTable getFilteredFollowUps(string searchText = "")
+        public DataTable getFilteredFollowUps(string searchText = "", string typeFilter = "All Types")
         {
             sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name " +
                        "FROM tbl_follow_up f " +
@@ -43,7 +43,12 @@ namespace TWLH_Loan_Management_System
 
             if (!string.IsNullOrEmpty(searchText))
             {
-                sqlQuery += $"AND (c.first_name LIKE '%{searchText}%' OR c.last_name LIKE '%{searchText}%' OR f.notes LIKE '%{searchText}%' OR f.follow_up_type LIKE '%{searchText}%') ";
+                sqlQuery += $"AND (c.first_name LIKE '%{searchText}%' OR c.last_name LIKE '%{searchText}%' OR f.notes LIKE '%{searchText}%') ";
+            }
+
+            if (!string.IsNullOrEmpty(typeFilter) && typeFilter != "All Types")
+            {
+                sqlQuery += $"AND f.follow_up_type = '{typeFilter}' ";
             }
 
             sqlQuery += "ORDER BY f.follow_up_date DESC";
@@ -70,9 +75,9 @@ namespace TWLH_Loan_Management_System
             db.sqlManager(sqlQuery);
         }
 
-        public void displayFollowUpCards(WrapPanel container, string searchText = "")
+        public void displayFollowUpCards(WrapPanel container, string searchText = "", string typeFilter = "All Types")
         {
-            DataTable dt = getFilteredFollowUps(searchText);
+            DataTable dt = getFilteredFollowUps(searchText, typeFilter);
             container.Children.Clear();
 
             foreach (DataRow row in dt.Rows)
@@ -202,7 +207,7 @@ namespace TWLH_Loan_Management_System
                     FollowUpForm form = new FollowUpForm(rowToUpdate);
                     if (form.ShowDialog() == true)
                     {
-                        displayFollowUpCards(container, searchText);
+                        displayFollowUpCards(container, searchText, typeFilter);
                     }
                 };
                 Grid.SetColumn(editBtn, 1);

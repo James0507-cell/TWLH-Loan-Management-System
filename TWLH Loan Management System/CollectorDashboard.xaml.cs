@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,19 +42,31 @@ namespace TWLH_Loan_Management_System
                 txtMyAssignmentCount.Text = dashBoardinfo.getMyAssignmentCount(userID);
                 txtOverdueCount.Text = dashBoardinfo.getOverdueAssignmentCount(userID);
                 
-                StackPanel cardsPanel = dashBoardinfo.collectionAssignmentCard(userID);
-                stkAssignmentDetails.Children.Clear();
-                
-                while (cardsPanel.Children.Count > 0)
+                DataTable dt = dashBoardinfo.getMyAssignments(userID);
+                if (dt != null)
                 {
-                    UIElement element = cardsPanel.Children[0] as UIElement;
-                    cardsPanel.Children.RemoveAt(0);
-                    stkAssignmentDetails.Children.Add(element);
+                    dgAssignments.ItemsSource = dt.DefaultView;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while loading the dashboard: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnManage_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            DataRowView row = btn.DataContext as DataRowView;
+
+            if (row != null)
+            {
+                int assignmentID = Convert.ToInt32(row["assignment_id"]);
+                CollectionDetails details = new CollectionDetails(assignmentID);
+                if (details.ShowDialog() == true)
+                {
+                    loadDashboard();
+                }
             }
         }
     }
