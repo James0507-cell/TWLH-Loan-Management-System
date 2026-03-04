@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TWLH_Loan_Management_System"
         mc:Ignorable="d"
         Title="TWLH Loan Management System" Height="650" Width="1100"
-        WindowStartupLocation="CenterScreen" Background="White">
+        WindowStartupLocation="CenterScreen" Background="White" WindowState="Maximized">
 
     <Window.Resources>
         <!-- Modern Color Palette -->
