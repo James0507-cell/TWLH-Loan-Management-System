@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -44,6 +44,11 @@ namespace TWLH_Loan_Management_System
 
                 decimal grandTotal = installment.displayInstallmentCards(installmentContainer, loanID);
                 txtGrandTotal.Text = $"₱{grandTotal:N2}";
+            }
+            else
+            {
+                MessageBox.Show("This loan record is no longer available (it may have been voided).");
+                this.Close();
             }
         }
 

@@ -20,8 +20,19 @@ namespace TWLH_Loan_Management_System
         {
             try
             {
-                // Better query: includes ORDER BY for better UI organization
-                string query = "SELECT * FROM tbl_promise ORDER BY promise_payment_date ASC";
+                // Better query: includes ORDER BY for better UI organization, joins for client and employee info
+                string query = @"SELECT p.*, 
+                               CONCAT(c.first_name, ' ', c.last_name) as client_name, 
+                               CONCAT(e1.first_name, ' ', e1.last_name) as recorder_name,
+                               IFNULL(CONCAT(e2.first_name, ' ', e2.last_name), 'System') as updated_by_name
+                               FROM tbl_promise p
+                               JOIN tbl_past_due_account pda ON p.past_due_id = pda.past_due_id
+                               JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id
+                               JOIN tbl_loan l ON li.loan_id = l.loan_id
+                               JOIN tbl_client c ON l.client_id = c.client_id
+                               JOIN tbl_employee e1 ON p.recorded_by = e1.employee_id
+                               LEFT JOIN tbl_employee e2 ON p.updated_by = e2.employee_id
+                               ORDER BY p.promise_id DESC";
                 DataTable dt = db.displayRecords(query);
                 PromiseCardsControl.ItemsSource = dt.DefaultView;
             }

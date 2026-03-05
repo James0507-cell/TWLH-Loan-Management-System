@@ -19,12 +19,22 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getInstallmentsByLoanID(int loanID)
         {
-            strQuery = $"SELECT * FROM tbl_loan_installment WHERE loan_id = {loanID} ORDER BY installment_due_date ASC";
+            strQuery = $@"SELECT li.*, IFNULL(CONCAT(e.first_name, ' ', e.last_name), 'System') as updated_by_name 
+                        FROM tbl_loan_installment li 
+                        JOIN tbl_loan l ON li.loan_id = l.loan_id 
+                        LEFT JOIN tbl_employee e ON li.updated_by = e.employee_id
+                        WHERE li.loan_id = {loanID} AND l.is_void = 0 
+                        ORDER BY li.installment_due_date ASC";
             return db.displayRecords(strQuery);
         }
         public DataTable getTotalAmountNeededToPay(int loanID)
         {
-            strQuery = $"select * from vw_total_amount_installment where loan_id = {loanID}";
+            strQuery = $@"SELECT vw.*, li.updated_at, IFNULL(CONCAT(e.first_name, ' ', e.last_name), 'System') as updated_by_name 
+                        FROM vw_total_amount_installment vw
+                        JOIN tbl_loan_installment li ON vw.installment_id = li.installment_id
+                        LEFT JOIN tbl_employee e ON li.updated_by = e.employee_id
+                        WHERE vw.loan_id = {loanID}
+                        ORDER BY vw.installment_id ASC";
             return db.displayRecords(strQuery);
         }
 
@@ -229,7 +239,28 @@ namespace TWLH_Loan_Management_System
                 Grid.SetColumn(col3, 2);
                 grid.Children.Add(col3);
 
-                card.Child = grid;
+                // Add grid to a wrapper stack to allow last updated info at the bottom
+                StackPanel cardContent = new StackPanel();
+                cardContent.Children.Add(grid);
+
+                // Last Updated Info
+                if (row["updated_at"] != DBNull.Value)
+                {
+                    DateTime updatedAt = Convert.ToDateTime(row["updated_at"]);
+                    string updatedByName = row["updated_by_name"] != DBNull.Value ? row["updated_by_name"].ToString() : "System";
+                    
+                    cardContent.Children.Add(new TextBlock 
+                    { 
+                        Text = $"Last Updated: {updatedAt:MMM dd, yyyy HH:mm} by {updatedByName}", 
+                        FontSize = 10, 
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#94A3B8"),
+                        FontStyle = FontStyles.Italic,
+                        Margin = new Thickness(0, 15, 0, 0),
+                        HorizontalAlignment = HorizontalAlignment.Right
+                    });
+                }
+
+                card.Child = cardContent;
                 container.Children.Add(card);
             }
 

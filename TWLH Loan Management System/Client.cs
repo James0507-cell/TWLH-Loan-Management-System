@@ -19,24 +19,24 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getClient()
         {
-            sqlQuery = "SELECT c.*, GROUP_CONCAT(b.business_name SEPARATOR ', ') as business_names FROM tbl_client c LEFT JOIN tbl_business b ON c.client_id = b.client_id GROUP BY c.client_id";
+            sqlQuery = "SELECT c.*, IFNULL(CONCAT(e.first_name, ' ', e.last_name), 'System') as updated_by_name, GROUP_CONCAT(b.business_name SEPARATOR ', ') as business_names FROM tbl_client c LEFT JOIN tbl_business b ON c.client_id = b.client_id LEFT JOIN tbl_employee e ON c.updated_by = e.employee_id GROUP BY c.client_id ORDER BY c.client_id ASC";
             return db.displayRecords(sqlQuery);
         }
 
         public DataTable getClient(int clientID)
         {
-            sqlQuery = $"SELECT c.*, GROUP_CONCAT(b.business_name SEPARATOR ', ') as business_names FROM tbl_client c LEFT JOIN tbl_business b ON c.client_id = b.client_id WHERE c.client_id = '{clientID}' GROUP BY c.client_id";
+            sqlQuery = $"SELECT c.*, IFNULL(CONCAT(e.first_name, ' ', e.last_name), 'System') as updated_by_name, GROUP_CONCAT(b.business_name SEPARATOR ', ') as business_names FROM tbl_client c LEFT JOIN tbl_business b ON c.client_id = b.client_id LEFT JOIN tbl_employee e ON c.updated_by = e.employee_id WHERE c.client_id = '{clientID}' GROUP BY c.client_id ORDER BY c.client_id ASC";
             return db.displayRecords(sqlQuery);
         }
 
         public DataTable getFilteredClients(string searchText = "")
         {
-            sqlQuery = "SELECT c.*, GROUP_CONCAT(b.business_name SEPARATOR ', ') as business_names FROM tbl_client c LEFT JOIN tbl_business b ON c.client_id = b.client_id WHERE 1=1 ";
+            sqlQuery = "SELECT c.*, IFNULL(CONCAT(e.first_name, ' ', e.last_name), 'System') as updated_by_name, GROUP_CONCAT(b.business_name SEPARATOR ', ') as business_names FROM tbl_client c LEFT JOIN tbl_business b ON c.client_id = b.client_id LEFT JOIN tbl_employee e ON c.updated_by = e.employee_id WHERE 1=1 ";
             if (!string.IsNullOrEmpty(searchText))
             {
                 sqlQuery += $"AND (c.first_name LIKE '%{searchText}%' OR c.last_name LIKE '%{searchText}%' OR b.business_name LIKE '%{searchText}%' OR c.client_id LIKE '%{searchText}%') ";
             }
-            sqlQuery += " GROUP BY c.client_id";
+            sqlQuery += " GROUP BY c.client_id ORDER BY c.client_id ASC";
             return db.displayRecords(sqlQuery);
         }
 
@@ -199,6 +199,23 @@ namespace TWLH_Loan_Management_System
                 buttonsGrid.Children.Add(viewBtn);
                 buttonsGrid.Children.Add(editBtn);
                 stack.Children.Add(buttonsGrid);
+
+                // Last Updated Info
+                if (row["updated_at"] != DBNull.Value)
+                {
+                    DateTime updatedAt = Convert.ToDateTime(row["updated_at"]);
+                    string updatedByName = row["updated_by_name"].ToString();
+                    
+                    stack.Children.Add(new TextBlock 
+                    { 
+                        Text = $"Updated {updatedAt:MMM dd, yyyy HH:mm} by {updatedByName}", 
+                        FontSize = 9, 
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#94A3B8"),
+                        FontStyle = FontStyles.Italic,
+                        Margin = new Thickness(0, 8, 0, 0),
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    });
+                }
 
                 card.Child = stack;
                 container.Children.Add(card);

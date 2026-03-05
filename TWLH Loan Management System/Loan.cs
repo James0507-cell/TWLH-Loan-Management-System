@@ -39,10 +39,11 @@ namespace TWLH_Loan_Management_System
             db.sqlManager(strQuery);
         }
 
-        public DataTable getFilteredLoans(string searchText = "", string status = "All Statuses", string installmentPlan = "All Plans")
+        public DataTable getFilteredLoans(string searchText = "", string status = "All Statuses", string installmentPlan = "All Plans", string loanType = "Standard")
         {
             strQuery = @"SELECT l.*, c.first_name, c.last_name, 
                        CONCAT(c.first_name, ' ', c.last_name) as FullName, 
+                       IFNULL(CONCAT(e.first_name, ' ', e.last_name), 'System') as updated_by_name,
                        (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) as total_installments, 
                        (SELECT COUNT(DISTINCT li.installment_id) 
                         FROM tbl_loan_installment li
@@ -63,7 +64,8 @@ namespace TWLH_Loan_Management_System
                                (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) * 100), 0) as ProgressValue 
                        FROM tbl_loan l 
                        JOIN tbl_client c ON l.client_id = c.client_id 
-                       WHERE 1=1 ";
+                       LEFT JOIN tbl_employee e ON l.updated_by = e.employee_id
+                       WHERE l.is_void = " + (loanType == "Voided" ? "1" : "0") + " ";
 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -80,6 +82,8 @@ namespace TWLH_Loan_Management_System
                 strQuery += $"AND l.installment_plan = '{installmentPlan}' ";
             }
 
+            strQuery += " ORDER BY l.loan_id DESC";
+
             return db.displayRecords(strQuery);
         }
 
@@ -93,10 +97,46 @@ namespace TWLH_Loan_Management_System
             strQuery = $"select * from tbl_loan where loan_id = {loanID}";
             return db.displayRecords(strQuery);
         }
-
-        public void displayLoanCards(WrapPanel container, string searchText = "", string status = "All Statuses", string installmentPlan = "All Plans")
+        
+        public bool canVoidLoan(int loanID)
         {
-            DataTable dt = getFilteredLoans(searchText, status, installmentPlan);
+            // Check if there are any confirmed transactions for any installment under this loan
+            strQuery = $@"SELECT COUNT(*) FROM tbl_installment_payment ip
+                          JOIN tbl_transaction t ON ip.transaction_id = t.transaction_id
+                          JOIN tbl_loan_installment li ON ip.installment_id = li.installment_id
+                          WHERE li.loan_id = {loanID} AND t.status = 'Confirmed'";
+            
+            DataTable dt = db.displayRecords(strQuery);
+            if (dt.Rows.Count > 0)
+            {
+                return Convert.ToInt32(dt.Rows[0][0]) == 0;
+            }
+            return true;
+        }
+
+        public void voidLoan(int loanID)
+        {
+            if (!canVoidLoan(loanID))
+            {
+                throw new Exception("Loan cannot be voided because it already has confirmed transactions.");
+            }
+
+            // 1. Mark loan as void
+            strQuery = $"UPDATE tbl_loan SET is_void = 1 WHERE loan_id = {loanID}";
+            db.sqlManager(strQuery);
+
+            // 2. Cancel collection assignments related to this loan's installments
+            strQuery = $@"UPDATE tbl_collection_assignment ca
+                          JOIN tbl_past_due_account pda ON ca.past_due_id = pda.past_due_id
+                          JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id
+                          SET ca.assignment_status = 'Canceled'
+                          WHERE li.loan_id = {loanID}";
+            db.sqlManager(strQuery);
+        }
+
+        public void displayLoanCards(WrapPanel container, string searchText = "", string status = "All Statuses", string installmentPlan = "All Plans", string loanType = "Standard")
+        {
+            DataTable dt = getFilteredLoans(searchText, status, installmentPlan, loanType);
             container.Children.Clear();
             
             // ... (rest of the displayLoanCards logic remains the same)
@@ -115,6 +155,7 @@ namespace TWLH_Loan_Management_System
                 string loanStatus = row["loan_status"].ToString();
                 int totalInstallments = Convert.ToInt32(row["total_installments"]);
                 int paidInstallments = Convert.ToInt32(row["paid_installments"]);
+                bool isVoid = Convert.ToBoolean(row["is_void"]);
 
                 // Create Card Border
                 Border card = new Border
@@ -125,19 +166,47 @@ namespace TWLH_Loan_Management_System
                     Background = Brushes.White,
                     CornerRadius = new System.Windows.CornerRadius(15),
                     BorderBrush = (Brush)new BrushConverter().ConvertFrom("#E2E8F0"),
-                    BorderThickness = new System.Windows.Thickness(1.5)
+                    BorderThickness = new System.Windows.Thickness(1.5),
+                    Opacity = isVoid ? 0.7 : 1.0
                 };
 
                 StackPanel stack = new StackPanel { Margin = new System.Windows.Thickness(25) };
 
-                // Header: Loan ID
-                stack.Children.Add(new TextBlock
+                // Header: Loan ID and Void Badge
+                Grid headerGrid = new Grid();
+                headerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                headerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+                TextBlock idTxt = new TextBlock
                 {
                     Text = $"Loan #{loanID}",
                     FontWeight = System.Windows.FontWeights.Bold,
                     FontSize = 18,
                     Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B")
-                });
+                };
+                Grid.SetColumn(idTxt, 0);
+                headerGrid.Children.Add(idTxt);
+
+                if (isVoid)
+                {
+                    Border voidBadge = new Border
+                    {
+                        Padding = new Thickness(8, 4, 8, 4),
+                        CornerRadius = new CornerRadius(6),
+                        Background = (Brush)new BrushConverter().ConvertFrom("#FEE2E2"),
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
+                    voidBadge.Child = new TextBlock
+                    {
+                        Text = "VOIDED",
+                        FontSize = 10,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#EF4444")
+                    };
+                    Grid.SetColumn(voidBadge, 1);
+                    headerGrid.Children.Add(voidBadge);
+                }
+                stack.Children.Add(headerGrid);
 
                 // Client Name & ID
                 stack.Children.Add(new TextBlock
@@ -324,36 +393,82 @@ namespace TWLH_Loan_Management_System
                     details.ShowDialog();
                 };
 
-                // Update Button with Icon
-                Button updateBtn = new Button
+                // Void Button with Icon (replacing Update button)
+                Button voidBtn = new Button
                 {
                     Style = cardBtnStyle,
-                    Tag = row, // Store row for updating
+                    Tag = loanID,
                     Margin = new System.Windows.Thickness(5, 0, 0, 0),
-                    Background = (Brush)new BrushConverter().ConvertFrom("#3044FF"),
-                    Foreground = Brushes.White
+                    Background = (Brush)new BrushConverter().ConvertFrom("#FEE2E2"),
+                    Foreground = (Brush)new BrushConverter().ConvertFrom("#EF4444"),
+                    Visibility = (UserSession.Role == "Admin" || UserSession.Role == "Staff") && !isVoid ? Visibility.Visible : Visibility.Collapsed
                 };
-                StackPanel updateBtnContent = new StackPanel { Orientation = Orientation.Horizontal };
-                updateBtnContent.Children.Add(new ImageAwesome { Icon = FontAwesomeIcon.Edit, Width = 14, Height = 14, Foreground = updateBtn.Foreground, Margin = new Thickness(0, 0, 8, 0) });
-                updateBtnContent.Children.Add(new TextBlock { Text = "Update", VerticalAlignment = VerticalAlignment.Center });
-                updateBtn.Content = updateBtnContent;
+                StackPanel voidBtnContent = new StackPanel { Orientation = Orientation.Horizontal };
+                voidBtnContent.Children.Add(new ImageAwesome { Icon = FontAwesomeIcon.Trash, Width = 14, Height = 14, Foreground = voidBtn.Foreground, Margin = new Thickness(0, 0, 8, 0) });
+                voidBtnContent.Children.Add(new TextBlock { Text = "Void", VerticalAlignment = VerticalAlignment.Center });
+                voidBtn.Content = voidBtnContent;
 
-                updateBtn.Click += (s, e) =>
+                voidBtn.Click += (s, e) =>
                 {
-                    Button btn = (Button)s;
-                    DataRow rowToUpdate = (DataRow)btn.Tag;
-                    LoanForm form = new LoanForm(rowToUpdate);
-                    if (form.ShowDialog() == true)
+                    int idToVoid = (int)((Button)s).Tag;
+                    if (!canVoidLoan(idToVoid))
                     {
-                        displayLoanCards(container); // Refresh cards
+                        MessageBox.Show("This loan cannot be voided because there are already confirmed transactions associated with its installments.", "Action Prohibited", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    MessageBoxResult result = MessageBox.Show("Are you sure you want to void this loan? This action will mark the loan as a mistake and cancel any associated collection assignments. This cannot be undone.", "Confirm Void", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            voidLoan(idToVoid);
+                            MessageBox.Show("Loan has been successfully voided.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                            displayLoanCards(container, searchText, status, installmentPlan, loanType); // Refresh cards
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error voiding loan: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                 };
 
                 Grid.SetColumn(viewBtn, 0);
-                Grid.SetColumn(updateBtn, 1);
+                Grid.SetColumn(voidBtn, 1);
                 buttonsGrid.Children.Add(viewBtn);
-                buttonsGrid.Children.Add(updateBtn);
+                buttonsGrid.Children.Add(voidBtn);
                 stack.Children.Add(buttonsGrid);
+
+                // Last Updated Info
+                if (row["updated_at"] != DBNull.Value)
+                {
+                    DateTime updatedAt = Convert.ToDateTime(row["updated_at"]);
+                    string updatedByName = row["updated_by_name"].ToString();
+                    
+                    StackPanel updatedStack = new StackPanel 
+                    { 
+                        Orientation = Orientation.Horizontal, 
+                        Margin = new Thickness(0, 10, 0, 0),
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    };
+                    updatedStack.Children.Add(new ImageAwesome 
+                    { 
+                        Icon = FontAwesomeIcon.Pencil, 
+                        Width = 10, 
+                        Height = 10, 
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#94A3B8"),
+                        Margin = new Thickness(0, 0, 5, 0)
+                    });
+                    updatedStack.Children.Add(new TextBlock 
+                    { 
+                        Text = $"Updated {updatedAt:MMM dd, yyyy HH:mm} by {updatedByName}", 
+                        FontSize = 9, 
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#94A3B8"),
+                        FontStyle = FontStyles.Italic
+                    });
+                    stack.Children.Add(updatedStack);
+                }
 
                 card.Child = stack;
                 container.Children.Add(card);
@@ -383,7 +498,7 @@ namespace TWLH_Loan_Management_System
                                (SELECT COUNT(*) FROM tbl_loan_installment WHERE loan_id = l.loan_id) * 100), 0) as ProgressValue 
                        FROM tbl_loan l 
                        JOIN tbl_client c ON l.client_id = c.client_id 
-                       WHERE l.client_id = " + clientID;
+                       WHERE l.is_void = 0 AND l.client_id = " + clientID;
             return db.displayRecords(strQuery);
         }
 
@@ -479,7 +594,7 @@ namespace TWLH_Loan_Management_System
         }
         public bool hasExistingActiveLoan(int clientID)
         {
-            strQuery = $"SELECT COUNT(*) FROM tbl_loan WHERE client_id = {clientID} AND (loan_status = 'Active' OR loan_status = 'Past Due')";
+            strQuery = $"SELECT COUNT(*) FROM tbl_loan WHERE client_id = {clientID} AND (loan_status = 'Active' OR loan_status = 'Past Due') AND is_void = 0";
             DataTable dt = db.displayRecords(strQuery);
             if (dt.Rows.Count > 0)
             {

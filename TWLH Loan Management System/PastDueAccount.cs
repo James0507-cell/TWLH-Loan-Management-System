@@ -24,12 +24,13 @@ namespace TWLH_Loan_Management_System
                                li.loan_id,
                                CONCAT(c.first_name, ' ', c.last_name) as ClientName,
                                c.client_id,
-                               (li.installment_amount + pda.penalty_added) as TotalPastDue
+                               (li.installment_amount + IFNULL(pda.penalty_added, 0)) as TotalPastDue
                         FROM tbl_past_due_account pda
                         JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id
                         JOIN tbl_loan l ON li.loan_id = l.loan_id
                         JOIN tbl_client c ON l.client_id = c.client_id
-                        WHERE 1=1 ";
+                        WHERE l.is_void = 0 
+ ";
 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -41,7 +42,7 @@ namespace TWLH_Loan_Management_System
                 sqlQuery += $"AND pda.past_due_status = '{status}' ";
             }
 
-            sqlQuery += " ORDER BY li.installment_due_date DESC";
+            sqlQuery += " ORDER BY pda.past_due_id DESC";
 
             return db.displayRecords(sqlQuery);
         }
@@ -59,6 +60,20 @@ namespace TWLH_Loan_Management_System
                        $"JOIN tbl_client c ON l.client_id = c.client_id " +
                        $"WHERE pda.past_due_id = '{pastDueID}'";
             return db.displayRecords(sqlQuery);
+        }
+
+        public bool isLoanVoid(int pastDueID)
+        {
+            sqlQuery = $@"SELECT l.is_void FROM tbl_past_due_account pda 
+                        JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id 
+                        JOIN tbl_loan l ON li.loan_id = l.loan_id 
+                        WHERE pda.past_due_id = {pastDueID}";
+            DataTable dt = db.displayRecords(sqlQuery);
+            if (dt.Rows.Count > 0)
+            {
+                return Convert.ToBoolean(dt.Rows[0]["is_void"]);
+            }
+            return false;
         }
 
         public void displayPastDueCards(WrapPanel container, string searchText = "", string status = "All Statuses", Action onRefresh = null)

@@ -31,6 +31,7 @@ namespace TWLH_Loan_Management_System
             this._pastDueID = pastDueID;
             dpDate.SelectedDate = DateTime.Now;
             cmbType.SelectedIndex = 0;
+            checkIfVoid();
         }
 
         public FollowUpForm(DataRow row)
@@ -57,6 +58,28 @@ namespace TWLH_Loan_Management_System
             TextBlock headerTitle = (TextBlock)this.FindName("headerTitle");
             if (headerTitle != null) headerTitle.Text = "Edit Follow Up";
             btnSave.Content = "Update Record";
+            checkIfVoid();
+        }
+
+        private void checkIfVoid()
+        {
+            PastDueAccount pda = new PastDueAccount();
+            if (pda.isLoanVoid(_pastDueID))
+            {
+                btnSave.IsEnabled = false;
+                btnSave.Opacity = 0.5;
+                btnSave.Content = "Action Restricted";
+                
+                dpDate.IsEnabled = false;
+                cmbType.IsEnabled = false;
+                txtNotes.IsReadOnly = true;
+                txtNotes.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+
+                TextBlock headerTitle = (TextBlock)this.FindName("headerTitle");
+                if (headerTitle != null) headerTitle.Text += " (VOIDED LOAN)";
+                
+                MessageBox.Show("This follow-up is associated with a voided loan and cannot be modified.", "Voided Loan", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

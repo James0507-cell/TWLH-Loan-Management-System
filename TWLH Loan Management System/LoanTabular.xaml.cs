@@ -25,6 +25,7 @@ namespace TWLH_Loan_Management_System
         string searchText = "";
         string status = "All Statuses";
         string plan = "All Plans";
+        string loanType = "Standard";
 
         public LoanTabular()
         {
@@ -33,12 +34,13 @@ namespace TWLH_Loan_Management_System
             dgLoans.MouseDoubleClick += DgLoans_MouseDoubleClick;
         }
 
-        public LoanTabular(string searchText, string status, string plan = "All Plans")
+        public LoanTabular(string searchText, string status, string plan = "All Plans", string loanType = "Standard")
         {
             InitializeComponent();
             this.searchText = searchText;
             this.status = status;
             this.plan = plan;
+            this.loanType = loanType;
             this.Loaded += LoanTabular_Loaded;
             dgLoans.MouseDoubleClick += DgLoans_MouseDoubleClick;
         }
@@ -66,14 +68,38 @@ namespace TWLH_Loan_Management_System
             }
         }
 
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private void btnVoid_Click(object sender, RoutedEventArgs e)
         {
+            if (UserSession.Role != "Admin" && UserSession.Role != "Staff")
+            {
+                MessageBox.Show("You do not have permission to void loans.", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+
             if (((Button)sender).DataContext is DataRowView row)
             {
-                LoanForm form = new LoanForm(row.Row);
-                if (form.ShowDialog() == true)
+                int idToVoid = Convert.ToInt32(row["loan_id"]);
+
+                if (!loan.canVoidLoan(idToVoid))
                 {
-                    PopulateTable();
+                    MessageBox.Show("This loan cannot be voided because there are already confirmed transactions associated with its installments.", "Action Prohibited", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to void this loan? This action will mark the loan as a mistake and cancel any associated collection assignments. This cannot be undone.", "Confirm Void", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        loan.voidLoan(idToVoid);
+                        MessageBox.Show("Loan has been successfully voided.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        PopulateTable();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error voiding loan: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -87,7 +113,7 @@ namespace TWLH_Loan_Management_System
         {
             try
             {
-                dgLoans.ItemsSource = loan.getFilteredLoans(searchText, status, plan).DefaultView;
+                dgLoans.ItemsSource = loan.getFilteredLoans(searchText, status, plan, loanType).DefaultView;
             }
             catch (Exception ex)
             {

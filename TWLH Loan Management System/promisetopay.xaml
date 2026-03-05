@@ -79,6 +79,11 @@
 
                                     <Separator Background="#F8F9FA" Margin="0,0,0,18"/>
 
+                                    <TextBlock Text="Client Name" FontSize="12" Foreground="#8392AB"/>
+                                    <TextBlock Text="{Binding client_name}" FontSize="18" FontWeight="Bold" Foreground="#344767" Margin="0,2,0,18"/>
+
+                                    <Separator Background="#F8F9FA" Margin="0,0,0,18"/>
+
                                     <Grid Margin="0,0,0,15">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -90,10 +95,29 @@
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Text="Recorded By" FontSize="11" Foreground="#8392AB"/>
-                                            <TextBlock Text="{Binding recorded_by}" FontWeight="SemiBold" Foreground="#344767"/>
+                                            <TextBlock Text="{Binding recorder_name}" FontWeight="SemiBold" Foreground="#344767"/>
                                         </StackPanel>
                                     </Grid>
 
+                                    <!-- Last Updated Info -->
+                                    <StackPanel Margin="0,0,0,10">
+                                        <TextBlock FontSize="10" Foreground="#8392AB" FontStyle="Italic">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding updated_at, TargetNullValue=''}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Run Text="Updated: "/>
+                                            <Run Text="{Binding updated_at, StringFormat='\{0:MMM dd, yyyy HH:mm\}'}"/>
+                                            <Run Text=" by "/>
+                                            <Run Text="{Binding updated_by_name}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    
                                     <TextBlock Text="Admin Remarks" FontSize="11" Foreground="#8392AB" Margin="0,0,0,5"/>
                                     <Border Background="#F8F9FA" CornerRadius="8" Padding="12" MinHeight="70">
                                         <TextBlock Text="{Binding remarks}" Foreground="#67748E" FontSize="12" TextWrapping="Wrap" FontStyle="Italic"/>

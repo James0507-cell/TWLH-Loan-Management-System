@@ -31,6 +31,7 @@ namespace TWLH_Loan_Management_System
             this._pastDueID = pastDueID;
             LoadCollectors();
             cmbStatus.SelectedIndex = 0; // Default to In Progress
+            checkIfVoid();
         }
 
         // New constructor for updating
@@ -58,6 +59,26 @@ namespace TWLH_Loan_Management_System
             
             btnSave.Content = "Update Assignment";
             this.Title = "Update Collection Assignment";
+            checkIfVoid();
+        }
+
+        private void checkIfVoid()
+        {
+            PastDueAccount pda = new PastDueAccount();
+            if (pda.isLoanVoid(_pastDueID))
+            {
+                btnSave.IsEnabled = false;
+                btnSave.Opacity = 0.5;
+                btnSave.Content = "Action Restricted";
+                
+                cmbCollector.IsEnabled = false;
+                cmbStatus.IsEnabled = false;
+
+                TextBlock headerTitle = (TextBlock)this.FindName("headerTitle");
+                if (headerTitle != null) headerTitle.Text += " (VOIDED LOAN)";
+                
+                MessageBox.Show("This collection assignment is associated with a voided loan and cannot be modified.", "Voided Loan", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void LoadCollectors()

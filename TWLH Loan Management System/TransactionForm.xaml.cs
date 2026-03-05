@@ -71,6 +71,50 @@ namespace TWLH_Loan_Management_System
                 txtSubtitle.Text = $"Transaction #{_transactionID} is VOIDED and cannot be changed.";
                 txtSubtitle.Foreground = Brushes.Red;
             }
+
+            // Hide balance for existing transactions to avoid confusion
+            txtBalance.Visibility = Visibility.Collapsed;
+        }
+
+        private void cmbClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbClient.SelectedValue != null)
+            {
+                int clientID = Convert.ToInt32(cmbClient.SelectedValue);
+                LoadClientBalance(clientID);
+            }
+        }
+
+        private decimal _currentBalance = 0;
+        private void LoadClientBalance(int clientID)
+        {
+            try
+            {
+                string query = $"SELECT SUM(total_amount_to_pay) FROM vw_total_amount_installment WHERE client_id = {clientID}";
+                DataTable dt = _db.displayRecords(query);
+                if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)
+                {
+                    _currentBalance = Convert.ToDecimal(dt.Rows[0][0]);
+                    txtBalance.Text = $"Total Balance: ₱{_currentBalance:N2}";
+                    txtBalance.Foreground = (Brush)new BrushConverter().ConvertFrom("#3044FF");
+
+                    if (_currentBalance <= 0)
+                    {
+                        txtBalance.Text = "No outstanding balance or only voided loans.";
+                        txtBalance.Foreground = Brushes.Red;
+                    }
+                }
+                else
+                {
+                    _currentBalance = 0;
+                    txtBalance.Text = "No active installments found for this client.";
+                    txtBalance.Foreground = Brushes.Red;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading balance: " + ex.Message);
+            }
         }
 
         private void LoadClients()
@@ -137,8 +181,21 @@ namespace TWLH_Loan_Management_System
                 {
                     // Adding new transaction (will trigger waterfall)
                     int clientID = Convert.ToInt32(cmbClient.SelectedValue);
-                    double amount = double.Parse(txtAmount.Text);
+                    decimal amount = decimal.Parse(txtAmount.Text);
                     string type = ((ComboBoxItem)cmbType.SelectedItem).Content.ToString();
+
+                    // Validation: Overpayment and Voided Loans
+                    if (_currentBalance <= 0)
+                    {
+                        MessageBox.Show("This client has no outstanding balance to pay. They might have only voided loans or already fully paid their active loans.", "Invalid Transaction", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    if (amount > _currentBalance)
+                    {
+                        MessageBox.Show($"Payment amount (₱{amount:N2}) exceeds the total outstanding balance (₱{_currentBalance:N2}). Overpayments are not allowed.", "Overpayment Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
 
                     string query = $"INSERT INTO tbl_transaction (client_id, transaction_type, transaction_amount, status, recorded_by) " +
                                    $"VALUES ({clientID}, '{type}', {amount}, '{status}', {recordedBy})";

@@ -31,13 +31,13 @@ namespace TWLH_Loan_Management_System
         public string getTotalActiveLoans()
         {
             strquery =   $"select count(loan_id) from tbl_loan " +
-                         $"where loan_status = 'Active'";
+                         $"where loan_status = 'Active' AND is_void = 0";
             return db.displayRecords(strquery).Rows[0][0].ToString();
         }
         public string getTotalLoanAmount()
         {
             strquery =  $"select sum(loan_amount) from tbl_loan " +
-                        $"where loan_status = 'Active'";
+                        $"where loan_status = 'Active' AND is_void = 0";
             return db.displayRecords(strquery).Rows[0][0].ToString();
         }
 
@@ -54,18 +54,18 @@ namespace TWLH_Loan_Management_System
 
         public string getTotalPaidInstallment()
         {
-            strquery = $"select count(installment_id) from tbl_loan_installment where installment_status = 'Paid'";
+            strquery = $"select count(li.installment_id) from tbl_loan_installment li join tbl_loan l on li.loan_id = l.loan_id where li.installment_status = 'Paid' and l.is_void = 0";
             return db.displayRecords(strquery).Rows[0][0].ToString();
         }
         public string getTotalPastDueAccount()
         {
-            strquery = $"select count(installment_id) from tbl_past_due_account where past_due_status <> 'Resolved'";
+            strquery = $"select count(pda.installment_id) from tbl_past_due_account pda join tbl_loan_installment li on pda.installment_id = li.installment_id join tbl_loan l on li.loan_id = l.loan_id where pda.past_due_status <> 'Resolved' and l.is_void = 0";
             return db.displayRecords(strquery).Rows[0][0].ToString();
         }
 
         public string getTotalPastDueAmount()
         {
-            strquery = $"select sum(installment_amount) from tbl_loan_installment where installment_status = 'Past Due'";
+            strquery = $"select sum(li.installment_amount) from tbl_loan_installment li join tbl_loan l on li.loan_id = l.loan_id where li.installment_status = 'Past Due' and l.is_void = 0";
             return db.displayRecords(strquery).Rows[0][0].ToString();
         }
 
@@ -89,12 +89,12 @@ namespace TWLH_Loan_Management_System
                         " from tbl_loan_installment li " +
                         " inner join tbl_loan lo on li.loan_id = lo.loan_id " +
                         " where lo.loan_status <> 'Paid' " +
-                        " and li.installment_status = 'Paid') " +
+                        " and li.installment_status = 'Paid' and lo.is_void = 0) " +
                         "/ " +
                         "(select count(li.installment_id) " +
                         " from tbl_loan_installment li " +
                         " inner join tbl_loan lo on li.loan_id = lo.loan_id " +
-                        " where lo.loan_status <> 'Paid'), 0)";
+                        " where lo.loan_status <> 'Paid' and lo.is_void = 0), 0)";
 
 
             DataTable dt = db.displayRecords(strquery);
@@ -112,7 +112,7 @@ namespace TWLH_Loan_Management_System
                         $"on li.loan_id = lo.loan_id " +
                         $"where lo.loan_status <> 'Paid' " +
                         $"and " +
-                        $"li.installment_status = 'Paid'";
+                        $"li.installment_status = 'Paid' and lo.is_void = 0";
                         return db.displayRecords(strquery).Rows[0][0].ToString();
         }
 

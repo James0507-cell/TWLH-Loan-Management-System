@@ -24,6 +24,7 @@ namespace TWLH_Loan_Management_System
                                  CONCAT(c.first_name, ' ', c.last_name) as client_name,
                                  CONCAT(e.first_name, ' ', e.last_name) as collector_name,
                                  CONCAT(creator.first_name, ' ', creator.last_name) as creator_name,
+                                 IFNULL(CONCAT(updater.first_name, ' ', updater.last_name), 'System') as updated_by_name,
                                  l.loan_amount,
                                  li.installment_amount,
                                  pda.penalty_added,
@@ -35,7 +36,8 @@ namespace TWLH_Loan_Management_System
                           JOIN tbl_client c ON l.client_id = c.client_id
                           JOIN tbl_employee e ON ca.assigned_to = e.employee_id
                           JOIN tbl_employee creator ON ca.created_by = creator.employee_id
-                          ORDER BY ca.created_at DESC";
+                          LEFT JOIN tbl_employee updater ON ca.updated_by = updater.employee_id
+                          ORDER BY ca.assignment_id DESC";
             return db.displayRecords(sqlQuery);
         }
 
@@ -45,6 +47,7 @@ namespace TWLH_Loan_Management_System
                                  CONCAT(c.first_name, ' ', c.last_name) as client_name,
                                  CONCAT(e.first_name, ' ', e.last_name) as collector_name,
                                  CONCAT(creator.first_name, ' ', creator.last_name) as creator_name,
+                                 IFNULL(CONCAT(updater.first_name, ' ', updater.last_name), 'System') as updated_by_name,
                                  l.loan_amount,
                                  li.installment_amount,
                                  pda.penalty_added,
@@ -56,8 +59,9 @@ namespace TWLH_Loan_Management_System
                           JOIN tbl_client c ON l.client_id = c.client_id
                           JOIN tbl_employee e ON ca.assigned_to = e.employee_id
                           JOIN tbl_employee creator ON ca.created_by = creator.employee_id
+                          LEFT JOIN tbl_employee updater ON ca.updated_by = updater.employee_id
                           WHERE ca.assigned_to = '{collectorID}'
-                          ORDER BY ca.created_at DESC";
+                          ORDER BY ca.assignment_id DESC";
             return db.displayRecords(sqlQuery);
         }
 
@@ -178,6 +182,17 @@ namespace TWLH_Loan_Management_System
             totalGrid.Children.Add(valTotal);
             totalBox.Child = totalGrid;
             mainStack.Children.Add(totalBox);
+
+            // Last Updated Info
+            if (row["updated_at"] != DBNull.Value)
+            {
+                DateTime updatedAt = Convert.ToDateTime(row["updated_at"]);
+                string updatedByName = row["updated_by_name"].ToString();
+                
+                StackPanel updateStack = new StackPanel { Margin = new Thickness(20, 10, 20, 0) };
+                AddIconDetail(updateStack, FontAwesomeIcon.Pencil, "Updated:", $"{updatedAt:MMM dd, yyyy HH:mm} by {updatedByName}");
+                mainStack.Children.Add(updateStack);
+            }
 
             // Action Buttons
             Grid buttonsGrid = new Grid();

@@ -34,6 +34,29 @@ namespace TWLH_Loan_Management_System
             InitializeComponent();
             this._pastDueID = pastDueID;
             dpDate.SelectedDate = DateTime.Now.AddDays(7);
+            checkIfVoid();
+        }
+
+        private void checkIfVoid()
+        {
+            PastDueAccount pda = new PastDueAccount();
+            if (pda.isLoanVoid(_pastDueID))
+            {
+                btnSave.IsEnabled = false;
+                btnSave.Opacity = 0.5;
+                btnSave.Content = "Action Restricted";
+                
+                dpDate.IsEnabled = false;
+                txtAmount.IsReadOnly = true;
+                txtRemarks.IsReadOnly = true;
+                txtAmount.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+                txtRemarks.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+
+                TextBlock headerTitle = (TextBlock)this.FindName("headerTitle");
+                if (headerTitle != null) headerTitle.Text += " (VOIDED LOAN)";
+                
+                MessageBox.Show("This promise record is associated with a voided loan and cannot be modified.", "Voided Loan", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

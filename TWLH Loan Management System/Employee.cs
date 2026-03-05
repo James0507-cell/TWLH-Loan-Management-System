@@ -159,9 +159,13 @@ namespace TWLH_Loan_Management_System
                         e.created_at AS DateHired,
                         CONCAT(e.first_name, ' ', e.last_name) AS Name, 
                         IF(e.is_active = 1, 'Active', 'Inactive') AS Status,
-                        ec.username
+                        ec.username,
+                        e.updated_at,
+                        IFNULL(CONCAT(e2.first_name, ' ', e2.last_name), 'System') as updated_by_name
                      FROM tbl_employee e
-                     LEFT JOIN tbl_employee_credential ec ON e.employee_id = ec.employee_id";
+                     LEFT JOIN tbl_employee_credential ec ON e.employee_id = ec.employee_id
+                     LEFT JOIN tbl_employee e2 ON e.updated_by = e2.employee_id
+                     ORDER BY e.employee_id ASC";
             return db.displayRecords(query);
         }
 

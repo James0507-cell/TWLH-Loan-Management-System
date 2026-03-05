@@ -296,8 +296,27 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="DATE" Binding="{Binding created_at, StringFormat='\{0:MMM dd, yyyy\}'}" Width="*" MinWidth="130"/>
-                    <DataGridTextColumn Header="RECORDED BY" Binding="{Binding RecordedBy}" Width="*" MinWidth="150"/>
+                    <DataGridTemplateColumn Header="RECORDED BY" Width="*" MinWidth="160">
+                       <DataGridTemplateColumn.CellTemplate>
+                           <DataTemplate>
+                               <StackPanel VerticalAlignment="Center">
+                                   <TextBlock Text="{Binding RecordedBy}" FontWeight="SemiBold" Foreground="#1E293B"/>
+                                   <TextBlock Text="{Binding created_at, StringFormat='\{0:MMM dd, yyyy HH:mm\}'}" FontSize="11" Foreground="#64748B"/>
+                               </StackPanel>
+                           </DataTemplate>
+                       </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="LAST UPDATED" Width="*" MinWidth="160">
+                       <DataGridTemplateColumn.CellTemplate>
+                           <DataTemplate>
+                               <StackPanel VerticalAlignment="Center">
+                                   <TextBlock Text="{Binding updated_at, Mode=OneWay, StringFormat='\{0:MMM dd, yyyy HH:mm\}'}" Foreground="#1E293B" FontWeight="SemiBold"/>
+                                   <TextBlock Text="{Binding updated_by_name, Mode=OneWay, StringFormat='by \{0\}'}" FontSize="11" Foreground="#64748B"/>
+                               </StackPanel>
+                           </DataTemplate>
+                       </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTemplateColumn Header="ACTIONS" Width="180">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

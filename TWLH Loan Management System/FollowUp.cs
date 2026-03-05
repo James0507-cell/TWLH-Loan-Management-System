@@ -20,25 +20,28 @@ namespace TWLH_Loan_Management_System
 
         public DataTable getFollowUpRecrods()
         {
-            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name " +
-                       "FROM tbl_follow_up f " +
-                       "JOIN tbl_past_due_account pda ON f.past_due_id = pda.past_due_id " +
-                       "JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id " +
-                       "JOIN tbl_loan l ON li.loan_id = l.loan_id " +
-                       "JOIN tbl_client c ON l.client_id = c.client_id " +
-                       "JOIN tbl_employee e ON f.recorded_by = e.employee_id";
-            return db.displayRecords(sqlQuery);
-        }
-
-        public DataTable getFilteredFollowUps(string searchText = "", string typeFilter = "All Types")
-        {
-            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name " +
+            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name, IFNULL(CONCAT(e2.first_name, ' ', e2.last_name), 'System') as updated_by_name " +
                        "FROM tbl_follow_up f " +
                        "JOIN tbl_past_due_account pda ON f.past_due_id = pda.past_due_id " +
                        "JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id " +
                        "JOIN tbl_loan l ON li.loan_id = l.loan_id " +
                        "JOIN tbl_client c ON l.client_id = c.client_id " +
                        "JOIN tbl_employee e ON f.recorded_by = e.employee_id " +
+                       "LEFT JOIN tbl_employee e2 ON f.updated_by = e2.employee_id " +
+                       "ORDER BY f.follow_up_id DESC";
+            return db.displayRecords(sqlQuery);
+        }
+
+        public DataTable getFilteredFollowUps(string searchText = "", string typeFilter = "All Types")
+        {
+            sqlQuery = "SELECT f.*, CONCAT(c.first_name, ' ', c.last_name) as client_name, CONCAT(e.first_name, ' ', e.last_name) as recorder_name, IFNULL(CONCAT(e2.first_name, ' ', e2.last_name), 'System') as updated_by_name " +
+                       "FROM tbl_follow_up f " +
+                       "JOIN tbl_past_due_account pda ON f.past_due_id = pda.past_due_id " +
+                       "JOIN tbl_loan_installment li ON pda.installment_id = li.installment_id " +
+                       "JOIN tbl_loan l ON li.loan_id = l.loan_id " +
+                       "JOIN tbl_client c ON l.client_id = c.client_id " +
+                       "JOIN tbl_employee e ON f.recorded_by = e.employee_id " +
+                       "LEFT JOIN tbl_employee e2 ON f.updated_by = e2.employee_id " +
                        "WHERE 1=1 ";
 
             if (!string.IsNullOrEmpty(searchText))
@@ -51,7 +54,7 @@ namespace TWLH_Loan_Management_System
                 sqlQuery += $"AND f.follow_up_type = '{typeFilter}' ";
             }
 
-            sqlQuery += "ORDER BY f.follow_up_date DESC";
+            sqlQuery += "ORDER BY f.follow_up_id DESC";
             return db.displayRecords(sqlQuery);
         }
 
@@ -214,6 +217,23 @@ namespace TWLH_Loan_Management_System
                 footer.Children.Add(editBtn);
 
                 stack.Children.Add(footer);
+
+                // Last Updated Info
+                if (row["updated_at"] != DBNull.Value)
+                {
+                    DateTime updatedAt = Convert.ToDateTime(row["updated_at"]);
+                    string updatedByName = row["updated_by_name"].ToString();
+                    
+                    stack.Children.Add(new TextBlock 
+                    { 
+                        Text = $"Updated {updatedAt:MMM dd, yyyy HH:mm} by {updatedByName}", 
+                        FontSize = 9, 
+                        Foreground = (Brush)new BrushConverter().ConvertFrom("#94A3B8"),
+                        FontStyle = FontStyles.Italic,
+                        Margin = new Thickness(0, 8, 0, 0),
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    });
+                }
 
                 card.Child = stack;
                 container.Children.Add(card);

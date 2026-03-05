@@ -190,6 +190,12 @@
                     <ComboBoxItem Content="Quarterly"/>
                     <ComboBoxItem Content="Anually"/>
                 </ComboBox>
+
+                <!-- Type Filter -->
+                <ComboBox Style="{StaticResource ElegantComboBox}" x:Name="cmbType" Width="130" Margin="15,0,0,0">
+                    <ComboBoxItem Content="Standard" IsSelected="True"/>
+                    <ComboBoxItem Content="Voided"/>
+                </ComboBox>
             </StackPanel>
 
             <!-- Layout Switcher Tab -->

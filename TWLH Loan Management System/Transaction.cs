@@ -19,10 +19,12 @@ namespace TWLH_Loan_Management_System
         {
             strQuery = "SELECT t.*, " +
                        "CONCAT(c.first_name, ' ', c.last_name) as ClientName, " +
-                       "CONCAT(e.first_name, ' ', e.last_name) as RecordedBy " +
+                       "CONCAT(e.first_name, ' ', e.last_name) as RecordedBy, " +
+                       "IFNULL(CONCAT(e2.first_name, ' ', e2.last_name), 'System') as updated_by_name " +
                        "FROM tbl_transaction t " +
                        "LEFT JOIN tbl_client c ON t.client_id = c.client_id " +
                        "LEFT JOIN tbl_employee e ON t.recorded_by = e.employee_id " +
+                       "LEFT JOIN tbl_employee e2 ON t.updated_by = e2.employee_id " +
                        "WHERE 1=1 ";
 
             if (!string.IsNullOrEmpty(searchText))
@@ -35,7 +37,7 @@ namespace TWLH_Loan_Management_System
                 strQuery += $"AND t.transaction_type = '{type}' ";
             }
 
-            strQuery += "ORDER BY t.created_at DESC";
+            strQuery += "ORDER BY t.transaction_id DESC";
 
             return db.displayRecords(strQuery);
         }

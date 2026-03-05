@@ -87,6 +87,42 @@
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="LOAN ID" Binding="{Binding loan_id, Mode=OneWay}" Width="80"/>
+                    <DataGridTemplateColumn Header="TYPE" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Padding="8,4" CornerRadius="6" HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding is_void, Mode=OneWay}" Value="True">
+                                                    <Setter Property="Background" Value="#FEE2E2"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding is_void, Mode=OneWay}" Value="False">
+                                                    <Setter Property="Background" Value="#D1FAE5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock FontSize="11" FontWeight="Bold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding is_void, Mode=OneWay}" Value="True">
+                                                        <Setter Property="Text" Value="VOIDED"/>
+                                                        <Setter Property="Foreground" Value="#EF4444"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding is_void, Mode=OneWay}" Value="False">
+                                                        <Setter Property="Text" Value="STANDARD"/>
+                                                        <Setter Property="Foreground" Value="#10B981"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="CLIENT" Width="2*" MinWidth="200">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -102,6 +138,17 @@
                     <DataGridTextColumn Header="INTEREST" Binding="{Binding interest_rate, Mode=OneWay, StringFormat='\{0\}%'}" Width="80"/>
                     <DataGridTextColumn Header="DUE DATE" Binding="{Binding due_date, Mode=OneWay, StringFormat='\{0:MMM dd, yyyy\}'}" Width="*" MinWidth="110"/>
                     <DataGridTextColumn Header="PLAN" Binding="{Binding installment_plan, Mode=OneWay}" Width="*" MinWidth="100"/>
+                    <DataGridTemplateColumn Header="LAST UPDATED" Width="*" MinWidth="150">
+                       <DataGridTemplateColumn.CellTemplate>
+                           <DataTemplate>
+                               <StackPanel VerticalAlignment="Center">
+                                   <TextBlock Text="{Binding updated_at, Mode=OneWay, StringFormat='\{0:MMM dd, yyyy HH:mm\}'}" Foreground="#1E293B" FontWeight="SemiBold"/>
+                                   <TextBlock Text="{Binding updated_by_name, Mode=OneWay, StringFormat='by \{0\}'}" FontSize="11" Foreground="#64748B"/>
+                               </StackPanel>
+                           </DataTemplate>
+                       </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTemplateColumn Header="STATUS" Width="120" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -165,11 +212,23 @@
                                             <TextBlock Text="View" VerticalAlignment="Center" FontSize="11"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button Style="{StaticResource ActionButtonStyle}" 
-                                            Background="#3044FF" Foreground="White" Click="btnUpdate_Click">
+                                    <Button x:Name="btnVoid"
+                                            Background="#FEE2E2"
+                                            Foreground="#EF4444"
+                                            Click="btnVoid_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding is_void, Mode=OneWay}" Value="False">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
                                         <StackPanel Orientation="Horizontal">
-                                            <fa:ImageAwesome Icon="Edit" Width="12" Height="12" Margin="0,0,5,0" Foreground="White"/>
-                                            <TextBlock Text="Edit" VerticalAlignment="Center" FontSize="11"/>
+                                            <fa:ImageAwesome Icon="Trash" Width="12" Height="12" Margin="0,0,5,0" Foreground="#EF4444"/>
+                                            <TextBlock Text="Void" VerticalAlignment="Center" FontSize="11"/>
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
