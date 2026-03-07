@@ -55,6 +55,7 @@ namespace TWLH_Loan_Management_System
             currentEmployee.Password = txtPassword.Password;
             currentEmployee.IsEmployeeActive = cmbEmployeeStatus.Text == "Active";
             currentEmployee.IsCredentialActive = cmbCredentialStatus.Text == "Active";
+            currentEmployee.UpdatedBy = UserSession.EmployeeID;
 
             bool success;
             if (isEditMode)

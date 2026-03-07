@@ -39,7 +39,7 @@ namespace TWLH_Loan_Management_System
                 DataRow row = dt.Rows[0];
                 txtLoanID.Text = $"Loan #{row["loan_id"]}";
                 txtClientID.Text = $"Client ID: {row["client_id"]}";
-                txtPlan.Text = row["installment_plan"].ToString();
+                txtPlan.Text = $"{row["installment_plan"]} days";
                 txtInterest.Text = $"{row["interest_rate"]}%";
 
                 decimal grandTotal = installment.displayInstallmentCards(installmentContainer, loanID);

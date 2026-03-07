@@ -160,14 +160,8 @@
                     <DatePicker x:Name="dtpDueDate" Style="{StaticResource ElegantDatePicker}" Margin="0,0,0,20"/>
 
                     <!-- Installment Plan -->
-                    <TextBlock Text="Installment Plan" FontWeight="SemiBold" Foreground="#1E293B" Margin="0,0,0,8"/>
-                    <ComboBox x:Name="cmbInstallmentPlan" Style="{StaticResource ElegantComboBox}" Margin="0,0,0,20">
-                        <ComboBoxItem Content="Daily"/>
-                        <ComboBoxItem Content="Semimonthly"/>
-                        <ComboBoxItem Content="Monthly"/>
-                        <ComboBoxItem Content="Quarterly"/>
-                        <ComboBoxItem Content="Anually"/>
-                    </ComboBox>
+                    <TextBlock Text="Installment Plan (Interval in Days)" FontWeight="SemiBold" Foreground="#1E293B" Margin="0,0,0,8"/>
+                    <TextBox x:Name="txtInstallmentPlan" Style="{StaticResource ModernInput}" Margin="0,0,0,20"/>
 
                     <!-- Status (Only for Update) -->
                     <StackPanel x:Name="statusPanel" Visibility="Collapsed">

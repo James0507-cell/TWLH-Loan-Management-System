@@ -26,7 +26,7 @@ namespace TWLH_Loan_Management_System
             InitializeComponent();
             txtSearch.TextChanged += TxtSearch_TextChanged;
             cmbStatus.SelectionChanged += CmbStatus_SelectionChanged;
-            cmbPlan.SelectionChanged += CmbPlan_SelectionChanged;
+            txtPlanFilter.TextChanged += TxtPlanFilter_TextChanged;
             cmbType.SelectionChanged += CmbType_SelectionChanged;
         }
 
@@ -40,7 +40,7 @@ namespace TWLH_Loan_Management_System
             ApplyFilters();
         }
 
-        private void CmbPlan_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TxtPlanFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             ApplyFilters();
         }
@@ -52,11 +52,11 @@ namespace TWLH_Loan_Management_System
 
         private void ApplyFilters()
         {
-            if (txtSearch == null || cmbStatus == null || cmbPlan == null || cmbType == null) return;
+            if (txtSearch == null || cmbStatus == null || txtPlanFilter == null || cmbType == null) return;
 
             string searchText = txtSearch.Text;
             string status = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Statuses";
-            string plan = (cmbPlan.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Plans";
+            string plan = string.IsNullOrWhiteSpace(txtPlanFilter.Text) ? "All Plans" : txtPlanFilter.Text;
             string loanType = (cmbType.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Standard";
 
             if (scrollCards.Visibility == Visibility.Visible)

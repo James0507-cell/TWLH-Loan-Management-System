@@ -20,6 +20,7 @@ namespace TWLH_Loan_Management_System
         public bool IsEmployeeActive { get; set; }
         public bool IsCredentialActive { get; set; }
         public int Age { get; set; }
+        public int UpdatedBy { get; set; }
 
         private dbManager db = new dbManager();
 
@@ -84,7 +85,8 @@ namespace TWLH_Loan_Management_System
                     role = '{Role}', 
                     contact_number = '{ContactNumber}', 
                     email = '{Email}',
-                    is_active = {empActive}
+                    is_active = {empActive},
+                    updated_by = {UpdatedBy}
                     WHERE employee_id = {EmployeeId}";
                 
                 db.sqlManager(query);
@@ -167,6 +169,30 @@ namespace TWLH_Loan_Management_System
                      LEFT JOIN tbl_employee e2 ON e.updated_by = e2.employee_id
                      ORDER BY e.employee_id ASC";
             return db.displayRecords(query);
+        }
+
+        public static bool Deactivate(int id, int updatedBy)
+        {
+            try
+            {
+                dbManager db = new dbManager();
+                // 1. Deactivate main employee record and set updated_by
+                db.sqlManager($"UPDATE tbl_employee SET is_active = 0, updated_by = {updatedBy} WHERE employee_id = {id}");
+                
+                // 2. Deactivate login credentials
+                db.sqlManager($"UPDATE tbl_employee_credential SET is_active = 0 WHERE employee_id = {id}");
+
+                // 3. Deactivate role-specific access
+                db.sqlManager($"UPDATE tbl_admin SET is_active = 0 WHERE employee_id = {id}");
+                db.sqlManager($"UPDATE tbl_staff SET is_active = 0 WHERE employee_id = {id}");
+                db.sqlManager($"UPDATE tbl_collector SET is_active = 0 WHERE employee_id = {id}");
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public static bool Deactivate(int id)

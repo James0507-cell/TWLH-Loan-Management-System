@@ -182,14 +182,21 @@
                 </ComboBox>
 
                 <!-- Plan Filter -->
-                <ComboBox Style="{StaticResource ElegantComboBox}" x:Name="cmbPlan" Width="160" Margin="15,0,0,0">
-                    <ComboBoxItem Content="All Plans" IsSelected="True"/>
-                    <ComboBoxItem Content="Daily"/>
-                    <ComboBoxItem Content="Semimonthly"/>
-                    <ComboBoxItem Content="Monthly"/>
-                    <ComboBoxItem Content="Quarterly"/>
-                    <ComboBoxItem Content="Anually"/>
-                </ComboBox>
+                <Grid Width="160" Margin="15,0,0,0">
+                    <TextBox Style="{StaticResource ModernSearchBox}" x:Name="txtPlanFilter"/>
+                    <TextBlock IsHitTestVisible="False" Text="Filter by days..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="40,0,0,0" Foreground="#A0AEC0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=txtPlanFilter}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
 
                 <!-- Type Filter -->
                 <ComboBox Style="{StaticResource ElegantComboBox}" x:Name="cmbType" Width="130" Margin="15,0,0,0">

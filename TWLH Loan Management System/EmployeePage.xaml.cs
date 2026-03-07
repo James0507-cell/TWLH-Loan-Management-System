@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
@@ -129,9 +130,9 @@ namespace TWLH_Loan_Management_System
                 MessageBoxResult result = MessageBox.Show($"Are you sure you want to deactivate {name}?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
-                    if (Employee.Deactivate(id))
+                    if (Employee.Deactivate(id, UserSession.EmployeeID))
                     {
-                        MessageBox.Show("Employee deactivated.");
+                        MessageBox.Show("Employee record deactivated.");
                         LoadEmployees();
                     }
                 }

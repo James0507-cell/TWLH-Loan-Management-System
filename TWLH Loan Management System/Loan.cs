@@ -22,18 +22,18 @@ namespace TWLH_Loan_Management_System
             strQuery = $"select * from tbl_loan where client_id = '{clientID}'";
             db.displayRecords(strQuery);
         }
-        public void addLoan(int clientID, double amount, string dueDate, string installmentPlan, 
+        public void addLoan(int clientID, double amount, string dueDate, int installmentPlan, 
                             double interestRate, string status, int approvedBy)
         {
             strQuery = $"Insert into tbl_loan (client_id, loan_amount, due_date, installment_plan, interest_rate, loan_status, approved_by) " +
-                       $"values ({clientID}, {amount}, '{dueDate}', '{installmentPlan}', {interestRate}, '{status}', {approvedBy})";
+                       $"values ({clientID}, {amount}, '{dueDate}', {installmentPlan}, {interestRate}, '{status}', {approvedBy})";
             db.sqlManager(strQuery);
         }
 
-        public void updateLoan(int loanID, int clientID, double amount, string dueDate, string installmentPlan,
+        public void updateLoan(int loanID, int clientID, double amount, string dueDate, int installmentPlan,
                                 double interestRate, string status, int approvedBy)
         {
-            strQuery = $"Update tbl_loan set loan_amount = {amount}, due_date = '{dueDate}', installment_plan = '{installmentPlan}', " +
+            strQuery = $"Update tbl_loan set loan_amount = {amount}, due_date = '{dueDate}', installment_plan = {installmentPlan}, " +
                        $"interest_rate = {interestRate}, loan_status = '{status}', approved_by = {approvedBy} " +
                        $"where loan_id = {loanID}";
             db.sqlManager(strQuery);
@@ -79,7 +79,7 @@ namespace TWLH_Loan_Management_System
 
             if (installmentPlan != "All Plans")
             {
-                strQuery += $"AND l.installment_plan = '{installmentPlan}' ";
+                strQuery += $"AND l.installment_plan = {installmentPlan} ";
             }
 
             strQuery += " ORDER BY l.loan_id DESC";
@@ -308,7 +308,7 @@ namespace TWLH_Loan_Management_System
 
                 StackPanel planStack = new StackPanel();
                 planStack.Children.Add(new TextBlock { Text = "PLAN", FontSize = 9, Foreground = (Brush)new BrushConverter().ConvertFrom("#64748B"), FontWeight = FontWeights.SemiBold });
-                planStack.Children.Add(new TextBlock { Text = installmentPlan, FontSize = 11, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
+                planStack.Children.Add(new TextBlock { Text = $"{currentPlan} days", FontSize = 11, Foreground = (Brush)new BrushConverter().ConvertFrom("#1E293B"), FontWeight = FontWeights.Medium });
                 Grid.SetColumn(planStack, 1);
                 detailsGrid.Children.Add(planStack);
 

@@ -137,7 +137,7 @@
                     <DataGridTextColumn Header="AMOUNT" Binding="{Binding loan_amount, Mode=OneWay, StringFormat='₱\{0:N2\}'}" Width="*" MinWidth="110"/>
                     <DataGridTextColumn Header="INTEREST" Binding="{Binding interest_rate, Mode=OneWay, StringFormat='\{0\}%'}" Width="80"/>
                     <DataGridTextColumn Header="DUE DATE" Binding="{Binding due_date, Mode=OneWay, StringFormat='\{0:MMM dd, yyyy\}'}" Width="*" MinWidth="110"/>
-                    <DataGridTextColumn Header="PLAN" Binding="{Binding installment_plan, Mode=OneWay}" Width="*" MinWidth="100"/>
+                    <DataGridTextColumn Header="PLAN" Binding="{Binding installment_plan, Mode=OneWay, StringFormat='\{0\} days'}" Width="*" MinWidth="100"/>
                     <DataGridTemplateColumn Header="LAST UPDATED" Width="*" MinWidth="150">
                        <DataGridTemplateColumn.CellTemplate>
                            <DataTemplate>

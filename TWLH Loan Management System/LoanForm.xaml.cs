@@ -37,9 +37,9 @@ namespace TWLH_Loan_Management_System
             txtAmount.Text = row["loan_amount"].ToString();
             dtpDueDate.SelectedDate = Convert.ToDateTime(row["due_date"]);
             txtInterestRate.Text = row["interest_rate"].ToString();
+            txtInstallmentPlan.Text = row["installment_plan"].ToString();
 
-            // Select Status and Plan
-            SelectComboBoxItem(cmbInstallmentPlan, row["installment_plan"].ToString());
+            // Select Status
             SelectComboBoxItem(cmbStatus, row["loan_status"].ToString());
 
             // Disable all fields except status for updates
@@ -52,11 +52,12 @@ namespace TWLH_Loan_Management_System
             txtAmount.IsReadOnly = true;
             txtInterestRate.IsReadOnly = true;
             dtpDueDate.IsEnabled = false;
-            cmbInstallmentPlan.IsEnabled = false;
+            txtInstallmentPlan.IsReadOnly = true;
             
             // Optionally adjust background to visually indicate read-only status
             txtAmount.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
             txtInterestRate.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
+            txtInstallmentPlan.Background = (Brush)new BrushConverter().ConvertFrom("#F1F5F9");
         }
 
         private void LoadClients()
@@ -116,9 +117,9 @@ namespace TWLH_Loan_Management_System
                     return;
                 }
 
-                if (cmbInstallmentPlan.SelectedItem == null)
+                if (string.IsNullOrWhiteSpace(txtInstallmentPlan.Text) || !int.TryParse(txtInstallmentPlan.Text, out _))
                 {
-                    MessageBox.Show("Please select an installment plan.");
+                    MessageBox.Show("Please enter a valid number of days for the installment plan.");
                     return;
                 }
 
@@ -131,7 +132,7 @@ namespace TWLH_Loan_Management_System
                 int clientID = Convert.ToInt32(cmbClient.SelectedValue);
                 double amount = double.Parse(txtAmount.Text);
                 string dueDate = dtpDueDate.SelectedDate.Value.ToString("yyyy-MM-dd");
-                string plan = ((ComboBoxItem)cmbInstallmentPlan.SelectedItem).Content.ToString();
+                int plan = int.Parse(txtInstallmentPlan.Text);
                 double interestRate = double.Parse(txtInterestRate.Text);
                 string status = _loanID == -1 ? "Active" : ((ComboBoxItem)cmbStatus.SelectedItem).Content.ToString();
                 int approvedBy = UserSession.EmployeeID; 
