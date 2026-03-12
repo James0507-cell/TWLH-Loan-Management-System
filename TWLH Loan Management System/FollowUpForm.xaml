@@ -117,6 +117,7 @@
                             <ComboBoxItem Content="Call"/>
                             <ComboBoxItem Content="Message"/>
                             <ComboBoxItem Content="Email"/>
+                            <ComboBoxItem Content="Meet Up"/>
                         </ComboBox>
                     </StackPanel>
 
