@@ -52,20 +52,44 @@ namespace TWLH_Loan_Management_System
 
         private void ApplyFilters()
         {
-            if (txtSearch == null || cmbStatus == null || txtPlanFilter == null || cmbType == null) return;
-
-            string searchText = txtSearch.Text;
-            string status = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Statuses";
-            string plan = string.IsNullOrWhiteSpace(txtPlanFilter.Text) ? "All Plans" : txtPlanFilter.Text;
-            string loanType = (cmbType.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Standard";
-
-            if (scrollCards.Visibility == Visibility.Visible)
+            try
             {
-                loan.displayLoanCards(loanContainer, searchText, status, plan, loanType);
+                if (txtSearch == null || cmbStatus == null || txtPlanFilter == null || cmbType == null) return;
+
+                string searchText = txtSearch.Text;
+                string status = (cmbStatus.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "All Statuses";
+                
+                // Validate numeric input for installment plan
+                string plan = "All Plans";
+                if (!string.IsNullOrWhiteSpace(txtPlanFilter.Text))
+                {
+                    if (int.TryParse(txtPlanFilter.Text, out _))
+                    {
+                        plan = txtPlanFilter.Text;
+                    }
+                    else
+                    {
+                        // If non-numeric input is entered, we can either ignore the filter or notify the user
+                        // For now, we'll default back to "All Plans" to prevent SQL errors, but we won't crash
+                        plan = "All Plans";
+                    }
+                }
+
+                string loanType = (cmbType.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Standard";
+
+                if (scrollCards.Visibility == Visibility.Visible)
+                {
+                    loan.displayLoanCards(loanContainer, searchText, status, plan, loanType);
+                }
+                else
+                {
+                    loanFrame.Navigate(new LoanTabular(searchText, status, plan, loanType));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                loanFrame.Navigate(new LoanTabular(searchText, status, plan, loanType));
+                // Catch any database or runtime errors to prevent the application from exiting
+                MessageBox.Show("An error occurred while filtering loans: " + ex.Message, "Filtering Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

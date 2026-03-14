@@ -125,9 +125,10 @@
                 <!-- Type Filter -->
                 <ComboBox Style="{StaticResource ElegantComboBox}" x:Name="cmbType" Width="180" Margin="15,0,0,0" SelectionChanged="cmbType_SelectionChanged">
                     <ComboBoxItem Content="All Types" IsSelected="True"/>
-                    <ComboBoxItem Content="Payment"/>
-                    <ComboBoxItem Content="Disbursement"/>
-                    <ComboBoxItem Content="Penalty"/>
+                    <ComboBoxItem Content="Cash"/>
+                    <ComboBoxItem Content="Back Transfer"/>
+                    <ComboBoxItem Content="GCash"/>
+                    <ComboBoxItem Content="Check"/>
                 </ComboBox>
             </StackPanel>
 
@@ -221,6 +222,19 @@
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Style.Triggers>
+                                                <DataTrigger Binding="{Binding transaction_type}" Value="Cash">
+                                                    <Setter Property="Background" Value="#D1FAE5"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding transaction_type}" Value="Back Transfer">
+                                                    <Setter Property="Background" Value="#E0E7FF"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding transaction_type}" Value="GCash">
+                                                    <Setter Property="Background" Value="#E0F2FE"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding transaction_type}" Value="Check">
+                                                    <Setter Property="Background" Value="#F1F5F9"/>
+                                                </DataTrigger>
+                                                <!-- Keep legacy triggers for backward compatibility -->
                                                 <DataTrigger Binding="{Binding transaction_type}" Value="Payment">
                                                     <Setter Property="Background" Value="#D1FAE5"/>
                                                 </DataTrigger>
@@ -237,6 +251,19 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding transaction_type}" Value="Cash">
+                                                        <Setter Property="Foreground" Value="#10B981"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding transaction_type}" Value="Back Transfer">
+                                                        <Setter Property="Foreground" Value="#3044FF"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding transaction_type}" Value="GCash">
+                                                        <Setter Property="Foreground" Value="#0EA5E9"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding transaction_type}" Value="Check">
+                                                        <Setter Property="Foreground" Value="#64748B"/>
+                                                    </DataTrigger>
+                                                    <!-- Keep legacy triggers for backward compatibility -->
                                                     <DataTrigger Binding="{Binding transaction_type}" Value="Payment">
                                                         <Setter Property="Foreground" Value="#10B981"/>
                                                     </DataTrigger>

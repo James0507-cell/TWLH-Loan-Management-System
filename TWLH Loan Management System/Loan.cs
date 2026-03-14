@@ -77,9 +77,9 @@ namespace TWLH_Loan_Management_System
                 strQuery += $"AND l.loan_status = '{status}' ";
             }
 
-            if (installmentPlan != "All Plans")
+            if (installmentPlan != "All Plans" && int.TryParse(installmentPlan, out int planValue))
             {
-                strQuery += $"AND l.installment_plan = {installmentPlan} ";
+                strQuery += $"AND l.installment_plan = {planValue} ";
             }
 
             strQuery += " ORDER BY l.loan_id DESC";
